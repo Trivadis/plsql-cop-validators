@@ -1,0 +1,30 @@
+*.class
+*._trace
+*.xtendbin
+*.DS_Store
+*.log
+tvdcc_report.*
+code_coverage.html
+**/target
+**/bin
+**/test-output
+**/xtend-gen
+**/xtext-gen
+**/.sonar
+**/.project
+**/.classpath
+**/.settings
+**/.scannerwork
+**/.idea
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
