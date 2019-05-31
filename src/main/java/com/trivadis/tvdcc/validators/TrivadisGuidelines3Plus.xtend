@@ -94,7 +94,7 @@ class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopVal
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisGuidelines3Plus.ISSUE_RECORD_NAME,
 				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
-					ISSUE_RECORD_NAME, '''Cursors should start with '«PREFIX_RECORD_NAME»'.''', MAJOR,
+					ISSUE_RECORD_NAME, '''Records should start with '«PREFIX_RECORD_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisGuidelines3Plus.ISSUE_ARRAY_NAME,
 				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
