@@ -36,7 +36,7 @@ G-9013    | Exceptions should start with 'e_'.
 G-9014    | Constants should start with 'co_'.
 G-9015    | Subtypes should end with 'type'.
 
-These validator is an [extension](https://github.com/Trivadis/cop-validators/blob/master/src/main/java/com/trivadis/tvdcc/validators/TrivadisGuidelines3Plus.xtend#L38) to the Trivadis PL/SQL & SQL Coding Guidelines. This means that the all guidelines defined in chapter [4. Language Usage are checked](https://trivadis.github.io/plsql-and-sql-coding-guidelines/4-language-usage/1-general/g-1010/) as well. 
+This validator is an [extension](https://github.com/Trivadis/cop-validators/blob/master/src/main/java/com/trivadis/tvdcc/validators/TrivadisGuidelines3Plus.xtend#L38) to the Trivadis PL/SQL & SQL Coding Guidelines. This means that the all guidelines defined in chapter [4. Language Usage are checked](https://trivadis.github.io/plsql-and-sql-coding-guidelines/4-language-usage/1-general/g-1010/) as well. 
 
 ### GLP
 
@@ -58,7 +58,7 @@ Guideline | Message
 --------- | -----------
 G-9501    | Parameter used in string expression of dynamic SQL. Use asserted local variable instead.
 
-It looks for unasserted paraemters used in [`EXECUTE IMMEDIATE`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/EXECUTE-IMMEDIATE-statement.html#GUID-C3245A95-B85B-4280-A01F-12307B108DC8) statements and [`OPEN FOR`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/OPEN-FOR-statement.html#GUID-EB7AF439-FDD3-4461-9E3F-B621E8ABFB96) statements. All parameters used in these statements must be asserted with one of the subprograms provided by [`DBMS_ASSERT`](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_ASSERT.html#GUID-27B4B484-7CD7-48FE-89A3-B630ADE1CB50).
+It looks for unasserted parameters used in [`EXECUTE IMMEDIATE`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/EXECUTE-IMMEDIATE-statement.html#GUID-C3245A95-B85B-4280-A01F-12307B108DC8) statements and [`OPEN FOR`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/OPEN-FOR-statement.html#GUID-EB7AF439-FDD3-4461-9E3F-B621E8ABFB96) statements. All parameters used in these statements must be asserted with one of the subprograms provided by [`DBMS_ASSERT`](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_ASSERT.html#GUID-27B4B484-7CD7-48FE-89A3-B630ADE1CB50).
 
 #### Example (bad)
 
