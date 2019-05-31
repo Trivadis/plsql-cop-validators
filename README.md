@@ -166,3 +166,29 @@ END pkg;
    The check result is shown by default at the bottom of your SQL Developer workspace.
 
    ![Check](./images/sqldev-check-result.png)
+
+## How to Build
+
+1. Install PL/SQL Cop 
+
+   As explained [above](README.md#use-in-plsql-cop).
+
+2. Install Maven
+
+   [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.6.1
+
+3. Clone the cop-validators repository
+
+   Clone or download this repository. 
+
+4. Build `validators.jar`
+
+   Open a terminal window in the cop-validators root folder and maven build by the following command
+
+		mvn -Dtvdcc.basedir=/usr/local/bin/tvdcc clean package
+
+	Amend the parameter `tvdcc.basedir` to match your `TVDCC_HOME` directory. This folder is used to reference PL/SQL Cop  jar files which are not available in public Maven repositories
+
+## License
+
+The PL/SQL Cop Validators are licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License. You may obtain a copy of the License at https://creativecommons.org/licenses/by-nc-nd/3.0/.
