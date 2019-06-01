@@ -62,7 +62,7 @@ It looks for unasserted parameters used in [`EXECUTE IMMEDIATE`](https://docs.or
 
 #### Example (bad)
 
-The input parameter `in_table_name` is copied to the local variable `l_table_name` and the used without an assert to build the `l_sql` variable. Hence, the execute immediate statement is considered vulnerable to SQL injection, e.g. by passing `DEPT CASCADE CONSTRAINTS`.
+The input parameter `in_table_name` is copied to the local variable `l_table_name` and then used without an assert to build the `l_sql` variable. Hence, the execute immediate statement is considered vulnerable to SQL injection, e.g. by passing `DEPT CASCADE CONSTRAINTS`.
 
 ```sql
 CREATE OR REPLACE PACKAGE BODY pkg IS
