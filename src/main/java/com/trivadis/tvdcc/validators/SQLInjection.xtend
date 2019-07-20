@@ -43,6 +43,7 @@ import org.eclipse.xtext.validation.Check
 
 class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
+	val ASSERT_PACKAGES = #["dbms_assert", "ut_utils"]
 
 	override getGuidelines() {
 		if (guidelines === null) {
@@ -204,8 +205,10 @@ class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 		val usages = EcoreUtil2.getAllContentsOfType(body, SimpleExpressionNameValue).filter[it.value.equalsIgnoreCase(n.value)]
 		for (usage : usages) {
 			val name = usage.qualifiedFunctionName
-			if (name.toLowerCase.contains("dbms_assert.")) {
-				return true
+			for (assertPackage : ASSERT_PACKAGES) {
+				if (name.toLowerCase.contains('''«assertPackage».''')) {
+					return true
+				}
 			}
 		}
 		return false
