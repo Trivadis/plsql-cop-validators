@@ -318,5 +318,47 @@ class SQLInjectionTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.size)
 	}
+	
+	@Test
+	def void issue1_ut_utils_wrapper() {
+		val stmt = '''
+			create or replace package body ut_annotation_manager as
+			  -- ...
+			  function get_missing_objects(a_object_owner varchar2, a_object_type varchar2) return ut_annotation_objs_cache_info is
+			    l_rows         sys_refcursor;
+			    l_ut_owner     varchar2(250) := ut_utils.ut_owner;
+			    l_objects_view varchar2(200) := ut_metadata.get_objects_view_name();
+			    l_cursor_text  varchar2(32767);
+			    l_data         ut_annotation_objs_cache_info;
+			    l_result       ut_annotation_objs_cache_info;
+			    l_card         natural;
+			  begin
+			    l_data := ut_annotation_cache_manager.get_annotations_objects_info(a_object_owner, a_object_type);
+			    l_card := ut_utils.scale_cardinality(cardinality(l_data));
+			
+			    l_cursor_text :=
+			      'select /*+ cardinality(i '||l_card||') */
+			                value(i)
+			           from table( cast( :l_data as '||l_ut_owner||'.ut_annotation_objs_cache_info ) ) i
+			           where
+			             not exists (
+			                select 1  from '||l_objects_view||q'[ o
+			                 where o.owner = i.object_owner
+			                   and o.object_name = i.object_name
+			                   and o.object_type = i.object_type
+			                   and o.owner       = ']'||ut_utils.qualified_sql_name(a_object_owner)||q'['
+			                   and o.object_type = ']'||ut_utils.qualified_sql_name(a_object_type)||q'['
+			                )]';
+			    open l_rows for l_cursor_text  using l_data;
+			    fetch l_rows bulk collect into l_result limit ut_utils.gc_max_objects_fetch_limit;
+			    close l_rows;
+			    return l_result;
+			  end;
+			  -- ...
+			end ut_annotation_manager;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.size)
+	}
 
 }
