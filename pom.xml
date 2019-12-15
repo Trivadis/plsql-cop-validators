@@ -166,6 +166,7 @@
 								<exclude>**/TrivadisGuidelines3PlusTest.java</exclude>
 								<exclude>**/GLPTest.java</exclude>
 								<exclude>**/SQLInjectionTest.java</exclude>
+								<exclude>**/OverrideTrivadisGuidelinesTest.java</exclude>
 							</excludes>
 						</configuration>
 					</execution>
@@ -208,6 +209,20 @@
 							<reuseForks>true</reuseForks>
 							<includes>
 								<include>**/SQLInjectionTest.java</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>override-trivadis-guidelines-test</id>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>${skipTests}</skip>
+							<forkCount>1</forkCount>
+							<reuseForks>true</reuseForks>
+							<includes>
+								<include>**/OverrideTrivadisGuidelinesTest.java</include>
 							</includes>
 						</configuration>
 					</execution>
