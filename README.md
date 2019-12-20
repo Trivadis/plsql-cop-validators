@@ -6,13 +6,14 @@ You may use these validators as is or amend/extend them to suit your needs.
 
 ## Provided Validators
 
-This project provides the following three custom validators:
+This project provides the following four custom validators in the package `com.trivadis.tvdcc.validators`:
 
 Class | Description 
 ----- | -----------
-com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus | Checks [Naming Conventions](https://trivadis.github.io/plsql-and-sql-coding-guidelines/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql) of the Trivadis PL/SQL & SQL Coding Guidelines
-com.trivadis.tvdcc.validators.GLP | Checks naming of global and local variables and parameters 
-com.trivadis.tvdcc.validators.SQLInjection | Looks SQL injection vulnerabilities, e.g. unasserted parameters in dynamic SQL
+TrivadisGuidelines3Plus | Checks [Naming Conventions](https://trivadis.github.io/plsql-and-sql-coding-guidelines/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql) of the Trivadis PL/SQL & SQL Coding Guidelines
+GLP | Checks naming of global and local variables and parameters 
+SQLInjection | Looks for SQL injection vulnerabilities, e.g. unasserted parameters in dynamic SQL
+OverrideTrivadisGuidelines | Extends TrivadisGuidelines3 and overrides check for [G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v3.6/4-language-usage/1-general/g-1050/).
 
 ### TrivadisGuidelines3Plus
 
@@ -59,6 +60,18 @@ Guideline | Message
 G-9501    | Parameter used in string expression of dynamic SQL. Use asserted local variable instead.
 
 It looks for unasserted parameters used in [`EXECUTE IMMEDIATE`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/EXECUTE-IMMEDIATE-statement.html#GUID-C3245A95-B85B-4280-A01F-12307B108DC8) statements and [`OPEN FOR`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/OPEN-FOR-statement.html#GUID-EB7AF439-FDD3-4461-9E3F-B621E8ABFB96) statements. All parameters used in these statements must be asserted with one of the subprograms provided by [`DBMS_ASSERT`](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_ASSERT.html#GUID-27B4B484-7CD7-48FE-89A3-B630ADE1CB50).
+
+### OverrideTrivadisGuidelines
+
+This validator shows how existing guideline checks can be overridden. 
+
+The following guideline is overriden:
+
+Guideline | Message
+--------- | -----------
+[G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v3.6/4-language-usage/1-general/g-1050/) | Avoid using literals in your code.
+
+Literals as part of a [Logger](https://github.com/OraOpenSource/Logger) package call are not reported (see also #8).
 
 #### Example (bad)
 
@@ -188,6 +201,14 @@ END pkg;
 		mvn -Dtvdcc.basedir=/usr/local/bin/tvdcc clean package
 
 	Amend the parameter `tvdcc.basedir` to match your `TVDCC_HOME` directory. This folder is used to reference PL/SQL Cop  jar files which are not available in public Maven repositories
+
+## Issues
+Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/).
+
+* [Questions](https://github.com/trivadis/plsql-cop-validators/issues?q=is%3Aissue+label%3Aquestion)
+* [Open enhancements](https://github.com/trivadis/plsql-cop-validators/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
+* [Open bugs](https://github.com/trivadis/plsql-cop-validators/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
+* [Submit new issue](https://github.com/trivadis/plsql-cop-validators/issues/new)
 
 ## License
 
