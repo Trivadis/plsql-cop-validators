@@ -61,18 +61,6 @@ G-9501    | Parameter used in string expression of dynamic SQL. Use asserted loc
 
 It looks for unasserted parameters used in [`EXECUTE IMMEDIATE`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/EXECUTE-IMMEDIATE-statement.html#GUID-C3245A95-B85B-4280-A01F-12307B108DC8) statements and [`OPEN FOR`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/OPEN-FOR-statement.html#GUID-EB7AF439-FDD3-4461-9E3F-B621E8ABFB96) statements. All parameters used in these statements must be asserted with one of the subprograms provided by [`DBMS_ASSERT`](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_ASSERT.html#GUID-27B4B484-7CD7-48FE-89A3-B630ADE1CB50).
 
-### OverrideTrivadisGuidelines
-
-This validator shows how existing guideline checks can be overridden. 
-
-The following guideline is overriden:
-
-Guideline | Message
---------- | -----------
-[G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v3.6/4-language-usage/1-general/g-1050/) | Avoid using literals in your code.
-
-Literals as part of a [Logger](https://github.com/OraOpenSource/Logger) package call are not reported (see also #8).
-
 #### Example (bad)
 
 The input parameter `in_table_name` is copied to the local variable `l_table_name` and then used without an assert to build the `l_sql` variable. Hence, the execute immediate statement is considered vulnerable to SQL injection, e.g. by passing `DEPT CASCADE CONSTRAINTS`.
@@ -110,6 +98,18 @@ CREATE OR REPLACE PACKAGE BODY pkg IS
     END f;
 END pkg;
 ```
+
+### OverrideTrivadisGuidelines
+
+This validator shows how existing guideline checks can be overridden. 
+
+The following guideline is overriden:
+
+Guideline | Message
+--------- | -----------
+[G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v3.6/4-language-usage/1-general/g-1050/) | Avoid using literals in your code.
+
+Literals as part of a [Logger](https://github.com/OraOpenSource/Logger) package call are not reported (see also [issue 8](https://github.com/Trivadis/plsql-cop-validators/issues/8)).
 
 ## Use in PL/SQL Cop
 
