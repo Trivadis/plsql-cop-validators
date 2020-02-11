@@ -84,10 +84,9 @@ class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopVal
 		readProperties
 	}
 	
-	def readProperties() {
-		
+	def readProperties() {	
 		try{
-			input = new FileInputStream("custom_variable_prefixes.properties")
+			input = new FileInputStream("plugin/custom_variable_prefixes.properties")
 	        prop  = new Properties()
 	
 	        prop.load(input)
@@ -110,7 +109,7 @@ class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopVal
 			PREFIX_CONSTANT_NAME         = prop.getProperty("PREFIX_CONSTANT_NAME"        , PREFIX_CONSTANT_NAME)
 			SUFFIX_SUBTYPE_NAME          = prop.getProperty("SUFFIX_SUBTYPE_NAME"         , SUFFIX_SUBTYPE_NAME)
 		} catch(FileNotFoundException e) {
-			println("No custom properties file defined. Using default pre-/suffixes. Customize in custom_variable_prefixes.properties")
+			println("Information: No custom properties file defined. Using default pre-/suffixes. You can customize in plugins/custom_variable_prefixes.properties file." + System.lineSeparator())
 		}
 	}
 
