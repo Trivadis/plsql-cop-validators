@@ -37,7 +37,7 @@ G-9013    | Exceptions should start with 'e_'.
 G-9014    | Constants should start with 'co_'.
 G-9015    | Subtypes should end with 'type'.
 
-These  pre-/suffixes can be customized by using the [custom_variable_prefixes.properties](https://github.com/Primus-Delphi-Group/plsql-cop-validators/blob/Read_Suffix_or_Prefix_from_File/plugin/custom_variable_prefixes.properties) file. This file should be placed in the `plugin` folder of `TVDCC_HOME`.
+These  pre-/suffixes can be customized by using the [custom_variable_prefixes.properties](plugin/custom_variable_prefixes.properties) file. This file should be placed in the `plugin` folder of `TVDCC_HOME`.
 The provided file contains all valid entries. If an entry is omitted it will fall back to the default value (see table above).
 
 This validator is an [extension](https://github.com/Trivadis/cop-validators/blob/master/src/main/java/com/trivadis/tvdcc/validators/TrivadisGuidelines3Plus.xtend#L38) to the Trivadis PL/SQL & SQL Coding Guidelines. This means that the all guidelines defined in chapter [4. Language Usage are checked](https://trivadis.github.io/plsql-and-sql-coding-guidelines/4-language-usage/1-general/g-1010/) as well. 
