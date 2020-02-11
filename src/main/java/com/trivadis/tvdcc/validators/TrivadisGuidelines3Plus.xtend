@@ -34,9 +34,15 @@ import java.util.HashMap
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
+import java.util.Properties
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 
 class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
+	FileInputStream	 input
+	Properties 		 prop
+	
 
 	public static int ISSUE_GLOBAL_VARIABLE_NAME = 9001
 	public static int ISSUE_LOCAL_VARIABLE_NAME = 9002
@@ -71,6 +77,42 @@ class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopVal
 	public static String PREFIX_EXCEPTION_NAME = "e_"
 	public static String PREFIX_CONSTANT_NAME = "co_"
 	public static String SUFFIX_SUBTYPE_NAME = "_type"
+	
+	
+	new(){
+		super();
+		readProperties
+	}
+	
+	def readProperties() {
+		
+		try{
+			input = new FileInputStream("custom_variable_prefixes.properties")
+	        prop  = new Properties()
+	
+	        prop.load(input)
+	
+	        PREFIX_GLOBAL_VARIABLE_NAME  = prop.getProperty("PREFIX_GLOBAL_VARIABLE_NAME" , PREFIX_GLOBAL_VARIABLE_NAME)
+			PREFIX_LOCAL_VARIABLE_NAME   = prop.getProperty("PREFIX_LOCAL_VARIABLE_NAME"  , PREFIX_LOCAL_VARIABLE_NAME)
+			PREFIX_CURSOR_NAME           = prop.getProperty("PREFIX_CURSOR_NAME"          , PREFIX_CURSOR_NAME)
+			PREFIX_RECORD_NAME           = prop.getProperty("PREFIX_RECORD_NAME"          , PREFIX_RECORD_NAME)
+			PREFIX_ARRAY_NAME            = prop.getProperty("PREFIX_ARRAY_NAME"           , PREFIX_ARRAY_NAME)
+			PREFIX_OBJECT_NAME           = prop.getProperty("PREFIX_OBJECT_NAME"          , PREFIX_OBJECT_NAME)
+			PREFIX_CURSOR_PARAMETER_NAME = prop.getProperty("PREFIX_CURSOR_PARAMETER_NAME", PREFIX_CURSOR_PARAMETER_NAME)
+			PREFIX_IN_PARAMETER_NAME     = prop.getProperty("PREFIX_IN_PARAMETER_NAME"    , PREFIX_IN_PARAMETER_NAME)
+			PREFIX_OUT_PARAMETER_NAME    = prop.getProperty("PREFIX_OUT_PARAMETER_NAME"   , PREFIX_OUT_PARAMETER_NAME)
+			PREFIX_IN_OUT_PARAMETER_NAME = prop.getProperty("PREFIX_IN_OUT_PARAMETER_NAME", PREFIX_IN_OUT_PARAMETER_NAME)
+			PREFIX_RECORD_TYPE_NAME      = prop.getProperty("PREFIX_RECORD_TYPE_NAME"     , PREFIX_RECORD_TYPE_NAME)
+			SUFFIX_RECORD_TYPE_NAME      = prop.getProperty("SUFFIX_RECORD_TYPE_NAME"     , SUFFIX_RECORD_TYPE_NAME)
+			PREFIX_ARRAY_TYPE_NAME       = prop.getProperty("PREFIX_ARRAY_TYPE_NAME"      , PREFIX_ARRAY_TYPE_NAME)
+			SUFFIX_ARRAY_TYPE_NAME       = prop.getProperty("SUFFIX_ARRAY_TYPE_NAME"      , SUFFIX_ARRAY_TYPE_NAME)
+			PREFIX_EXCEPTION_NAME        = prop.getProperty("PREFIX_EXCEPTION_NAME"       , PREFIX_EXCEPTION_NAME)
+			PREFIX_CONSTANT_NAME         = prop.getProperty("PREFIX_CONSTANT_NAME"        , PREFIX_CONSTANT_NAME)
+			SUFFIX_SUBTYPE_NAME          = prop.getProperty("SUFFIX_SUBTYPE_NAME"         , SUFFIX_SUBTYPE_NAME)
+		} catch(FileNotFoundException e) {
+			println("No custom properties file defined. Using default pre-/suffixes. Customize in custom_variable_prefixes.properties")
+		}
+	}
 
 	override getGuidelines() {
 		if (guidelines === null) {
