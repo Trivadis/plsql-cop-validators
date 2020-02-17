@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
 import java.util.Properties
+import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 
@@ -77,16 +78,15 @@ class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopVal
 	public static String PREFIX_EXCEPTION_NAME = "e_"
 	public static String PREFIX_CONSTANT_NAME = "co_"
 	public static String SUFFIX_SUBTYPE_NAME = "_type"
-	
-	
+
 	new(){
-		super();
+		super()
 		readProperties
 	}
-	
+
 	def readProperties() {	
 		try{
-			input = new FileInputStream("plugin/custom_variable_prefixes.properties")
+			input = new FileInputStream(System.getProperty("user.home") + File.separator + "TrivadisGuidelines3Plus.properties")
 	        prop  = new Properties()
 	
 	        prop.load(input)
@@ -109,7 +109,7 @@ class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopVal
 			PREFIX_CONSTANT_NAME         = prop.getProperty("PREFIX_CONSTANT_NAME"        , PREFIX_CONSTANT_NAME)
 			SUFFIX_SUBTYPE_NAME          = prop.getProperty("SUFFIX_SUBTYPE_NAME"         , SUFFIX_SUBTYPE_NAME)
 		} catch(FileNotFoundException e) {
-			println("Information: No custom properties file defined. Using default pre-/suffixes. You can customize in plugins/custom_variable_prefixes.properties file." + System.lineSeparator())
+			//no special behaviour without Properties [https://github.com/Trivadis/plsql-cop-validators/issues/13]
 		}
 	}
 
