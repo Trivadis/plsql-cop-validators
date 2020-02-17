@@ -108,6 +108,8 @@ class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopVal
 			PREFIX_EXCEPTION_NAME        = prop.getProperty("PREFIX_EXCEPTION_NAME"       , PREFIX_EXCEPTION_NAME)
 			PREFIX_CONSTANT_NAME         = prop.getProperty("PREFIX_CONSTANT_NAME"        , PREFIX_CONSTANT_NAME)
 			SUFFIX_SUBTYPE_NAME          = prop.getProperty("SUFFIX_SUBTYPE_NAME"         , SUFFIX_SUBTYPE_NAME)
+
+			input.close()
 		} catch(FileNotFoundException e) {
 			//no special behaviour without Properties [https://github.com/Trivadis/plsql-cop-validators/issues/13]
 		}
