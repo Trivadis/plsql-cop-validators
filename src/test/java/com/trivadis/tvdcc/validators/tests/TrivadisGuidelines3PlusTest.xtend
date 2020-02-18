@@ -20,12 +20,29 @@ import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.io.File
+import org.junit.AfterClass
 
 class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
+
+	static String backupFileSuffix			= ".backup"
+
+	static String propertyPathString 		= System.getProperty("user.home") + File.separator + "TrivadisGuidelines3Plus.properties"
+	static String backupPropertyPathString 	= propertyPathString + backupFileSuffix
 
 	@BeforeClass
 	static def setupValidator() {
 		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisGuidelines3Plus
+	}	
+	
+	@BeforeClass
+	static def void stashPropertiesFile() {
+		if(Files.exists(Paths.get(propertyPathString))){
+				Files.copy(Paths.get(propertyPathString), Paths.get(backupPropertyPathString));
+				Files.delete(Paths.get(propertyPathString))	
+		}
 	}	
 
 	@Test 
@@ -488,5 +505,13 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 		'''
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.filter[it.code == "G-9015"].size)
+	}	
+	
+	@AfterClass
+	static def void restorePropertiesFile() {
+		if(Files.exists(Paths.get(backupPropertyPathString))){
+				Files.copy(Paths.get(backupPropertyPathString),Paths.get(propertyPathString))
+				Files.delete(Paths.get(backupPropertyPathString))
+		}
 	}	
 }
