@@ -37,6 +37,30 @@ G-9013    | Exceptions should start with 'e_'.
 G-9014    | Constants should start with 'co_'.
 G-9015    | Subtypes should end with 'type'.
 
+These  pre-/suffixes can be customized by using a TrivadisGuidelines3Plus.properties file. This file should be placed in the `users home` directory.
+If an entry is omitted it will fall back to the default value (see table above).
+The file has the following structure:
+
+```
+PREFIX_GLOBAL_VARIABLE_NAME = g_
+PREFIX_LOCAL_VARIABLE_NAME = l_
+PREFIX_CURSOR_NAME = c_
+PREFIX_RECORD_NAME = r_
+PREFIX_ARRAY_NAME = t_
+PREFIX_OBJECT_NAME = o_
+PREFIX_CURSOR_PARAMETER_NAME = p_
+PREFIX_IN_PARAMETER_NAME = in_
+PREFIX_OUT_PARAMETER_NAME = out_
+PREFIX_IN_OUT_PARAMETER_NAME = io_
+PREFIX_RECORD_TYPE_NAME = r_
+SUFFIX_RECORD_TYPE_NAME = _type
+PREFIX_ARRAY_TYPE_NAME = t_
+SUFFIX_ARRAY_TYPE_NAME = _type
+PREFIX_EXCEPTION_NAME = e_
+PREFIX_CONSTANT_NAME = co_
+SUFFIX_SUBTYPE_NAME = _type
+```
+
 This validator is an [extension](https://github.com/Trivadis/cop-validators/blob/master/src/main/java/com/trivadis/tvdcc/validators/TrivadisGuidelines3Plus.xtend#L38) to the Trivadis PL/SQL & SQL Coding Guidelines. This means that the all guidelines defined in chapter [4. Language Usage are checked](https://trivadis.github.io/plsql-and-sql-coding-guidelines/4-language-usage/1-general/g-1010/) as well. 
 
 ### GLP
