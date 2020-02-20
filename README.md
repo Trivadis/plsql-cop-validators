@@ -37,9 +37,9 @@ G-9013    | Exceptions should start with 'e_'.
 G-9014    | Constants should start with 'co_'.
 G-9015    | Subtypes should end with 'type'.
 
-These  pre-/suffixes can be customized by using a TrivadisGuidelines3Plus.properties file. This file should be placed in the `users home` directory.
-If an entry is omitted it will fall back to the default value (see table above).
-The file has the following structure:
+These  prefixes and suffixes can be customized by using a `TrivadisGuidelines3Plus.properties` file. This file must be placed in the user's home directory (`$HOME` for Linux or macOS and `%HOMEDRIVE%%HOMEPATH%` for Windows). If a property is omitted it will fall back to the default value (see table above).
+
+Here's an example of the `TrivadisGuidelines3Plus.properties` file content:
 
 ```
 PREFIX_GLOBAL_VARIABLE_NAME = g_
