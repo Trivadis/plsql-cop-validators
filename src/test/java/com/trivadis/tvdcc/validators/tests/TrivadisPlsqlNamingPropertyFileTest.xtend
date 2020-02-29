@@ -21,7 +21,7 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 	@BeforeClass
 	static def void setupTest() {
 		stashPropertiesFile
-		createTestPropertyFile
+		createTestPropertiesFile
 		setupValidator
 	}
 
@@ -37,8 +37,8 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 		}
 	}
 
-	// create a simple property-file to test with	
-	static def void createTestPropertyFile() {
+	// create a simple properties file to test with	
+	static def void createTestPropertiesFile() {
 		val file = new File(propertyPathString)
 		val fileWriter = new FileWriter(file, true)
 		val bufferedWriter = new BufferedWriter(fileWriter)
