@@ -13,47 +13,40 @@ import java.io.BufferedWriter
 import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
 
 class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
-	
-	static File file
-	
-	static FileWriter fileWriter
-	
-	static BufferedWriter bufferedWriter
-	
-	static String backupFileSuffix			= ".backup"
 
-	static String propertyPathString 		= System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
-	static String backupPropertyPathString 	= propertyPathString + backupFileSuffix
-	
+	static String propertyPathString = System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
+	static String backupFileSuffix = ".backup"
+	static String backupPropertyPathString = propertyPathString + backupFileSuffix
+
 	@BeforeClass
 	static def void setupValidator() {
 		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisPlsqlNaming
-	}	
-	
-	//save the users properties
+	}
+
+	// save the users properties
 	@BeforeClass
 	static def void stashPropertiesFile() {
-		if(Files.exists(Paths.get(propertyPathString))){
-				Files.copy(Paths.get(propertyPathString), Paths.get(backupPropertyPathString))
-				Files.delete(Paths.get(propertyPathString))
+		if (Files.exists(Paths.get(propertyPathString))) {
+			Files.copy(Paths.get(propertyPathString), Paths.get(backupPropertyPathString))
+			Files.delete(Paths.get(propertyPathString))
 		}
-	}	
-	
-	//create a simple property-file to test with	
+	}
+
+	// create a simple property-file to test with	
 	@BeforeClass
 	static def void createTestPropertyFile() {
-		file = new File(propertyPathString)
-		fileWriter = new FileWriter(file, true)
-    	bufferedWriter = new BufferedWriter(fileWriter)
-    	bufferedWriter.write("PREFIX_LOCAL_VARIABLE_NAME = loc_")
-    	bufferedWriter.newLine()
-    	bufferedWriter.close()
-    	fileWriter.close()
-    
-	}	
-	
-	//check that old prefix is now not accepted
-	@Test 
+		val file = new File(propertyPathString)
+		val fileWriter = new FileWriter(file, true)
+		val bufferedWriter = new BufferedWriter(fileWriter)
+		bufferedWriter.write("PREFIX_LOCAL_VARIABLE_NAME = loc_")
+		bufferedWriter.newLine()
+		bufferedWriter.close()
+		fileWriter.close()
+
+	}
+
+	// check that old prefix is now not accepted
+	@Test
 	def void LocalVariableNok() {
 		val stmt = '''
 			CREATE OR REPLACE PACKAGE BODY example AS
@@ -68,8 +61,8 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 		Assert.assertEquals(1, issues.filter[it.code == "G-9002"].size)
 	}
 
-	//check that new prefix from file is accepted
-	@Test 
+	// check that new prefix from file is accepted
+	@Test
 	def void LocalVariableOk() {
 		val stmt = '''
 			CREATE OR REPLACE PACKAGE BODY example AS
@@ -83,9 +76,9 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.filter[it.code == "G-9002"].size)
 	}
-	
-	//check that defaults are used if not specified in the properties-file
-	@Test 
+
+	// check that defaults are used if not specified in the properties-file
+	@Test
 	def void GlobalVariableNok() {
 		val stmt = '''
 			CREATE OR REPLACE PACKAGE example AS
@@ -97,8 +90,8 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 		Assert.assertEquals(1, issues.filter[it.code == "G-9001"].size)
 	}
 
-	//check that defaults are used if not specified in the properties-file
-	@Test 
+	// check that defaults are used if not specified in the properties-file
+	@Test
 	def void GlobalVariableOk() {
 		val stmt = '''
 			CREATE OR REPLACE PACKAGE example AS
@@ -107,19 +100,19 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 		'''
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.filter[it.code == "G-9001"].size)
-		
+
 	}
-	
+
 	@AfterClass
 	static def void restorePropertiesFile() {
-		//delete the test property-file 
-		if(Files.exists(Paths.get(propertyPathString))){
+		// delete the test property-file 
+		if (Files.exists(Paths.get(propertyPathString))) {
 			Files.delete(Paths.get(propertyPathString))
 		}
-		//restore the users properties after the test
-		if(Files.exists(Paths.get(backupPropertyPathString))){
-				Files.copy(Paths.get(backupPropertyPathString),Paths.get(propertyPathString))
-				Files.delete(Paths.get(backupPropertyPathString))
+		// restore the users properties after the test
+		if (Files.exists(Paths.get(backupPropertyPathString))) {
+			Files.copy(Paths.get(backupPropertyPathString), Paths.get(propertyPathString))
+			Files.delete(Paths.get(backupPropertyPathString))
 		}
-	}	
+	}
 }
