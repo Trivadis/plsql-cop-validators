@@ -5,7 +5,7 @@
 	<!-- The Basics -->
 	<groupId>trivadis.tvdcc</groupId>
 	<artifactId>trivadis.tvdcc.validators</artifactId>
-	<version>1.3.1-SNAPSHOT</version>
+	<version>1.4.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -168,11 +168,12 @@
 								<exclude>**/GLPTest.java</exclude>
 								<exclude>**/SQLInjectionTest.java</exclude>
 								<exclude>**/OverrideTrivadisGuidelinesTest.java</exclude>
+								<exclude>**/TrivadisGuidelines3PlusTest.java</exclude>
 							</excludes>
 						</configuration>
 					</execution>
 					<execution>
-						<id>trivadis-guidelines-3plus-test</id>
+						<id>trivadis-plsql-naming-test</id>
 						<goals>
 							<goal>test</goal>
 						</goals>
@@ -186,7 +187,7 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>trivadis-guidelines-3plus-property-file-test</id>
+						<id>trivadis-plsql-naming-properties-file-test</id>
 						<goals>
 							<goal>test</goal>
 						</goals>
@@ -238,6 +239,20 @@
 							<reuseForks>true</reuseForks>
 							<includes>
 								<include>**/OverrideTrivadisGuidelinesTest.java</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>trivadis-guidelines-3plus-test</id>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>${skipTests}</skip>
+							<forkCount>1</forkCount>
+							<reuseForks>true</reuseForks>
+							<includes>
+								<include>**/TrivadisGuidelines3PlusTest.java</include>
 							</includes>
 						</configuration>
 					</execution>
