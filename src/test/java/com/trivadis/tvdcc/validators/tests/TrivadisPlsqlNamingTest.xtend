@@ -29,7 +29,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 
 	static String backupFileSuffix			= ".backup"
 
-	static String propertyPathString 		= System.getProperty("user.home") + File.separator + "TrivadisPlsqlNaming.properties"
+	static String propertyPathString 		= System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
 	static String backupPropertyPathString 	= propertyPathString + backupFileSuffix
 
 	@BeforeClass
