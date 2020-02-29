@@ -10,12 +10,13 @@ This project provides the following four custom validators in the package `com.t
 
 Class | Description 
 ----- | -----------
-TrivadisGuidelines3Plus | Checks [Naming Conventions](https://trivadis.github.io/plsql-and-sql-coding-guidelines/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql) of the Trivadis PL/SQL & SQL Coding Guidelines
+TrivadisPlsqlNaming | Checks [Naming Conventions](https://trivadis.github.io/plsql-and-sql-coding-guidelines/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql) of the Trivadis PL/SQL & SQL Coding Guidelines
 GLP | Checks naming of global and local variables and parameters 
 SQLInjection | Looks for SQL injection vulnerabilities, e.g. unasserted parameters in dynamic SQL
 OverrideTrivadisGuidelines | Extends TrivadisGuidelines3 and overrides check for [G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v3.6/4-language-usage/1-general/g-1050/).
+TrivadisGuidelines3Plus | Combines the validators TrivadisPlsqlNaming, SQLInjection and OverrideTrivadisGuidelines. 
 
-### TrivadisGuidelines3Plus
+### TrivadisPlsqlNaming
 
 This validator implements 15 guidelines to cover the chapter [2.2 Naming Conventions](https://trivadis.github.io/plsql-and-sql-coding-guidelines/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql) of the Trivadis PL/SQL & SQL Coding Guidelines.
 
@@ -37,9 +38,9 @@ G-9013    | Exceptions should start with 'e_'.
 G-9014    | Constants should start with 'co_'.
 G-9015    | Subtypes should end with 'type'.
 
-These  prefixes and suffixes can be customized by using a `TrivadisGuidelines3Plus.properties` file. This file must be placed in the user's home directory (`$HOME` for Linux or macOS and `%HOMEDRIVE%%HOMEPATH%` for Windows). If a property is omitted it will fall back to the default value (see table above).
+These prefixes and suffixes can be customized by using a `TrivadisPlsqlNaming.properties` file. This file must be placed in the user's home directory (`$HOME` for Linux or macOS and `%HOMEDRIVE%%HOMEPATH%` for Windows). If a property is omitted it will fall back to the default value (see table above).
 
-Here's an example of the `TrivadisGuidelines3Plus.properties` file content:
+Here's an example of the `TrivadisPlsqlNaming.properties` file content using default values for all properties:
 
 ```
 PREFIX_GLOBAL_VARIABLE_NAME = g_
@@ -60,8 +61,6 @@ PREFIX_EXCEPTION_NAME = e_
 PREFIX_CONSTANT_NAME = co_
 SUFFIX_SUBTYPE_NAME = _type
 ```
-
-This validator is an [extension](https://github.com/Trivadis/cop-validators/blob/master/src/main/java/com/trivadis/tvdcc/validators/TrivadisGuidelines3Plus.xtend#L38) to the Trivadis PL/SQL & SQL Coding Guidelines. This means that the all guidelines defined in chapter [4. Language Usage are checked](https://trivadis.github.io/plsql-and-sql-coding-guidelines/4-language-usage/1-general/g-1010/) as well. 
 
 ### GLP
 
@@ -134,6 +133,10 @@ Guideline | Message
 [G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v3.6/4-language-usage/1-general/g-1050/) | Avoid using literals in your code.
 
 Literals as part of a [Logger](https://github.com/OraOpenSource/Logger) package call are not reported (see also [issue 8](https://github.com/Trivadis/plsql-cop-validators/issues/8)).
+
+### TrivadisGuidelines3Plus
+
+This validator combines the validators [TrivadisPlsqlNaming](#trivadisplsqlnaming), [SQLInjection](#sqlinjection) and [OverrideTrivadisGuidelines](#overridetrivadisguidelines). This way you can deal with an unbound number of validators without comproming the maintainablity.
 
 ## Use in PL/SQL Cop
 

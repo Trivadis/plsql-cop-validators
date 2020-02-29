@@ -25,9 +25,19 @@ import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
 import com.trivadis.oracle.plsql.validation.Remediation
 import java.util.HashMap
 import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.validation.EValidatorRegistrar
 
 class GLP extends PLSQLJavaValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
+
+	// must be overridden to avoid duplicate issues when used via ComposedChecks 
+	override register(EValidatorRegistrar registrar) {
+		val ePackages = getEPackages()
+		if (registrar.registry.get(ePackages.get(0)) == null) {
+			// standalone validator, default registration required
+			super.register(registrar);
+		}
+	}
 
 	override getGuidelines() {
 		if (guidelines === null) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Philipp Salvisberg <philipp.salvisberg@trivadis.com>
+ * Copyright 2020 Philipp Salvisberg <philipp.salvisberg@trivadis.com>
  * 
  * Licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 
  * Unported License (the "License"); you may not use this file except 
@@ -17,35 +17,132 @@ package com.trivadis.tvdcc.validators.tests
 
 import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences
 import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus
+import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.io.File
-import org.junit.AfterClass
 
 class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 
-	static String backupFileSuffix			= ".backup"
-
-	static String propertyPathString 		= System.getProperty("user.home") + File.separator + "TrivadisGuidelines3Plus.properties"
-	static String backupPropertyPathString 	= propertyPathString + backupFileSuffix
-
 	@BeforeClass
+	static def void setupTest() {
+		TrivadisPlsqlNamingTest.stashPropertiesFile
+		setupValidator
+	}
+
 	static def setupValidator() {
 		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisGuidelines3Plus
-	}	
+	}
 	
-	@BeforeClass
-	static def void stashPropertiesFile() {
-		if(Files.exists(Paths.get(propertyPathString))){
-				Files.copy(Paths.get(propertyPathString), Paths.get(backupPropertyPathString));
-				Files.delete(Paths.get(propertyPathString))	
-		}
-	}	
+	@Test
+	def void guidelines() {
+		val guidelines = (getValidator() as TrivadisGuidelines3Plus).guidelines
+		Assert.assertEquals(16, guidelines.values.filter[it.id >= 9000].size)
+		Assert.assertEquals(92, guidelines.values.filter[it.id < 9000].size)
+		Assert.assertEquals(79, guidelines.values.filter[it.id < 1000].size)
+	}
+	
+	@Test
+	def void getGuidelineId_mapped_via_Trivadis2() {
+		val validator = new TrivadisGuidelines3Plus
+		Assert.assertEquals("G-1010", validator.getGuidelineId(1))
+	}
+	
+	@Test
+	def void getGuidelineId_of_Trivadis3() {
+		val validator = new TrivadisGuidelines3Plus
+		Assert.assertEquals("G-2130", validator.getGuidelineId(2130))
+	}
 
+	@Test
+	def void getGuidelineMsg_mapped_via_Trivadis2() {
+		val validator = new TrivadisGuidelines3Plus
+		Assert.assertEquals("G-1010: Try to label your sub blocks.", validator.getGuidelineMsg(1))
+	}
+
+	@Test
+	def void getGuidelineMsg_mapped_via_Trivadis3() {
+		val validator = new TrivadisGuidelines3Plus
+		Assert.assertEquals("G-2130: Try to use subtypes for constructs used often in your code.", validator.getGuidelineMsg(2130))
+	}
+
+	// issue avoided by OverrideTrivadisGuidelines (would throw an error via TrivadisGuidelines3)
+	@Test
+	def void literalInLoggerCallIsOkay() {
+		val stmt = '''
+			BEGIN
+			   logger.log('Hello World');
+			END;
+		'''
+		val issues = stmt.issues.filter[it.code == "G-1050"]
+		Assert.assertEquals(0, issues.size)
+	}
+
+	// issue thrown by OverrideTrivadisGuidelines (check in parent)
+	@Test
+	def void literalInDbmsOutputCallIsNotOkay() {
+		val stmt = '''
+			BEGIN
+			   dbms_output.put_line('Hello World');
+			END;
+		'''
+		val issues = stmt.issues.filter[it.code == "G-1050"]
+		Assert.assertEquals(1, issues.size)
+	}
+	
+	// issue thrown by TrivadisGuidelines3
+	@Test
+	def void guideline2230_na() {
+		val stmt = '''
+			CREATE OR REPLACE PACKAGE BODY constants_up IS
+			   co_big_increase CONSTANT NUMBER(5,0) := 1;
+			   
+			   FUNCTION big_increase RETURN NUMBER DETERMINISTIC IS
+			   BEGIN
+			      RETURN co_big_increase;
+			   END big_increase;
+			END constants_up;
+			/
+		'''
+		val issues = stmt.issues.filter[it.code == "G-2230"]
+		Assert.assertEquals(1, issues.size)
+	}
+
+	// issue thrown by TrivadisGuidelines2
+	@Test
+	def void guideline1010_10() {
+		val stmt = '''
+			BEGIN
+			   BEGIN 
+			      NULL;
+			   END;
+			END;
+			/
+		'''
+		val issues = stmt.issues.filter[it.code == "G-1010"]
+		Assert.assertEquals(1, issues.size)
+	}
+
+	// issue thrown by SQLInjection
 	@Test 
+	def void executeImmediateNotAssertedVariable() {
+		val stmt = '''
+			CREATE OR REPLACE PROCEDURE p (in_table_name IN VARCHAR2) AS
+			   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
+			   l_table_name VARCHAR2(128 BYTE);
+			   l_sql        VARCHAT2(4000 BYTE);
+			BEGIN
+			   l_table_name := in_table_name;
+			   l_sql := replace(l_templ, '#in_table_name#', l_table_name);
+			   EXECUTE IMMEDIATE l_sql;
+			END p;
+		'''
+		val issues = stmt.issues.filter[it.code == "G-9501"]
+		Assert.assertEquals(1, issues.size)
+	}
+
+	// issue thrown by TrivadisPlsqlNaming
+	@Test
 	def void globalVariableNok() {
 		val stmt = '''
 			CREATE OR REPLACE PACKAGE example AS
@@ -57,461 +154,9 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 		Assert.assertEquals(1, issues.filter[it.code == "G-9001"].size)
 	}
 
-	@Test 
-	def void globalVariableOk() {
-		val stmt = '''
-			CREATE OR REPLACE PACKAGE example AS
-			   g_some_name INTEGER;
-			END example;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9001"].size)
-	}
-
-	@Test 
-	def void localVariableNok() {
-		val stmt = '''
-			CREATE OR REPLACE PACKAGE BODY example AS
-			   PROCEDURE a IS
-			      some_name INTEGER;
-			   BEGIN
-			      NULL;
-			   END a;
-			END example;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9002"].size)
-	}
-
-	@Test 
-	def void localVariableOk() {
-		val stmt = '''
-			CREATE OR REPLACE PACKAGE BODY example AS
-			   PROCEDURE a IS
-			      l_some_name INTEGER;
-			   BEGIN
-			      NULL;
-			   END a;
-			END example;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9002"].size)
-	}
-
-	@Test 
-	def void cursorNameNok() {
-		val stmt = '''
-			DECLARE
-			   CURSOR some_name IS SELECT * FROM emp;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9003"].size)
-	}
-
-	@Test 
-	def void cursorNameOk() {
-		val stmt = '''
-			DECLARE
-			   CURSOR c_some_name IS SELECT * FROM emp;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9003"].size)
-	}
-
-	@Test
-	def void recordNameNok() {
-		val stmt = '''
-			DECLARE
-			   emp emp%ROWTYPE;
-			   TYPE r_dept_type IS RECORD (
-			      deptno NUMBER,
-			      dname  VARCHAR2(14 CHAR),
-			      loc    LOC(13 CHAR)
-			   );
-			   dept r_dept_type;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(2, issues.filter[it.code == "G-9004"].size)
-	}
-
-
-	@Test
-	def void recordNameOk() {
-		val stmt = '''
-			DECLARE
-			   r_emp emp%ROWTYPE;
-			   TYPE r_dept_type IS RECORD (
-			      deptno NUMBER,
-			      dname  VARCHAR2(14 CHAR),
-			      loc    LOC(13 CHAR)
-			   );
-			   r_dept r_dept_type;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9004"].size)
-	}
-
-	@Test
-	def void arrayNameNok() {
-		val stmt = '''
-			DECLARE
-			   TYPE t_varray_type IS VARRAY(10) OF STRING;
-			   array1 t_varray_type;
-			   TYPE t_nested_table_type IS TABLE OF STRING;
-			   array2 t_nested_table_type;
-			   TYPE t_assoc_array_type IS TABLE OF STRING INDEX BY PLS_INTEGER;
-			   array3 t_assoc_array_type;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(3, issues.filter[it.code == "G-9005"].size)
-	}
-
-	@Test
-	def void arrayNameOk() {
-		val stmt = '''
-			DECLARE
-			   TYPE t_varray_type IS VARRAY(10) OF STRING;
-			   t_array1 t_varray_type;
-			   TYPE t_nested_table_type IS TABLE OF STRING;
-			   t_array2 t_nested_table_type;
-			   TYPE t_assoc_array_type IS TABLE OF STRING INDEX BY PLS_INTEGER;
-			   t_array3 t_assoc_array_type;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9005"].size)
-	}
-
-	@Test
-	def void objectNameNok() {
-		val stmt = '''
-			CREATE OR REPLACE TYPE dept_type AS OBJECT (
-				deptno INTEGER,
-				dname  VARCHAR2(14 CHAR),
-				loc    VARCHAR2(13 CHAR)
-			);
-			
-			DECLARE
-			   dept dept_type;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9006"].size)
-	}
-
-	@Test
-	def void objectNameOk() {
-		val stmt = '''
-			CREATE OR REPLACE TYPE dept_type AS OBJECT (
-				deptno INTEGER,
-				dname  VARCHAR2(14 CHAR),
-				loc    VARCHAR2(13 CHAR)
-			);
-			
-			DECLARE
-			   o_dept dept_type;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9006"].size)
-	}
-
-	@Test 
-	def void cursorParameterNameNok() {
-		val stmt = '''
-			DECLARE
-			   CURSOR c_emp (x_ename IN VARCHAR2) IS 
-			      SELECT * 
-			        FROM emp
-			       WHERE ename LIKE x_ename;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9007"].size)
-	}
-
-	@Test 
-	def void cursorParameterNameOk() {
-		val stmt = '''
-			DECLARE
-			   CURSOR c_emp (p_ename IN VARCHAR2) IS 
-			      SELECT * 
-			        FROM emp
-			       WHERE ename LIKE p_ename;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9007"].size)
-	}
-
-	@Test 
-	def void inParameterNameNok() {
-		val stmt = '''
-			CREATE PROCEDURE p1 (param INTEGER) IS
-			BEGIN
-			   NULL;
-			END p1;
-			
-			CREATE PACKAGE p IS
-			   PROCEDURE p2 (param IN INTEGER);
-			END p;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(2, issues.filter[it.code == "G-9008"].size)
-	}
-
-	@Test 
-	def void inParameterNameOk() {
-		val stmt = '''
-			CREATE PROCEDURE p1 (in_param INTEGER) IS
-			BEGIN
-			   NULL;
-			END p1;
-			
-			CREATE PACKAGE p IS
-			   PROCEDURE p2 (in_param IN INTEGER);
-			END p;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9008"].size)
-	}
-
-	@Test 
-	def void outParameterNameNok() {
-		val stmt = '''
-			CREATE PROCEDURE p1 (param OUT INTEGER) IS
-			BEGIN
-			   NULL;
-			END p1;
-			
-			CREATE PACKAGE p IS
-			   PROCEDURE p2 (param OUT INTEGER);
-			END p;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(2, issues.filter[it.code == "G-9009"].size)
-	}
-
-	@Test 
-	def void outParameterNameOk() {
-		val stmt = '''
-			CREATE PROCEDURE p1 (out_param OUT INTEGER) IS
-			BEGIN
-			   NULL;
-			END p1;
-			
-			CREATE PACKAGE p IS
-			   PROCEDURE p2 (out_param OUT INTEGER);
-			END p;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9009"].size)
-	}
-
-	@Test 
-	def void inOutParameterNameNok() {
-		val stmt = '''
-			CREATE PROCEDURE p1 (param IN OUT INTEGER) IS
-			BEGIN
-			   NULL;
-			END p1;
-			
-			CREATE PACKAGE p IS
-			   PROCEDURE p2 (param IN OUT INTEGER);
-			END p;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(2, issues.filter[it.code == "G-9010"].size)
-	}
-
-	@Test 
-	def void inOutParameterNameOk() {
-		val stmt = '''
-			CREATE PROCEDURE p1 (io_param IN OUT INTEGER) IS
-			BEGIN
-			   NULL;
-			END p1;
-			
-			CREATE PACKAGE p IS
-			   PROCEDURE p2 (io_param IN OUT INTEGER);
-			END p;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9010"].size)
-	}
-
-	@Test
-	def void recordTypeNameNok() {
-		val stmt = '''
-			DECLARE
-			   TYPE dept_typ IS RECORD (
-			      deptno NUMBER,
-			      dname  VARCHAR2(14 CHAR),
-			      loc    LOC(13 CHAR)
-			   );
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9011"].size)
-	}
-
-	@Test
-	def void recordTypeNameOk() {
-		val stmt = '''
-			DECLARE
-			   TYPE r_dept_type IS RECORD (
-			      deptno NUMBER,
-			      dname  VARCHAR2(14 CHAR),
-			      loc    LOC(13 CHAR)
-			   );
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9011"].size)
-	}
-
-	@Test
-	def void arrayTypeNameNok() {
-		val stmt = '''
-			DECLARE
-			   TYPE t_varray          IS VARRAY(10) OF STRING;
-			   TYPE nested_table_type IS TABLE OF STRING;
-			   TYPE x_assoc_array_y   IS TABLE OF STRING INDEX BY PLS_INTEGER;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(3, issues.filter[it.code == "G-9012"].size)
-	}
-
-	@Test
-	def void arrayTypeNameOk() {
-		val stmt = '''
-			DECLARE
-			   TYPE t_varray_type       IS VARRAY(10) OF STRING;
-			   TYPE t_nested_table_type IS TABLE OF STRING;
-			   TYPE t_assoc_array_type  IS TABLE OF STRING INDEX BY PLS_INTEGER;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9012"].size)
-	}
-
-	@Test
-	def void exceptionNameNok() {
-		val stmt = '''
-			DECLARE
-			   some_name EXCEPTION;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9013"].size)
-	}
-
-	@Test
-	def void exceptionNameOk() {
-		val stmt = '''
-			DECLARE
-			   e_some_name EXCEPTION;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9013"].size)
-	}
-
-	@Test
-	def void constantNameNok() {
-		val stmt = '''
-			DECLARE
-			   maximum CONSTANT INTEGER := 1000;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9014"].size)
-	}
-
-	@Test
-	def void constantNameOk() {
-		val stmt = '''
-			DECLARE
-			   co_maximum CONSTANT INTEGER := 1000;
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9014"].size)
-	}
-	
-	@Test
-	def void subtypeNameNok() {
-		val stmt = '''
-			DECLARE
-			   SUBTYPE short_text IS VARCHAR2(100 CHAR);
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9015"].size)
-	}	
-
-	@Test
-	def void subtypeNameOk() {
-		val stmt = '''
-			DECLARE
-			   SUBTYPE short_text_type IS VARCHAR2(100 CHAR);
-			BEGIN
-			   NULL;
-			END;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9015"].size)
-	}	
-	
 	@AfterClass
 	static def void restorePropertiesFile() {
-		if(Files.exists(Paths.get(backupPropertyPathString))){
-				Files.copy(Paths.get(backupPropertyPathString),Paths.get(propertyPathString))
-				Files.delete(Paths.get(backupPropertyPathString))
-		}
-	}	
+		TrivadisPlsqlNamingTest.restorePropertiesFile
+	}
+
 }
