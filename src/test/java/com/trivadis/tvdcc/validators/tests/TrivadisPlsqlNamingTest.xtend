@@ -27,25 +27,24 @@ import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
 
 class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 
-	static String backupFileSuffix			= ".backup"
-
-	static String propertyPathString 		= System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
-	static String backupPropertyPathString 	= propertyPathString + backupFileSuffix
+	static String propertyPathString = System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
+	static String backupFileSuffix = ".backup"
+	static String backupPropertyPathString = propertyPathString + backupFileSuffix
 
 	@BeforeClass
 	static def setupValidator() {
 		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisPlsqlNaming
-	}	
-	
+	}
+
 	@BeforeClass
 	static def void stashPropertiesFile() {
-		if(Files.exists(Paths.get(propertyPathString))){
-				Files.copy(Paths.get(propertyPathString), Paths.get(backupPropertyPathString));
-				Files.delete(Paths.get(propertyPathString))	
+		if (Files.exists(Paths.get(propertyPathString))) {
+			Files.copy(Paths.get(propertyPathString), Paths.get(backupPropertyPathString));
+			Files.delete(Paths.get(propertyPathString))
 		}
-	}	
+	}
 
-	@Test 
+	@Test
 	def void globalVariableNok() {
 		val stmt = '''
 			CREATE OR REPLACE PACKAGE example AS
@@ -57,7 +56,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(1, issues.filter[it.code == "G-9001"].size)
 	}
 
-	@Test 
+	@Test
 	def void globalVariableOk() {
 		val stmt = '''
 			CREATE OR REPLACE PACKAGE example AS
@@ -68,7 +67,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(0, issues.filter[it.code == "G-9001"].size)
 	}
 
-	@Test 
+	@Test
 	def void localVariableNok() {
 		val stmt = '''
 			CREATE OR REPLACE PACKAGE BODY example AS
@@ -83,7 +82,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(1, issues.filter[it.code == "G-9002"].size)
 	}
 
-	@Test 
+	@Test
 	def void localVariableOk() {
 		val stmt = '''
 			CREATE OR REPLACE PACKAGE BODY example AS
@@ -98,7 +97,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(0, issues.filter[it.code == "G-9002"].size)
 	}
 
-	@Test 
+	@Test
 	def void cursorNameNok() {
 		val stmt = '''
 			DECLARE
@@ -111,7 +110,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(1, issues.filter[it.code == "G-9003"].size)
 	}
 
-	@Test 
+	@Test
 	def void cursorNameOk() {
 		val stmt = '''
 			DECLARE
@@ -142,7 +141,6 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(2, issues.filter[it.code == "G-9004"].size)
 	}
-
 
 	@Test
 	def void recordNameOk() {
@@ -237,7 +235,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(0, issues.filter[it.code == "G-9006"].size)
 	}
 
-	@Test 
+	@Test
 	def void cursorParameterNameNok() {
 		val stmt = '''
 			DECLARE
@@ -253,7 +251,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(1, issues.filter[it.code == "G-9007"].size)
 	}
 
-	@Test 
+	@Test
 	def void cursorParameterNameOk() {
 		val stmt = '''
 			DECLARE
@@ -269,7 +267,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(0, issues.filter[it.code == "G-9007"].size)
 	}
 
-	@Test 
+	@Test
 	def void inParameterNameNok() {
 		val stmt = '''
 			CREATE PROCEDURE p1 (param INTEGER) IS
@@ -285,7 +283,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(2, issues.filter[it.code == "G-9008"].size)
 	}
 
-	@Test 
+	@Test
 	def void inParameterNameOk() {
 		val stmt = '''
 			CREATE PROCEDURE p1 (in_param INTEGER) IS
@@ -301,7 +299,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(0, issues.filter[it.code == "G-9008"].size)
 	}
 
-	@Test 
+	@Test
 	def void outParameterNameNok() {
 		val stmt = '''
 			CREATE PROCEDURE p1 (param OUT INTEGER) IS
@@ -317,7 +315,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(2, issues.filter[it.code == "G-9009"].size)
 	}
 
-	@Test 
+	@Test
 	def void outParameterNameOk() {
 		val stmt = '''
 			CREATE PROCEDURE p1 (out_param OUT INTEGER) IS
@@ -333,7 +331,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(0, issues.filter[it.code == "G-9009"].size)
 	}
 
-	@Test 
+	@Test
 	def void inOutParameterNameNok() {
 		val stmt = '''
 			CREATE PROCEDURE p1 (param IN OUT INTEGER) IS
@@ -349,7 +347,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		Assert.assertEquals(2, issues.filter[it.code == "G-9010"].size)
 	}
 
-	@Test 
+	@Test
 	def void inOutParameterNameOk() {
 		val stmt = '''
 			CREATE PROCEDURE p1 (io_param IN OUT INTEGER) IS
@@ -480,7 +478,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.filter[it.code == "G-9014"].size)
 	}
-	
+
 	@Test
 	def void subtypeNameNok() {
 		val stmt = '''
@@ -492,7 +490,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		'''
 		val issues = stmt.issues
 		Assert.assertEquals(1, issues.filter[it.code == "G-9015"].size)
-	}	
+	}
 
 	@Test
 	def void subtypeNameOk() {
@@ -505,13 +503,13 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		'''
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.filter[it.code == "G-9015"].size)
-	}	
-	
+	}
+
 	@AfterClass
 	static def void restorePropertiesFile() {
-		if(Files.exists(Paths.get(backupPropertyPathString))){
-				Files.copy(Paths.get(backupPropertyPathString),Paths.get(propertyPathString))
-				Files.delete(Paths.get(backupPropertyPathString))
+		if (Files.exists(Paths.get(backupPropertyPathString))) {
+			Files.copy(Paths.get(backupPropertyPathString), Paths.get(propertyPathString))
+			Files.delete(Paths.get(backupPropertyPathString))
 		}
-	}	
+	}
 }
