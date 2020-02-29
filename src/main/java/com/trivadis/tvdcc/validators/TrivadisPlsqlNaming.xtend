@@ -89,9 +89,9 @@ class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidat
 			val prop = new Properties
 			prop.load(input)
 			for (field : this.class.declaredFields.filter[it.name.startsWith("PREFIX_") || it.name.startsWith("SUFFIX_")]) {
-				field.accessible = true
 				val value = prop.get(field.name);
 				if (value != null) {
+					field.accessible = true
 					field.set(this, prop.get(field.name))
 				}
 			}
