@@ -27,20 +27,23 @@ import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
 
 class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 
-	static String propertyPathString = System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
-	static String backupFileSuffix = ".backup"
-	static String backupPropertyPathString = propertyPathString + backupFileSuffix
+	public static val FULL_PROPERTY_FILE_NAME = System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
+	public static val String FULL_PROPERTY_FILE_NAME_BACKUP = FULL_PROPERTY_FILE_NAME + ".backup"
 
 	@BeforeClass
+	static def void setupTest() {
+		stashPropertiesFile
+		setupValidator
+	}
+
 	static def setupValidator() {
 		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisPlsqlNaming
 	}
 
-	@BeforeClass
 	static def void stashPropertiesFile() {
-		if (Files.exists(Paths.get(propertyPathString))) {
-			Files.copy(Paths.get(propertyPathString), Paths.get(backupPropertyPathString));
-			Files.delete(Paths.get(propertyPathString))
+		if (Files.exists(Paths.get(FULL_PROPERTY_FILE_NAME))) {
+			Files.copy(Paths.get(FULL_PROPERTY_FILE_NAME), Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP));
+			Files.delete(Paths.get(FULL_PROPERTY_FILE_NAME))
 		}
 	}
 
@@ -507,9 +510,9 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 
 	@AfterClass
 	static def void restorePropertiesFile() {
-		if (Files.exists(Paths.get(backupPropertyPathString))) {
-			Files.copy(Paths.get(backupPropertyPathString), Paths.get(propertyPathString))
-			Files.delete(Paths.get(backupPropertyPathString))
+		if (Files.exists(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP))) {
+			Files.copy(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP), Paths.get(FULL_PROPERTY_FILE_NAME))
+			Files.delete(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP))
 		}
 	}
 }

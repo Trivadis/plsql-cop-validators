@@ -1,52 +1,31 @@
 package com.trivadis.tvdcc.validators.tests
 
-import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
+import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.io.File
-import org.junit.AfterClass
-import java.io.FileWriter
-import java.io.BufferedWriter
-import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
 
 class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 
-	static String propertyPathString = System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
-	static String backupFileSuffix = ".backup"
-	static String backupPropertyPathString = propertyPathString + backupFileSuffix
-	
 	@BeforeClass
 	static def void setupTest() {
-		stashPropertiesFile
+		TrivadisPlsqlNamingTest.stashPropertiesFile
 		createTestPropertiesFile
-		setupValidator
-	}
-
-	static def void setupValidator() {
-		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisPlsqlNaming
-	}
-
-	// save the users properties
-	static def void stashPropertiesFile() {
-		if (Files.exists(Paths.get(propertyPathString))) {
-			Files.copy(Paths.get(propertyPathString), Paths.get(backupPropertyPathString))
-			Files.delete(Paths.get(propertyPathString))
-		}
+		TrivadisPlsqlNamingTest.setupValidator
 	}
 
 	// create a simple properties file to test with	
 	static def void createTestPropertiesFile() {
-		val file = new File(propertyPathString)
+		val file = new File(TrivadisPlsqlNamingTest.FULL_PROPERTY_FILE_NAME)
 		val fileWriter = new FileWriter(file, true)
 		val bufferedWriter = new BufferedWriter(fileWriter)
 		bufferedWriter.write("PREFIX_LOCAL_VARIABLE_NAME = loc_")
 		bufferedWriter.newLine()
 		bufferedWriter.close()
 		fileWriter.close()
-
 	}
 
 	// check that old prefix is now not accepted
@@ -109,14 +88,6 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 
 	@AfterClass
 	static def void restorePropertiesFile() {
-		// delete the test property-file 
-		if (Files.exists(Paths.get(propertyPathString))) {
-			Files.delete(Paths.get(propertyPathString))
-		}
-		// restore the users properties after the test
-		if (Files.exists(Paths.get(backupPropertyPathString))) {
-			Files.copy(Paths.get(backupPropertyPathString), Paths.get(propertyPathString))
-			Files.delete(Paths.get(backupPropertyPathString))
-		}
+		TrivadisPlsqlNamingTest.restorePropertiesFile
 	}
 }
