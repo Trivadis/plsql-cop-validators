@@ -16,7 +16,6 @@
 package com.trivadis.tvdcc.validators.tests
 
 import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences
-import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
@@ -24,17 +23,18 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.io.File
 import org.junit.AfterClass
+import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
 
-class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
+class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 
 	static String backupFileSuffix			= ".backup"
 
-	static String propertyPathString 		= System.getProperty("user.home") + File.separator + "TrivadisGuidelines3Plus.properties"
+	static String propertyPathString 		= System.getProperty("user.home") + File.separator + "TrivadisPlsqlNaming.properties"
 	static String backupPropertyPathString 	= propertyPathString + backupFileSuffix
 
 	@BeforeClass
 	static def setupValidator() {
-		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisGuidelines3Plus
+		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisPlsqlNaming
 	}	
 	
 	@BeforeClass

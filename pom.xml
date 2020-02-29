@@ -163,8 +163,8 @@
 								<include>**/*.java</include>
 							</includes>
 							<excludes>
-								<exclude>**/TrivadisGuidelines3PlusTest.java</exclude>
-								<exclude>**/TrivadisGuidelines3PlusPropertyFileTest.java</exclude>
+								<exclude>**/TrivadisPlsqlNamingTest.java</exclude>
+								<exclude>**/TrivadisPlsqlNamingPropertyFileTest.java</exclude>
 								<exclude>**/GLPTest.java</exclude>
 								<exclude>**/SQLInjectionTest.java</exclude>
 								<exclude>**/OverrideTrivadisGuidelinesTest.java</exclude>
@@ -181,7 +181,7 @@
 							<forkCount>1</forkCount>
 							<reuseForks>true</reuseForks>
 							<includes>
-								<include>**/TrivadisGuidelines3PlusTest.java</include>
+								<include>**/TrivadisPlsqlNamingTest.java</include>
 							</includes>
 						</configuration>
 					</execution>
@@ -195,7 +195,7 @@
 							<forkCount>1</forkCount>
 							<reuseForks>true</reuseForks>
 							<includes>
-								<include>**/TrivadisGuidelines3PlusPropertyFileTest.java</include>
+								<include>**/TrivadisPlsqlNamingPropertyFileTest.java</include>
 							</includes>
 						</configuration>
 					</execution>

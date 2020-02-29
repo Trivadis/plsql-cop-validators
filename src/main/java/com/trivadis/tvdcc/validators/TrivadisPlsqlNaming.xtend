@@ -39,11 +39,12 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 
-class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopValidator {
+class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
 	FileInputStream	 input
 	Properties 		 prop
 	
+	public static String PROPERTY_FILE_NAME = "TrivadisPlsqlNaming.properties"
 
 	public static int ISSUE_GLOBAL_VARIABLE_NAME = 9001
 	public static int ISSUE_LOCAL_VARIABLE_NAME = 9002
@@ -86,7 +87,7 @@ class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopVal
 
 	def readProperties() {	
 		try{
-			input = new FileInputStream(System.getProperty("user.home") + File.separator + "TrivadisGuidelines3Plus.properties")
+			input = new FileInputStream(System.getProperty("user.home") + File.separator + PROPERTY_FILE_NAME)
 	        prop  = new Properties()
 	
 	        prop.load(input)
@@ -127,60 +128,60 @@ class TrivadisGuidelines3Plus extends TrivadisGuidelines3 implements PLSQLCopVal
 				new PLSQLCopGuideline(
 					ISSUE_GLOBAL_VARIABLE_NAME, '''Global variables should start with '«PREFIX_GLOBAL_VARIABLE_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_LOCAL_VARIABLE_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_LOCAL_VARIABLE_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_LOCAL_VARIABLE_NAME, '''Local variables should start with '«PREFIX_LOCAL_VARIABLE_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_CURSOR_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_CURSOR_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_CURSOR_NAME, '''Cursors should start with '«PREFIX_CURSOR_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_RECORD_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_RECORD_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_RECORD_NAME, '''Records should start with '«PREFIX_RECORD_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_ARRAY_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_ARRAY_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_ARRAY_NAME, '''Collection types (arrays/tables) should start with '«PREFIX_ARRAY_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_OBJECT_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_OBJECT_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_OBJECT_NAME, '''Objects should start with '«PREFIX_OBJECT_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_CURSOR_PARAMETER_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_CURSOR_PARAMETER_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_CURSOR_PARAMETER_NAME, '''Cursor parameters should start with '«PREFIX_CURSOR_PARAMETER_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_IN_PARAMETER_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_IN_PARAMETER_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_IN_PARAMETER_NAME, '''In parameters should start with '«PREFIX_IN_PARAMETER_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_OUT_PARAMETER_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_OUT_PARAMETER_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_OUT_PARAMETER_NAME, '''Out parameters should start with '«PREFIX_OUT_PARAMETER_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_IN_OUT_PARAMETER_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_IN_OUT_PARAMETER_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_IN_OUT_PARAMETER_NAME, '''In/out parameters should start with '«PREFIX_IN_OUT_PARAMETER_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_RECORD_TYPE_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_RECORD_TYPE_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_RECORD_TYPE_NAME, '''Record Type definitions should start with '«PREFIX_RECORD_TYPE_NAME»' and end with '«SUFFIX_RECORD_TYPE_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_ARRAY_TYPE_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_ARRAY_TYPE_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_ARRAY_TYPE_NAME, '''Collection Type definitions (arrays/tables) should start with '«PREFIX_ARRAY_TYPE_NAME»' and end with '«SUFFIX_ARRAY_TYPE_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_EXCEPTION_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_EXCEPTION_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_EXCEPTION_NAME, '''Exceptions should start with '«PREFIX_EXCEPTION_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_CONSTANT_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_CONSTANT_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_CONSTANT_NAME, '''Constants should start with '«PREFIX_CONSTANT_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
-			guidelines.put(TrivadisGuidelines3Plus.ISSUE_SUBTYPE_NAME,
-				new PLSQLCopGuideline(TrivadisGuidelines3Plus.
+			guidelines.put(TrivadisPlsqlNaming.ISSUE_SUBTYPE_NAME,
+				new PLSQLCopGuideline(TrivadisPlsqlNaming.
 					ISSUE_SUBTYPE_NAME, '''Subtypes should end with '«SUFFIX_SUBTYPE_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 		}
