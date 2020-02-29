@@ -16,14 +16,15 @@
 package com.trivadis.tvdcc.validators.tests
 
 import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences
+import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
+import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.io.File
-import org.junit.AfterClass
-import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
 
 class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 
@@ -511,7 +512,8 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 	@AfterClass
 	static def void restorePropertiesFile() {
 		if (Files.exists(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP))) {
-			Files.copy(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP), Paths.get(FULL_PROPERTY_FILE_NAME))
+			Files.copy(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP), Paths.get(FULL_PROPERTY_FILE_NAME),
+				StandardCopyOption.REPLACE_EXISTING)
 			Files.delete(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP))
 		}
 	}
