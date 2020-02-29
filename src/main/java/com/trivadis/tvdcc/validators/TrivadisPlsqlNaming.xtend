@@ -44,39 +44,39 @@ class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidat
 
 	public static val PROPERTY_FILE_NAME = "TrivadisPlsqlNaming.properties"
 
-	public static val int ISSUE_GLOBAL_VARIABLE_NAME = 9001
-	public static val int ISSUE_LOCAL_VARIABLE_NAME = 9002
-	public static val int ISSUE_CURSOR_NAME = 9003
-	public static val int ISSUE_RECORD_NAME = 9004
-	public static val int ISSUE_ARRAY_NAME = 9005
-	public static val int ISSUE_OBJECT_NAME = 9006
-	public static val int ISSUE_CURSOR_PARAMETER_NAME = 9007
-	public static val int ISSUE_IN_PARAMETER_NAME = 9008
-	public static val int ISSUE_OUT_PARAMETER_NAME = 9009
-	public static val int ISSUE_IN_OUT_PARAMETER_NAME = 9010
-	public static val int ISSUE_RECORD_TYPE_NAME = 9011
-	public static val int ISSUE_ARRAY_TYPE_NAME = 9012
-	public static val int ISSUE_EXCEPTION_NAME = 9013
-	public static val int ISSUE_CONSTANT_NAME = 9014
-	public static val int ISSUE_SUBTYPE_NAME = 9015
+	public static val ISSUE_GLOBAL_VARIABLE_NAME = 9001
+	public static val ISSUE_LOCAL_VARIABLE_NAME = 9002
+	public static val ISSUE_CURSOR_NAME = 9003
+	public static val ISSUE_RECORD_NAME = 9004
+	public static val ISSUE_ARRAY_NAME = 9005
+	public static val ISSUE_OBJECT_NAME = 9006
+	public static val ISSUE_CURSOR_PARAMETER_NAME = 9007
+	public static val ISSUE_IN_PARAMETER_NAME = 9008
+	public static val ISSUE_OUT_PARAMETER_NAME = 9009
+	public static val ISSUE_IN_OUT_PARAMETER_NAME = 9010
+	public static val ISSUE_RECORD_TYPE_NAME = 9011
+	public static val ISSUE_ARRAY_TYPE_NAME = 9012
+	public static val ISSUE_EXCEPTION_NAME = 9013
+	public static val ISSUE_CONSTANT_NAME = 9014
+	public static val ISSUE_SUBTYPE_NAME = 9015
 
-	public static var PREFIX_GLOBAL_VARIABLE_NAME = "g_"
-	public static var PREFIX_LOCAL_VARIABLE_NAME = "l_"
-	public static var PREFIX_CURSOR_NAME = "c_"
-	public static var PREFIX_RECORD_NAME = "r_"
-	public static var PREFIX_ARRAY_NAME = "t_"
-	public static var PREFIX_OBJECT_NAME = "o_"
-	public static var PREFIX_CURSOR_PARAMETER_NAME = "p_"
-	public static var PREFIX_IN_PARAMETER_NAME = "in_"
-	public static var PREFIX_OUT_PARAMETER_NAME = "out_"
-	public static var PREFIX_IN_OUT_PARAMETER_NAME = "io_"
-	public static var PREFIX_RECORD_TYPE_NAME = "r_"
-	public static var SUFFIX_RECORD_TYPE_NAME = "_type"
-	public static var PREFIX_ARRAY_TYPE_NAME = "t_"
-	public static var SUFFIX_ARRAY_TYPE_NAME = "_type"
-	public static var PREFIX_EXCEPTION_NAME = "e_"
-	public static var PREFIX_CONSTANT_NAME = "co_"
-	public static var SUFFIX_SUBTYPE_NAME = "_type"
+	static var PREFIX_GLOBAL_VARIABLE_NAME = "g_"
+	static var PREFIX_LOCAL_VARIABLE_NAME = "l_"
+	static var PREFIX_CURSOR_NAME = "c_"
+	static var PREFIX_RECORD_NAME = "r_"
+	static var PREFIX_ARRAY_NAME = "t_"
+	static var PREFIX_OBJECT_NAME = "o_"
+	static var PREFIX_CURSOR_PARAMETER_NAME = "p_"
+	static var PREFIX_IN_PARAMETER_NAME = "in_"
+	static var PREFIX_OUT_PARAMETER_NAME = "out_"
+	static var PREFIX_IN_OUT_PARAMETER_NAME = "io_"
+	static var PREFIX_RECORD_TYPE_NAME = "r_"
+	static var SUFFIX_RECORD_TYPE_NAME = "_type"
+	static var PREFIX_ARRAY_TYPE_NAME = "t_"
+	static var SUFFIX_ARRAY_TYPE_NAME = "_type"
+	static var PREFIX_EXCEPTION_NAME = "e_"
+	static var PREFIX_CONSTANT_NAME = "co_"
+	static var SUFFIX_SUBTYPE_NAME = "_type"
 
 	new() {
 		super()
@@ -88,7 +88,8 @@ class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidat
 			val input = new FileInputStream(System.getProperty("user.home") + File.separator + PROPERTY_FILE_NAME)
 			val prop = new Properties
 			prop.load(input)
-			for (field : this.class.fields.filter[it.name.startsWith("PREFIX_") || it.name.startsWith("SUFFIX_")]) {
+			for (field : this.class.declaredFields.filter[it.name.startsWith("PREFIX_") || it.name.startsWith("SUFFIX_")]) {
+				field.accessible = true
 				val value = prop.get(field.name);
 				if (value != null) {
 					field.set(this, prop.get(field.name))
