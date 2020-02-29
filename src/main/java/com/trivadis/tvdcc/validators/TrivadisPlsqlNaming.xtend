@@ -41,78 +41,62 @@ import java.io.FileNotFoundException
 
 class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
-	FileInputStream	 input
-	Properties 		 prop
-	
-	public static String PROPERTY_FILE_NAME = "TrivadisPlsqlNaming.properties"
 
-	public static int ISSUE_GLOBAL_VARIABLE_NAME = 9001
-	public static int ISSUE_LOCAL_VARIABLE_NAME = 9002
-	public static int ISSUE_CURSOR_NAME = 9003
-	public static int ISSUE_RECORD_NAME = 9004
-	public static int ISSUE_ARRAY_NAME = 9005
-	public static int ISSUE_OBJECT_NAME = 9006
-	public static int ISSUE_CURSOR_PARAMETER_NAME = 9007
-	public static int ISSUE_IN_PARAMETER_NAME = 9008
-	public static int ISSUE_OUT_PARAMETER_NAME = 9009
-	public static int ISSUE_IN_OUT_PARAMETER_NAME = 9010
-	public static int ISSUE_RECORD_TYPE_NAME = 9011
-	public static int ISSUE_ARRAY_TYPE_NAME = 9012
-	public static int ISSUE_EXCEPTION_NAME = 9013
-	public static int ISSUE_CONSTANT_NAME = 9014
-	public static int ISSUE_SUBTYPE_NAME = 9015
+	public static val PROPERTY_FILE_NAME = "TrivadisPlsqlNaming.properties"
 
-	public static String PREFIX_GLOBAL_VARIABLE_NAME = "g_"
-	public static String PREFIX_LOCAL_VARIABLE_NAME = "l_"
-	public static String PREFIX_CURSOR_NAME = "c_"
-	public static String PREFIX_RECORD_NAME = "r_"
-	public static String PREFIX_ARRAY_NAME = "t_"
-	public static String PREFIX_OBJECT_NAME = "o_"
-	public static String PREFIX_CURSOR_PARAMETER_NAME = "p_"
-	public static String PREFIX_IN_PARAMETER_NAME = "in_"
-	public static String PREFIX_OUT_PARAMETER_NAME = "out_"
-	public static String PREFIX_IN_OUT_PARAMETER_NAME = "io_"
-	public static String PREFIX_RECORD_TYPE_NAME = "r_"
-	public static String SUFFIX_RECORD_TYPE_NAME = "_type"
-	public static String PREFIX_ARRAY_TYPE_NAME = "t_"
-	public static String SUFFIX_ARRAY_TYPE_NAME = "_type"
-	public static String PREFIX_EXCEPTION_NAME = "e_"
-	public static String PREFIX_CONSTANT_NAME = "co_"
-	public static String SUFFIX_SUBTYPE_NAME = "_type"
+	public static val int ISSUE_GLOBAL_VARIABLE_NAME = 9001
+	public static val int ISSUE_LOCAL_VARIABLE_NAME = 9002
+	public static val int ISSUE_CURSOR_NAME = 9003
+	public static val int ISSUE_RECORD_NAME = 9004
+	public static val int ISSUE_ARRAY_NAME = 9005
+	public static val int ISSUE_OBJECT_NAME = 9006
+	public static val int ISSUE_CURSOR_PARAMETER_NAME = 9007
+	public static val int ISSUE_IN_PARAMETER_NAME = 9008
+	public static val int ISSUE_OUT_PARAMETER_NAME = 9009
+	public static val int ISSUE_IN_OUT_PARAMETER_NAME = 9010
+	public static val int ISSUE_RECORD_TYPE_NAME = 9011
+	public static val int ISSUE_ARRAY_TYPE_NAME = 9012
+	public static val int ISSUE_EXCEPTION_NAME = 9013
+	public static val int ISSUE_CONSTANT_NAME = 9014
+	public static val int ISSUE_SUBTYPE_NAME = 9015
 
-	new(){
+	public static var PREFIX_GLOBAL_VARIABLE_NAME = "g_"
+	public static var PREFIX_LOCAL_VARIABLE_NAME = "l_"
+	public static var PREFIX_CURSOR_NAME = "c_"
+	public static var PREFIX_RECORD_NAME = "r_"
+	public static var PREFIX_ARRAY_NAME = "t_"
+	public static var PREFIX_OBJECT_NAME = "o_"
+	public static var PREFIX_CURSOR_PARAMETER_NAME = "p_"
+	public static var PREFIX_IN_PARAMETER_NAME = "in_"
+	public static var PREFIX_OUT_PARAMETER_NAME = "out_"
+	public static var PREFIX_IN_OUT_PARAMETER_NAME = "io_"
+	public static var PREFIX_RECORD_TYPE_NAME = "r_"
+	public static var SUFFIX_RECORD_TYPE_NAME = "_type"
+	public static var PREFIX_ARRAY_TYPE_NAME = "t_"
+	public static var SUFFIX_ARRAY_TYPE_NAME = "_type"
+	public static var PREFIX_EXCEPTION_NAME = "e_"
+	public static var PREFIX_CONSTANT_NAME = "co_"
+	public static var SUFFIX_SUBTYPE_NAME = "_type"
+
+	new() {
 		super()
 		readProperties
 	}
 
-	def readProperties() {	
-		try{
-			input = new FileInputStream(System.getProperty("user.home") + File.separator + PROPERTY_FILE_NAME)
-	        prop  = new Properties()
-	
-	        prop.load(input)
-	
-	        PREFIX_GLOBAL_VARIABLE_NAME  = prop.getProperty("PREFIX_GLOBAL_VARIABLE_NAME" , PREFIX_GLOBAL_VARIABLE_NAME)
-			PREFIX_LOCAL_VARIABLE_NAME   = prop.getProperty("PREFIX_LOCAL_VARIABLE_NAME"  , PREFIX_LOCAL_VARIABLE_NAME)
-			PREFIX_CURSOR_NAME           = prop.getProperty("PREFIX_CURSOR_NAME"          , PREFIX_CURSOR_NAME)
-			PREFIX_RECORD_NAME           = prop.getProperty("PREFIX_RECORD_NAME"          , PREFIX_RECORD_NAME)
-			PREFIX_ARRAY_NAME            = prop.getProperty("PREFIX_ARRAY_NAME"           , PREFIX_ARRAY_NAME)
-			PREFIX_OBJECT_NAME           = prop.getProperty("PREFIX_OBJECT_NAME"          , PREFIX_OBJECT_NAME)
-			PREFIX_CURSOR_PARAMETER_NAME = prop.getProperty("PREFIX_CURSOR_PARAMETER_NAME", PREFIX_CURSOR_PARAMETER_NAME)
-			PREFIX_IN_PARAMETER_NAME     = prop.getProperty("PREFIX_IN_PARAMETER_NAME"    , PREFIX_IN_PARAMETER_NAME)
-			PREFIX_OUT_PARAMETER_NAME    = prop.getProperty("PREFIX_OUT_PARAMETER_NAME"   , PREFIX_OUT_PARAMETER_NAME)
-			PREFIX_IN_OUT_PARAMETER_NAME = prop.getProperty("PREFIX_IN_OUT_PARAMETER_NAME", PREFIX_IN_OUT_PARAMETER_NAME)
-			PREFIX_RECORD_TYPE_NAME      = prop.getProperty("PREFIX_RECORD_TYPE_NAME"     , PREFIX_RECORD_TYPE_NAME)
-			SUFFIX_RECORD_TYPE_NAME      = prop.getProperty("SUFFIX_RECORD_TYPE_NAME"     , SUFFIX_RECORD_TYPE_NAME)
-			PREFIX_ARRAY_TYPE_NAME       = prop.getProperty("PREFIX_ARRAY_TYPE_NAME"      , PREFIX_ARRAY_TYPE_NAME)
-			SUFFIX_ARRAY_TYPE_NAME       = prop.getProperty("SUFFIX_ARRAY_TYPE_NAME"      , SUFFIX_ARRAY_TYPE_NAME)
-			PREFIX_EXCEPTION_NAME        = prop.getProperty("PREFIX_EXCEPTION_NAME"       , PREFIX_EXCEPTION_NAME)
-			PREFIX_CONSTANT_NAME         = prop.getProperty("PREFIX_CONSTANT_NAME"        , PREFIX_CONSTANT_NAME)
-			SUFFIX_SUBTYPE_NAME          = prop.getProperty("SUFFIX_SUBTYPE_NAME"         , SUFFIX_SUBTYPE_NAME)
-
+	def private readProperties() {
+		try {
+			val input = new FileInputStream(System.getProperty("user.home") + File.separator + PROPERTY_FILE_NAME)
+			val prop = new Properties
+			prop.load(input)
+			for (field : this.class.fields.filter[it.name.startsWith("PREFIX_") || it.name.startsWith("SUFFIX_")]) {
+				val value = prop.get(field.name);
+				if (value != null) {
+					field.set(this, prop.get(field.name))
+				}
+			}
 			input.close()
-		} catch(FileNotFoundException e) {
-			//no special behaviour without Properties [https://github.com/Trivadis/plsql-cop-validators/issues/13]
+		} catch (FileNotFoundException e) {
+			// ignore, see https://github.com/Trivadis/plsql-cop-validators/issues/13
 		}
 	}
 
@@ -188,7 +172,7 @@ class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidat
 		return guidelines
 	}
 
-	def isRowtype(EObject obj) {
+	def private isRowtype(EObject obj) {
 		var ret = false
 		val types = EcoreUtil2.getAllContentsOfType(obj, UserDefinedType)
 		if (types.size > 0) {
@@ -199,7 +183,7 @@ class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidat
 		return ret
 	}
 
-	def isRecordType(EObject obj) {
+	def private isRecordType(EObject obj) {
 		var ret = false
 		val type = EcoreUtil2.getAllContentsOfType(obj, UserDefinedType)?.get(0)
 		if (type !== null) {
@@ -214,7 +198,7 @@ class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidat
 		return ret
 	}
 
-	def isCollectionType(EObject obj) {
+	def private isCollectionType(EObject obj) {
 		var ret = false
 		val type = EcoreUtil2.getAllContentsOfType(obj, UserDefinedType)?.get(0)
 		if (type !== null) {
@@ -229,7 +213,7 @@ class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidat
 		return ret
 	}
 
-	def isObjectType(EObject obj) {
+	def private isObjectType(EObject obj) {
 		var ret = false
 		val type = EcoreUtil2.getAllContentsOfType(obj, UserDefinedType)?.get(0)
 		if (type !== null) {
@@ -246,7 +230,7 @@ class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidat
 		return ret
 	}
 
-	def isQualifiedUdt(EObject obj) {
+	def private isQualifiedUdt(EObject obj) {
 		var ret = false
 		val type = EcoreUtil2.getAllContentsOfType(obj, UserDefinedType)?.get(0)
 		if (type !== null) {
