@@ -29,17 +29,19 @@ import com.trivadis.oracle.plsql.plsql.UserDefinedType
 import com.trivadis.oracle.plsql.plsql.VariableDeclaration
 import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline
 import com.trivadis.oracle.plsql.validation.PLSQLCopValidator
+import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
 import com.trivadis.oracle.plsql.validation.Remediation
-import java.util.HashMap
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.xtext.EcoreUtil2
-import org.eclipse.xtext.validation.Check
-import java.util.Properties
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.util.HashMap
+import java.util.Properties
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.validation.EValidatorRegistrar
 
-class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidator {
+class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
 
 	public static val PROPERTY_FILE_NAME = "TrivadisPlsqlNaming.properties"
@@ -81,6 +83,15 @@ class TrivadisPlsqlNaming extends TrivadisGuidelines3 implements PLSQLCopValidat
 	new() {
 		super()
 		readProperties
+	}
+
+	// must be overridden to avoid duplicate issues when used via ComposedChecks 
+	override register(EValidatorRegistrar registrar) {
+		val ePackages = getEPackages()
+		if (registrar.registry.get(ePackages.get(0)) == null) {
+			// standalone validator, default registration required
+			super.register(registrar);
+		}
 	}
 
 	def private readProperties() {

@@ -40,10 +40,20 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.validation.EValidatorRegistrar
 
 class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
 	val ASSERT_PACKAGES = #["dbms_assert", "ut_utils"]
+
+	// must be overridden to avoid duplicate issues when used via ComposedChecks 
+	override register(EValidatorRegistrar registrar) {
+		val ePackages = getEPackages()
+		if (registrar.registry.get(ePackages.get(0)) == null) {
+			// standalone validator, default registration required
+			super.register(registrar);
+		}
+	}
 
 	override getGuidelines() {
 		if (guidelines === null) {

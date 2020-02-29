@@ -24,8 +24,18 @@ import com.trivadis.oracle.plsql.validation.PLSQLCopValidator
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.validation.Check
+import org.eclipse.xtext.validation.EValidatorRegistrar
 
 class OverrideTrivadisGuidelines extends TrivadisGuidelines3 implements PLSQLCopValidator {
+
+	// must be overridden to avoid duplicate issues when used via ComposedChecks 
+	override register(EValidatorRegistrar registrar) {
+		val ePackages = getEPackages()
+		if (registrar.registry.get(ePackages.get(0)) == null) {
+			// standalone validator, default registration required
+			super.register(registrar);
+		}
+	}
 
 	def boolean isConstantDeclaration(EObject obj) {
 		val constantDeclaration = EcoreUtil2.getContainerOfType(obj, ConstantDeclaration)
