@@ -17,19 +17,28 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 	static String propertyPathString = System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
 	static String backupFileSuffix = ".backup"
 	static String backupPropertyPathString = propertyPathString + backupFileSuffix
-
+	
 	@BeforeClass
+	static def void setupTest() {
+		stashPropertiesFile
+		createTestPropertyFile
+		setupValidator
+	}
+
 	static def void setupValidator() {
 		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisPlsqlNaming
 	}
 
-	// save the users properties and create a simple properties file to test with
-	@BeforeClass
-	static def void stashPropertiesFileAndCreatetestPropertiesFile() {
+	// save the users properties
+	static def void stashPropertiesFile() {
 		if (Files.exists(Paths.get(propertyPathString))) {
 			Files.copy(Paths.get(propertyPathString), Paths.get(backupPropertyPathString))
 			Files.delete(Paths.get(propertyPathString))
 		}
+	}
+
+	// create a simple property-file to test with	
+	static def void createTestPropertyFile() {
 		val file = new File(propertyPathString)
 		val fileWriter = new FileWriter(file, true)
 		val bufferedWriter = new BufferedWriter(fileWriter)
@@ -37,6 +46,7 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 		bufferedWriter.newLine()
 		bufferedWriter.close()
 		fileWriter.close()
+
 	}
 
 	// check that old prefix is now not accepted
