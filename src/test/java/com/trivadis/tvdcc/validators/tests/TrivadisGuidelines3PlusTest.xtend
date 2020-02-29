@@ -39,8 +39,33 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 		val guidelines = (getValidator() as TrivadisGuidelines3Plus).guidelines
 		Assert.assertEquals(16, guidelines.values.filter[it.id >= 9000].size)
 		Assert.assertEquals(92, guidelines.values.filter[it.id < 9000].size)
+		Assert.assertEquals(79, guidelines.values.filter[it.id < 1000].size)
 	}
 	
+	@Test
+	def void getGuidelineId_mapped_via_Trivadis2() {
+		val validator = new TrivadisGuidelines3Plus
+		Assert.assertEquals("G-1010", validator.getGuidelineId(1))
+	}
+	
+	@Test
+	def void getGuidelineId_of_Trivadis3() {
+		val validator = new TrivadisGuidelines3Plus
+		Assert.assertEquals("G-2130", validator.getGuidelineId(2130))
+	}
+
+	@Test
+	def void getGuidelineMsg_mapped_via_Trivadis2() {
+		val validator = new TrivadisGuidelines3Plus
+		Assert.assertEquals("G-1010: Try to label your sub blocks.", validator.getGuidelineMsg(1))
+	}
+
+	@Test
+	def void getGuidelineMsg_mapped_via_Trivadis3() {
+		val validator = new TrivadisGuidelines3Plus
+		Assert.assertEquals("G-2130: Try to use subtypes for constructs used often in your code.", validator.getGuidelineMsg(2130))
+	}
+
 	// issue avoided by OverrideTrivadisGuidelines (would throw an error via TrivadisGuidelines3)
 	@Test
 	def void literalInLoggerCallIsOkay() {
@@ -53,7 +78,7 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 		Assert.assertEquals(0, issues.size)
 	}
 
-	// issue thrown by TrivadisGuidelines3
+	// issue thrown by OverrideTrivadisGuidelines (check in parent)
 	@Test
 	def void literalInDbmsOutputCallIsNotOkay() {
 		val stmt = '''
@@ -62,6 +87,39 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues.filter[it.code == "G-1050"]
+		Assert.assertEquals(1, issues.size)
+	}
+	
+	// issue thrown by TrivadisGuidelines3
+	@Test
+	def void guideline2230_na() {
+		val stmt = '''
+			CREATE OR REPLACE PACKAGE BODY constants_up IS
+			   co_big_increase CONSTANT NUMBER(5,0) := 1;
+			   
+			   FUNCTION big_increase RETURN NUMBER DETERMINISTIC IS
+			   BEGIN
+			      RETURN co_big_increase;
+			   END big_increase;
+			END constants_up;
+			/
+		'''
+		val issues = stmt.issues.filter[it.code == "G-2230"]
+		Assert.assertEquals(1, issues.size)
+	}
+
+	// issue thrown by TrivadisGuidelines2
+	@Test
+	def void guideline1010_10() {
+		val stmt = '''
+			BEGIN
+			   BEGIN 
+			      NULL;
+			   END;
+			END;
+			/
+		'''
+		val issues = stmt.issues.filter[it.code == "G-1010"]
 		Assert.assertEquals(1, issues.size)
 	}
 
