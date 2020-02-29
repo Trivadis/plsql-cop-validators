@@ -23,7 +23,29 @@ import org.eclipse.xtext.validation.ComposedChecks
 
 @ComposedChecks(validators = #[OverrideTrivadisGuidelines, SQLInjection, TrivadisPlsqlNaming])
 class TrivadisGuidelines3Plus extends PLSQLJavaValidator implements PLSQLCopValidator {
-	HashMap<Integer, PLSQLCopGuideline> guidelines
+
+	val TrivadisGuidelines3 converter = new TrivadisGuidelines3
+	var HashMap<Integer, PLSQLCopGuideline> guidelines
+
+	// TODO: remove when TrivadisGuidelines2 uses new IDs
+	override String getGuidelineId(Integer id) {
+		if (id < 1000) {
+			return String.format("G-%04d", converter.getNewId(id))
+		} else {
+			return super.getGuidelineId(id)
+		}
+	}
+
+	// TODO: remove when TrivadisGuidelines2 uses new IDs
+	override String getGuidelineMsg(Integer id) {
+		if (id < 1000) {
+			val newId = converter.getNewId(id)
+			val guideline = getGuidelines.get(newId)
+			return String.format("G-%04d: %s", newId, guideline?.getMsg());
+		} else {
+			return super.getGuidelineMsg(id)
+		}
+	}
 	
 	override getGuidelines() {
 		if (guidelines === null) {
@@ -35,7 +57,12 @@ class TrivadisGuidelines3Plus extends PLSQLJavaValidator implements PLSQLCopVali
 				for (validator : annotation.validators) {
 					val validatorInstance = validator.newInstance;
 					for (guideline : (validatorInstance as PLSQLCopValidator).guidelines.values) {
-						guidelines.put(guideline.id, guideline)
+						if (guideline.id < 1000) {
+							// TODO: remove when TrivadisGuidelines2 uses new IDs
+							guidelines.put(converter.getNewId(guideline.id), guideline)
+						} else {
+							guidelines.put(guideline.id, guideline)
+						}
 					}
 				}
 			}
