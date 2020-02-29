@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Philipp Salvisberg <philipp.salvisberg@trivadis.com>
+ * Copyright 2020 Philipp Salvisberg <philipp.salvisberg@trivadis.com>
  * 
  * Licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 
  * Unported License (the "License"); you may not use this file except 
