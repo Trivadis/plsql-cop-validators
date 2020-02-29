@@ -8,7 +8,7 @@ import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
 
-class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
+class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
 
 	@BeforeClass
 	static def void setupTest() {
@@ -19,7 +19,7 @@ class TrivadisPlsqlNamingPropertyFileTest extends AbstractValidatorTest {
 
 	// create a simple properties file to test with	
 	static def void createTestPropertiesFile() {
-		val file = new File(TrivadisPlsqlNamingTest.FULL_PROPERTY_FILE_NAME)
+		val file = new File(TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME)
 		val fileWriter = new FileWriter(file, true)
 		val bufferedWriter = new BufferedWriter(fileWriter)
 		bufferedWriter.write("PREFIX_LOCAL_VARIABLE_NAME = loc_")

@@ -44,7 +44,7 @@ import org.eclipse.xtext.validation.EValidatorRegistrar
 class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
 
-	public static val PROPERTY_FILE_NAME = "TrivadisPlsqlNaming.properties"
+	public static val PROPERTIES_FILE_NAME = "TrivadisPlsqlNaming.properties"
 
 	public static val ISSUE_GLOBAL_VARIABLE_NAME = 9001
 	public static val ISSUE_LOCAL_VARIABLE_NAME = 9002
@@ -96,7 +96,7 @@ class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidato
 
 	def private readProperties() {
 		try {
-			val input = new FileInputStream(System.getProperty("user.home") + File.separator + PROPERTY_FILE_NAME)
+			val input = new FileInputStream(System.getProperty("user.home") + File.separator + com.trivadis.tvdcc.validators.TrivadisPlsqlNaming.PROPERTIES_FILE_NAME)
 			val prop = new Properties
 			prop.load(input)
 			for (field : this.class.declaredFields.filter[it.name.startsWith("PREFIX_") || it.name.startsWith("SUFFIX_")]) {

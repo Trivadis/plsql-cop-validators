@@ -28,8 +28,8 @@ import org.junit.Test
 
 class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 
-	public static val FULL_PROPERTY_FILE_NAME = System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTY_FILE_NAME
-	public static val String FULL_PROPERTY_FILE_NAME_BACKUP = FULL_PROPERTY_FILE_NAME + ".backup"
+	public static val FULL_PROPERTIES_FILE_NAME = System.getProperty("user.home") + File.separator + TrivadisPlsqlNaming.PROPERTIES_FILE_NAME
+	public static val String FULL_PROPERTIES_FILE_NAME_BACKUP = com.trivadis.tvdcc.validators.tests.TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME + ".backup"
 
 	@BeforeClass
 	static def void setupTest() {
@@ -42,9 +42,9 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 	}
 
 	static def void stashPropertiesFile() {
-		if (Files.exists(Paths.get(FULL_PROPERTY_FILE_NAME))) {
-			Files.copy(Paths.get(FULL_PROPERTY_FILE_NAME), Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP));
-			Files.delete(Paths.get(FULL_PROPERTY_FILE_NAME))
+		if (Files.exists(Paths.get(com.trivadis.tvdcc.validators.tests.TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME))) {
+			Files.copy(Paths.get(com.trivadis.tvdcc.validators.tests.TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME), Paths.get(com.trivadis.tvdcc.validators.tests.TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME_BACKUP));
+			Files.delete(Paths.get(com.trivadis.tvdcc.validators.tests.TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME))
 		}
 	}
 
@@ -511,10 +511,10 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 
 	@AfterClass
 	static def void restorePropertiesFile() {
-		if (Files.exists(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP))) {
-			Files.copy(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP), Paths.get(FULL_PROPERTY_FILE_NAME),
+		if (Files.exists(Paths.get(com.trivadis.tvdcc.validators.tests.TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME_BACKUP))) {
+			Files.copy(Paths.get(com.trivadis.tvdcc.validators.tests.TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME_BACKUP), Paths.get(com.trivadis.tvdcc.validators.tests.TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME),
 				StandardCopyOption.REPLACE_EXISTING)
-			Files.delete(Paths.get(FULL_PROPERTY_FILE_NAME_BACKUP))
+			Files.delete(Paths.get(com.trivadis.tvdcc.validators.tests.TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME_BACKUP))
 		}
 	}
 }
