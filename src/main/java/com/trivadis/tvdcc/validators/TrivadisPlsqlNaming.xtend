@@ -96,8 +96,7 @@ class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidato
 
 	def private readProperties() {
 		try {
-			val fis = new FileInputStream(System.getProperty("user.home") + File.separator +
-				com.trivadis.tvdcc.validators.TrivadisPlsqlNaming.PROPERTIES_FILE_NAME)
+			val fis = new FileInputStream(System.getProperty("user.home") + File.separator + PROPERTIES_FILE_NAME)
 			val prop = new Properties
 			prop.load(fis)
 			for (field : this.class.declaredFields.filter[it.name.startsWith("PREFIX_") || it.name.startsWith("SUFFIX_")]) {
