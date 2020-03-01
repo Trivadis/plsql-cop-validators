@@ -113,7 +113,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(1, issues.filter[it.code == "G-9003"].size)
 	}
-
+	
 	@Test
 	def void cursorNameOk() {
 		val stmt = '''
@@ -122,6 +122,34 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			BEGIN
 			   NULL;
 			END;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.filter[it.code == "G-9003"].size)
+	}
+
+	@Test
+	def void sysrefcursorNameNOk_bug5() {
+		val stmt = '''
+			DECLARE
+			   l_dept SYS_REFCURSOR;
+			BEGIN
+			   NULL;
+			END;
+			/
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(1, issues.filter[it.code == "G-9003"].size)
+	}
+
+	@Test
+	def void sysrefcursorNameOk_bug5() {
+		val stmt = '''
+			DECLARE
+			   c_dept SYS_REFCURSOR;
+			BEGIN
+			   NULL;
+			END;
+			/
 		'''
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.filter[it.code == "G-9003"].size)
