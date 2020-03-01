@@ -18,6 +18,7 @@ package com.trivadis.tvdcc.validators.tests
 import com.google.inject.Injector
 import com.trivadis.oracle.plsql.PLSQLStandaloneSetup
 import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
+import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.nio.charset.Charset
@@ -33,7 +34,7 @@ import org.junit.BeforeClass
 
 abstract class AbstractValidatorTest {
 
-	static val PROPERTIES_FILE_NAME = "TrivadisPlsqlNaming.properties"
+	static val PROPERTIES_FILE_NAME = TrivadisPlsqlNaming.PROPERTIES_FILE_NAME
 	public static val FULL_PROPERTIES_FILE_NAME = System.getProperty("user.home") + File.separator + PROPERTIES_FILE_NAME
 	static val String FULL_PROPERTIES_FILE_NAME_BACKUP = FULL_PROPERTIES_FILE_NAME + ".backup"
 
