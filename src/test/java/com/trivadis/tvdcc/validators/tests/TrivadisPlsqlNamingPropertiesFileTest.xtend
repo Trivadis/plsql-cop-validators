@@ -1,9 +1,10 @@
 package com.trivadis.tvdcc.validators.tests
 
+import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences
+import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
-import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
@@ -11,12 +12,12 @@ import org.junit.Test
 class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
 
 	@BeforeClass
-	static def void setupTest() {
-		TrivadisPlsqlNamingTest.stashPropertiesFile
+	static def void commonSetup() {
+		stashPropertiesFile
 		createTestPropertiesFile
-		TrivadisPlsqlNamingTest.setupValidator
+		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisPlsqlNaming
 	}
-
+	
 	// create a simple properties file to test with	
 	static def void createTestPropertiesFile() {
 		val file = new File(TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME)
@@ -86,8 +87,4 @@ class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
 
 	}
 
-	@AfterClass
-	static def void restorePropertiesFile() {
-		TrivadisPlsqlNamingTest.restorePropertiesFile
-	}
 }

@@ -17,7 +17,6 @@ package com.trivadis.tvdcc.validators.tests
 
 import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences
 import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus
-import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
@@ -25,11 +24,6 @@ import org.junit.Test
 class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 
 	@BeforeClass
-	static def void setupTest() {
-		TrivadisPlsqlNamingTest.stashPropertiesFile
-		setupValidator
-	}
-
 	static def setupValidator() {
 		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisGuidelines3Plus
 	}
@@ -152,11 +146,6 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 		'''
 		val issues = stmt.issues
 		Assert.assertEquals(1, issues.filter[it.code == "G-9001"].size)
-	}
-
-	@AfterClass
-	static def void restorePropertiesFile() {
-		TrivadisPlsqlNamingTest.restorePropertiesFile
 	}
 
 }

@@ -17,16 +17,52 @@ package com.trivadis.tvdcc.validators.tests
 
 import com.google.inject.Injector
 import com.trivadis.oracle.plsql.PLSQLStandaloneSetup
+import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
 import java.io.ByteArrayInputStream
+import java.io.File
 import java.nio.charset.Charset
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.xtext.validation.CheckMode
-import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
+import org.junit.AfterClass
+import org.junit.BeforeClass
 
 abstract class AbstractValidatorTest {
+
+	static val PROPERTIES_FILE_NAME = "TrivadisPlsqlNaming.properties"
+	public static val FULL_PROPERTIES_FILE_NAME = System.getProperty("user.home") + File.separator + PROPERTIES_FILE_NAME
+	static val String FULL_PROPERTIES_FILE_NAME_BACKUP = FULL_PROPERTIES_FILE_NAME + ".backup"
+
 	Injector injector = new PLSQLStandaloneSetup().createInjectorAndDoEMFRegistration();
+
+	@BeforeClass
+	static def void commonSetup() {
+		stashPropertiesFile
+	}
+
+	static def void stashPropertiesFile() {
+		if (Files.exists(Paths.get(FULL_PROPERTIES_FILE_NAME))) {
+			Files.copy(Paths.get(FULL_PROPERTIES_FILE_NAME), Paths.get(FULL_PROPERTIES_FILE_NAME_BACKUP));
+			Files.delete(Paths.get(FULL_PROPERTIES_FILE_NAME))
+		}
+	}
+
+	@AfterClass
+	static def void restorePropertiesFile() {
+		if (Files.exists(Paths.get(FULL_PROPERTIES_FILE_NAME_BACKUP))) {
+			Files.copy(Paths.get(FULL_PROPERTIES_FILE_NAME_BACKUP), Paths.get(FULL_PROPERTIES_FILE_NAME),
+				StandardCopyOption.REPLACE_EXISTING)
+			Files.delete(Paths.get(FULL_PROPERTIES_FILE_NAME_BACKUP))
+		} else {
+			if (Files.exists(Paths.get(FULL_PROPERTIES_FILE_NAME))) {
+				Files.delete(Paths.get(FULL_PROPERTIES_FILE_NAME))
+			}
+		}
+	}
 
 	def parse(String stmt) {
 		val resourceSet = injector.getInstance(XtextResourceSet);
