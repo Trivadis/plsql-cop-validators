@@ -31,7 +31,7 @@ class OverrideTrivadisGuidelines extends TrivadisGuidelines3 implements PLSQLCop
 	// must be overridden to avoid duplicate issues when used via ComposedChecks 
 	override register(EValidatorRegistrar registrar) {
 		val ePackages = getEPackages()
-		if (registrar.registry.get(ePackages.get(0)) == null) {
+		if (registrar.registry.get(ePackages.get(0)) === null) {
 			// standalone validator, default registration required
 			super.register(registrar);
 		}
