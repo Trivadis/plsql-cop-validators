@@ -38,6 +38,7 @@ import java.util.HashMap
 import java.util.Properties
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 
@@ -240,6 +241,12 @@ class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidato
 		}
 		return ret
 	}
+	
+	def private isSysRefcursor(VariableDeclaration v) {
+		val node = NodeModelUtils.getNode(v.type)
+		val ret = node.text.trim.toLowerCase == "sys_refcursor"
+		return ret
+	}
 
 	def private isQualifiedUdt(EObject obj) {
 		var ret = false
@@ -256,7 +263,11 @@ class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidato
 	def checkVariableName(VariableDeclaration v) {
 		val parent = v.eContainer.eContainer
 		val name = v.variable.value.toLowerCase
-		if (v.isObjectType) {
+		if (v.isSysRefcursor) {
+			if (!name.startsWith(PREFIX_CURSOR_NAME)) {
+				warning(ISSUE_CURSOR_NAME, v.variable, v)
+			}
+		} else if (v.isObjectType) {
 			if (!name.startsWith(PREFIX_OBJECT_NAME)) {
 				warning(ISSUE_OBJECT_NAME, v.variable, v)
 			}
