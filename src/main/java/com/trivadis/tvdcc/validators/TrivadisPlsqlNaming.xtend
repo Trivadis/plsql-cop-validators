@@ -88,7 +88,7 @@ class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidato
 	// must be overridden to avoid duplicate issues when used via ComposedChecks 
 	override register(EValidatorRegistrar registrar) {
 		val ePackages = getEPackages()
-		if (registrar.registry.get(ePackages.get(0)) == null) {
+		if (registrar.registry.get(ePackages.get(0)) === null) {
 			// standalone validator, default registration required
 			super.register(registrar);
 		}
@@ -101,7 +101,7 @@ class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidato
 			prop.load(fis)
 			for (field : this.class.declaredFields.filter[it.name.startsWith("PREFIX_") || it.name.startsWith("SUFFIX_")]) {
 				val value = prop.get(field.name);
-				if (value != null) {
+				if (value !== null) {
 					field.set(this, prop.get(field.name))
 				}
 			}
