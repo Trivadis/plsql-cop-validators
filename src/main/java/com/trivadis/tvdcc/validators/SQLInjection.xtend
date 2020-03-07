@@ -24,12 +24,14 @@ import com.trivadis.oracle.plsql.plsql.CreateProcedure
 import com.trivadis.oracle.plsql.plsql.ExecuteImmediateStatement
 import com.trivadis.oracle.plsql.plsql.FuncDeclInType
 import com.trivadis.oracle.plsql.plsql.FunctionDefinition
+import com.trivadis.oracle.plsql.plsql.FunctionOrParenthesisParameter
 import com.trivadis.oracle.plsql.plsql.OpenForStatement
 import com.trivadis.oracle.plsql.plsql.ParameterDeclaration
 import com.trivadis.oracle.plsql.plsql.ProcDeclInType
 import com.trivadis.oracle.plsql.plsql.ProcedureCallOrAssignmentStatement
 import com.trivadis.oracle.plsql.plsql.ProcedureDefinition
 import com.trivadis.oracle.plsql.plsql.SimpleExpressionNameValue
+import com.trivadis.oracle.plsql.plsql.SimpleExpressionStringValue
 import com.trivadis.oracle.plsql.plsql.UserDefinedType
 import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline
 import com.trivadis.oracle.plsql.validation.PLSQLCopValidator
@@ -224,46 +226,77 @@ class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 		return false
 	}
 
-	def void check(SimpleExpressionNameValue n) {
-		if (n.isParameter) {
-			if (!n.isAsserted) {
-				warning(9501, n, n)
+	def isParameterName(SimpleExpressionNameValue n) {
+		if (n.eContainer instanceof FunctionOrParenthesisParameter) {
+			val param = n.eContainer as FunctionOrParenthesisParameter
+			if (param.paramaterName === n) {
+				return true
 			}
 		}
-		n.checkAssignments
+		return false
 	}
 	
-	def void checkAssignments(SimpleExpressionNameValue n) {
+	def getRelevantSimplExpressionNameValues(EObject obj) {
+		return EcoreUtil2.getAllContentsOfType(obj, SimpleExpressionNameValue).filter [
+			!(it instanceof SimpleExpressionStringValue) && !it.isParameterName
+		]
+	}
+
+	def void check(SimpleExpressionNameValue n, HashMap<String, SimpleExpressionNameValue> expressions) {
+		if (!n.parameterName) {
+			if (n.isParameter) {
+				if (!n.isAsserted) {
+					warning(9501, n, n)
+					return
+				}
+			}
+			val recursiveExpressions = n.simpleExpressinNamesFromAssignments
+			val newExpressions = new HashMap<String, SimpleExpressionNameValue>
+			newExpressions.putAll(expressions)
+			newExpressions.putAll(recursiveExpressions)
+			for (key : recursiveExpressions.keySet) {
+				if (expressions.get(key) == null) {
+					check(recursiveExpressions.get(key), newExpressions)
+				}
+			}
+		}
+	}
+	
+	def HashMap<String, SimpleExpressionNameValue> getSimpleExpressinNamesFromAssignments(SimpleExpressionNameValue n) {
+		val expressions = new HashMap<String, SimpleExpressionNameValue>
 		val body = EcoreUtil2.getContainerOfType(n, Body)
-		val assignments = EcoreUtil2.getAllContentsOfType(body, ProcedureCallOrAssignmentStatement).filter[it.assignment !== null]
+		val assignments = EcoreUtil2.getAllContentsOfType(body, ProcedureCallOrAssignmentStatement).filter[it.assignment !== null].toList
 		for (assignment : assignments) {
 			val varName = assignment.procedureOrTarget?.object
 			if (varName instanceof SimpleExpressionNameValue) {
 				if (varName.value.equalsIgnoreCase(n.value)) {
 					var a = assignment.assignment
 					if (a instanceof SimpleExpressionNameValue) {
-						a.check
+						expressions.put(a.value.toLowerCase, a)
 					} else {
-						val names = EcoreUtil2.getAllContentsOfType(assignment?.assignment, SimpleExpressionNameValue)
-						for (name : names) {
-							name.check
+						for (name : getRelevantSimplExpressionNameValues(assignment?.assignment)) {
+							expressions.put(name.value.toLowerCase, name)
 						}
 					}
 				}
 			}
 		}
+		return expressions;
 	}
 	
 	def checkAll(EObject obj) {
+		val expressions = new HashMap<String, SimpleExpressionNameValue>
 		if (obj !== null) {
 			if (obj instanceof SimpleExpressionNameValue) {
-				obj.checkAssignments
+				expressions.putAll(obj.simpleExpressinNamesFromAssignments)
 			} else {
-				val names = EcoreUtil2.getAllContentsOfType(obj, SimpleExpressionNameValue)
-				for (name : names) {
-					name.check
+				for (name : getRelevantSimplExpressionNameValues(obj)) {
+					expressions.put(name.value.toLowerCase, name)
 				}
 			}
+		}
+		for (name : expressions.values) {
+			name.check(expressions)
 		}
 	}
 

@@ -360,5 +360,60 @@ class SQLInjectionTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.size)
 	}
+	
+	@Test
+	def void issue14_duplicate_warnings() {
+		val stmt = '''
+			CREATE OR REPLACE PACKAGE BODY pkg IS
+			   PROCEDURE p (
+			      p_config_name IN VARCHAR2,
+			      p_where       IN VARCHAR2
+			   ) IS
+			      v_sql           VARCHAR2(32767);
+			      v_search_config search_config_t%ROWTYPE;
+			      v_source        VARCHAR2(40) := '';
+			   BEGIN
+			      v_search_config := get_config_info(p_config_name => p_config_name);
+			      IF p_where IS NULL THEN
+			         RETURN 0;
+			      END IF;
+			      v_sql := 'DELETE FROM ' || v_search_config.load_target
+			            || ' <WHERE>';
+			      v_sql := REPLACE(v_sql, '<WHERE>', p_where);
+			      EXECUTE IMMEDIATE v_sql;
+			   END refresh_work_full;
+			END pkg;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(2, issues.size)
+		val issue_p_config_name = issues.findFirst[it.data.contains("p_config_name")]
+		Assert.assertEquals(10, issue_p_config_name.lineNumber)
+		val issue_p_where = issues.findFirst[it.data.contains("p_where")]
+		Assert.assertEquals(16, issue_p_where.lineNumber)
+	}
+
+	@Test
+	def void issue14_duplicate_warnings_are_ok_for_multiple_plsql_statements() {
+		val stmt = '''
+			CREATE OR REPLACE PROCEDURE p (in_table_name IN VARCHAR2) AS
+			   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'SELECT * FROM #in_table_name#';
+			   l_table_name VARCHAR2(128 BYTE);
+			   l_sql        VARCHAT2(4000 BYTE);
+			   l_cur        SYS_REFCURSOR;
+			BEGIN
+			   l_table_name := in_table_name;
+			   l_sql := replace(l_templ, '#in_table_name#', l_table_name);
+			   OPEN l_cur FOR l_sql;
+			   CLOSE l_cur;
+			   l_sql := 'BEGIN dbms_output.put_line(' || l_table_name || '); END;';
+			   EXECUTE IMMEDIATE l_sql;
+			END p;
+		'''
+		// every use of OpenForStatement and ExecuteImmediateStatement leads to a warning
+		val issues = stmt.issues.filter[it.data.contains("in_table_name")]
+		Assert.assertEquals(2, issues.size)
+		Assert.assertEquals(7, issues.get(0).lineNumber)
+		Assert.assertEquals(7, issues.get(1).lineNumber)
+	}
 
 }
