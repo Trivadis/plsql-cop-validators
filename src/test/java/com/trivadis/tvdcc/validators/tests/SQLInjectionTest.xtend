@@ -360,5 +360,36 @@ class SQLInjectionTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.size)
 	}
+	
+	@Test
+	def void issue14_duplicate_warnings() {
+		val stmt = '''
+			CREATE OR REPLACE PACKAGE BODY pkg IS
+			   PROCEDURE p (
+			      p_config_name IN VARCHAR2,
+			      p_where       IN VARCHAR2
+			   ) IS
+			      v_sql           VARCHAR2(32767);
+			      v_search_config search_config_t%ROWTYPE;
+			      v_source        VARCHAR2(40) := '';
+			   BEGIN
+			      v_search_config := get_config_info(p_config_name => p_config_name);
+			      IF p_where IS NULL THEN
+			         RETURN 0;
+			      END IF;
+			      v_sql := 'DELETE FROM ' || v_search_config.load_target
+			            || ' <WHERE>';
+			      v_sql := REPLACE(v_sql, '<WHERE>', p_where);
+			      EXECUTE IMMEDIATE v_sql;
+			   END refresh_work_full;
+			END pkg;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(2, issues.size)
+		val issue_p_config_name = issues.findFirst[it.data.contains("p_config_name")]
+		Assert.assertEquals(10, issue_p_config_name.lineNumber)
+		val issue_p_where = issues.findFirst[it.data.contains("p_where")]
+		Assert.assertEquals(16, issue_p_where.lineNumber)
+	}
 
 }
