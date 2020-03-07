@@ -392,4 +392,28 @@ class SQLInjectionTest extends AbstractValidatorTest {
 		Assert.assertEquals(16, issue_p_where.lineNumber)
 	}
 
+	@Test
+	def void issue14_duplicate_warnings_are_ok_for_multiple_plsql_statements() {
+		val stmt = '''
+			CREATE OR REPLACE PROCEDURE p (in_table_name IN VARCHAR2) AS
+			   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'SELECT * FROM #in_table_name#';
+			   l_table_name VARCHAR2(128 BYTE);
+			   l_sql        VARCHAT2(4000 BYTE);
+			   l_cur        SYS_REFCURSOR;
+			BEGIN
+			   l_table_name := in_table_name;
+			   l_sql := replace(l_templ, '#in_table_name#', l_table_name);
+			   OPEN l_cur FOR l_sql;
+			   CLOSE l_cur;
+			   l_sql := 'BEGIN dbms_output.put_line(' || l_table_name || '); END;';
+			   EXECUTE IMMEDIATE l_sql;
+			END p;
+		'''
+		// every use of OpenForStatement and ExecuteImmediateStatement leads to a warning
+		val issues = stmt.issues.filter[it.data.contains("in_table_name")]
+		Assert.assertEquals(2, issues.size)
+		Assert.assertEquals(7, issues.get(0).lineNumber)
+		Assert.assertEquals(7, issues.get(1).lineNumber)
+	}
+
 }
