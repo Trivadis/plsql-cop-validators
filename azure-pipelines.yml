@@ -66,6 +66,6 @@ steps:
   displayName: 'Maven com.trivadis.tvdcc'
   inputs:
     mavenPomFile: 'pom.xml'
-    mavenOptions: '$(MAVEN_OPTS)'
-    goals: '-Dtvdcc.basedir=$(Pipeline.Workspace) clean deploy'
+    mavenOptions: '$(MAVEN_OPTS) -Dtvdcc.basedir=$(Pipeline.Workspace) -DaltDeploymentRepository=plsqlcop::default::https://tvdvsts.pkgs.visualstudio.com/2001.5038513/_packaging/plsqlcop/maven/v1'
+    goals: 'clean deploy'
     publishJUnitResults: true
