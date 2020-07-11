@@ -1,0 +1,57 @@
+trigger:
+  branches:
+    include:
+    - main
+    - feature/*
+    - bugfix/*
+  paths:
+    include:
+    - src
+    - pom.xml
+    - azure-pipelines.yml
+    exclude:
+    - README.md
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)/.m2/repository
+  MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+
+steps:
+- task: MavenAuthenticate@0
+  displayName: 'Maven Authenticate'
+  inputs:
+    artifactsFeeds: plsqlcop
+
+- task: Cache@2
+  inputs:
+    key: 'maven | "$(Agent.OS)" | **/pom.xml'
+    restoreKeys: |
+      maven | "$(Agent.OS)"
+      maven
+    path: $(MAVEN_CACHE_FOLDER)
+  displayName: Cache Maven local repo
+
+- task: DownloadPackage@1
+  inputs:
+    packageType: 'maven'
+    feed: plsqlcop
+    definition: 'trivadis.tvdcc:tvdcc'
+    version: '2.3.1'
+    files: '*.jar'
+    downloadPath: '$(Pipeline.Workspace)'
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: mv $(Pipeline.Workspace)/tvdcc-2.3.1.jar $(Pipeline.Workspace)/tvdcc.jar
+
+- task: Maven@3
+  displayName: 'Maven com.trivadis.tvdcc'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '$(MAVEN_OPTS)'
+    goals: '-Dtvdcc.basedir=$(Pipeline.Workspace) clean deploy'
+    publishJUnitResults: true
