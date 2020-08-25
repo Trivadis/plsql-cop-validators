@@ -41,7 +41,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			CREATE OR REPLACE PROCEDURE p (in_table_name IN VARCHAR2) AS
 			   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'SELECT * FROM #in_table_name#';
 			   l_table_name VARCHAR2(128 BYTE);
-			   l_sql        VARCHAT2(4000 BYTE);
+			   l_sql        VARCHAR2(4000 BYTE);
 			   l_cur        SYS_REFCURSOR;
 			BEGIN
 			   l_table_name := in_table_name;
@@ -66,7 +66,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			CREATE OR REPLACE PROCEDURE p (in_table_name IN VARCHAR2) AS
 			   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
 			   l_table_name VARCHAR2(128 BYTE);
-			   l_sql        VARCHAT2(4000 BYTE);
+			   l_sql        VARCHAR2(4000 BYTE);
 			BEGIN
 			   l_table_name := sys.dbms_assert.enquote_name(in_table_name);
 			   l_sql := replace(l_templ, '#in_table_name#', l_table_name);
@@ -83,7 +83,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			CREATE OR REPLACE PROCEDURE p (in_table_name IN INTEGER) AS
 			   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
 			   l_table_name INTEGER;
-			   l_sql        VARCHAT2(4000 BYTE);
+			   l_sql        VARCHAR2(4000 BYTE);
 			BEGIN
 			   l_table_name := in_table_name;
 			   l_sql := replace(l_templ, '#in_table_name#', l_table_name);
@@ -100,7 +100,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			CREATE OR REPLACE PROCEDURE p (in_table_name IN VARCHAR2) AS
 			   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
 			   l_table_name VARCHAR2(128 BYTE);
-			   l_sql        VARCHAT2(4000 BYTE);
+			   l_sql        VARCHAR2(4000 BYTE);
 			BEGIN
 			   l_table_name := in_table_name;
 			   l_sql := replace(l_templ, '#in_table_name#', l_table_name);
@@ -123,7 +123,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			CREATE OR REPLACE FUNCTION f (in_table_name IN VARCHAR2) RETURN BOOLEAN AS
 			   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
 			   l_table_name VARCHAR2(128 BYTE);
-			   l_sql        VARCHAT2(4000 BYTE);
+			   l_sql        VARCHAR2(4000 BYTE);
 			BEGIN
 			   l_table_name := in_table_name;
 			   l_sql := replace(l_templ, '#in_table_name#', l_table_name);
@@ -148,7 +148,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			   PROCEDURE p (in_table_name IN VARCHAR2) AS
 			      co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
 			      l_table_name VARCHAR2(128 BYTE);
-			      l_sql        VARCHAT2(4000 BYTE);
+			      l_sql        VARCHAR2(4000 BYTE);
 			   BEGIN
 			      l_table_name := in_table_name;
 			      l_sql := replace(l_templ, '#in_table_name#', l_table_name);
@@ -173,7 +173,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			   FUNCTION f (in_table_name IN VARCHAR2) RETURN BOOLEAN AS
 			      co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
 			      l_table_name VARCHAR2(128 BYTE);
-			      l_sql        VARCHAT2(4000 BYTE);
+			      l_sql        VARCHAR2(4000 BYTE);
 			   BEGIN
 			      l_table_name := in_table_name;
 			      l_sql := replace(l_templ, '#in_table_name#', l_table_name);
@@ -199,7 +199,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			   MEMBER PROCEDURE p (in_table_name IN VARCHAR2) AS
 			      co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
 			      l_table_name VARCHAR2(128 BYTE);
-			      l_sql        VARCHAT2(4000 BYTE);
+			      l_sql        VARCHAR2(4000 BYTE);
 			   BEGIN
 			      l_table_name := in_table_name;
 			      l_sql := replace(l_templ, '#in_table_name#', l_table_name);
@@ -224,7 +224,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			   MEMBER FUNCTION f (in_table_name IN VARCHAR2) RETURN BOOLEAN AS
 			      co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
 			      l_table_name VARCHAR2(128 BYTE);
-			      l_sql        VARCHAT2(4000 BYTE);
+			      l_sql        VARCHAR2(4000 BYTE);
 			   BEGIN
 			      l_table_name := in_table_name;
 			      l_sql := replace(l_templ, '#in_table_name#', l_table_name);
@@ -250,7 +250,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			   CONSTRUCTOR FUNCTION f (in_table_name IN VARCHAR2) RETURN SELF AS RESULT AS
 			      co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
 			      l_table_name VARCHAR2(128 BYTE);
-			      l_sql        VARCHAT2(4000 BYTE);
+			      l_sql        VARCHAR2(4000 BYTE);
 			   BEGIN
 			      l_table_name := in_table_name;
 			      l_sql := replace(l_templ, '#in_table_name#', l_table_name);
@@ -398,7 +398,7 @@ class SQLInjectionTest extends AbstractValidatorTest {
 			CREATE OR REPLACE PROCEDURE p (in_table_name IN VARCHAR2) AS
 			   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'SELECT * FROM #in_table_name#';
 			   l_table_name VARCHAR2(128 BYTE);
-			   l_sql        VARCHAT2(4000 BYTE);
+			   l_sql        VARCHAR2(4000 BYTE);
 			   l_cur        SYS_REFCURSOR;
 			BEGIN
 			   l_table_name := in_table_name;
