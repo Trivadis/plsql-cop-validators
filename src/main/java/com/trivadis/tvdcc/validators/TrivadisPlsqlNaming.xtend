@@ -122,63 +122,63 @@ class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidato
 			// register custom guidelines
 			guidelines.put(ISSUE_GLOBAL_VARIABLE_NAME,
 				new PLSQLCopGuideline(
-					ISSUE_GLOBAL_VARIABLE_NAME, '''Global variables should start with '«PREFIX_GLOBAL_VARIABLE_NAME»'.''',
+					ISSUE_GLOBAL_VARIABLE_NAME, '''Always prefix global variables with '«PREFIX_GLOBAL_VARIABLE_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_LOCAL_VARIABLE_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_LOCAL_VARIABLE_NAME, '''Local variables should start with '«PREFIX_LOCAL_VARIABLE_NAME»'.''',
+					ISSUE_LOCAL_VARIABLE_NAME, '''Always prefix local variables with '«PREFIX_LOCAL_VARIABLE_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_CURSOR_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_CURSOR_NAME, '''Cursors should start with '«PREFIX_CURSOR_NAME»'.''', MAJOR,
+					ISSUE_CURSOR_NAME, '''Always prefix cursors with '«PREFIX_CURSOR_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_RECORD_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_RECORD_NAME, '''Records should start with '«PREFIX_RECORD_NAME»'.''', MAJOR,
+					ISSUE_RECORD_NAME, '''Always prefix records with '«PREFIX_RECORD_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_ARRAY_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_ARRAY_NAME, '''Collection types (arrays/tables) should start with '«PREFIX_ARRAY_NAME»'.''',
+					ISSUE_ARRAY_NAME, '''Always prefix collection types (arrays/tables) with '«PREFIX_ARRAY_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_OBJECT_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_OBJECT_NAME, '''Objects should start with '«PREFIX_OBJECT_NAME»'.''', MAJOR,
+					ISSUE_OBJECT_NAME, '''Always prefix objects with '«PREFIX_OBJECT_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_CURSOR_PARAMETER_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_CURSOR_PARAMETER_NAME, '''Cursor parameters should start with '«PREFIX_CURSOR_PARAMETER_NAME»'.''',
+					ISSUE_CURSOR_PARAMETER_NAME, '''Always prefix cursor parameters with '«PREFIX_CURSOR_PARAMETER_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_IN_PARAMETER_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_IN_PARAMETER_NAME, '''In parameters should start with '«PREFIX_IN_PARAMETER_NAME»'.''', MAJOR,
+					ISSUE_IN_PARAMETER_NAME, '''Always prefix in parameters with '«PREFIX_IN_PARAMETER_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_OUT_PARAMETER_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_OUT_PARAMETER_NAME, '''Out parameters should start with '«PREFIX_OUT_PARAMETER_NAME»'.''',
+					ISSUE_OUT_PARAMETER_NAME, '''Always prefix out parameters with '«PREFIX_OUT_PARAMETER_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_IN_OUT_PARAMETER_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_IN_OUT_PARAMETER_NAME, '''In/out parameters should start with '«PREFIX_IN_OUT_PARAMETER_NAME»'.''',
+					ISSUE_IN_OUT_PARAMETER_NAME, '''Always prefix in/out parameters with '«PREFIX_IN_OUT_PARAMETER_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_RECORD_TYPE_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_RECORD_TYPE_NAME, '''Record Type definitions should start with '«PREFIX_RECORD_TYPE_NAME»' and end with '«SUFFIX_RECORD_TYPE_NAME»'.''',
+					ISSUE_RECORD_TYPE_NAME, '''Always prefix record type definitions with '«PREFIX_RECORD_TYPE_NAME»' and add the suffix '«SUFFIX_RECORD_TYPE_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_ARRAY_TYPE_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_ARRAY_TYPE_NAME, '''Collection Type definitions (arrays/tables) should start with '«PREFIX_ARRAY_TYPE_NAME»' and end with '«SUFFIX_ARRAY_TYPE_NAME»'.''',
+					ISSUE_ARRAY_TYPE_NAME, '''Always prefix collection type definitions (arrays/tables) with '«PREFIX_ARRAY_TYPE_NAME»' and add the suffix '«SUFFIX_ARRAY_TYPE_NAME»'.''',
 					MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_EXCEPTION_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_EXCEPTION_NAME, '''Exceptions should start with '«PREFIX_EXCEPTION_NAME»'.''', MAJOR,
+					ISSUE_EXCEPTION_NAME, '''Always prefix exceptions with '«PREFIX_EXCEPTION_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_CONSTANT_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_CONSTANT_NAME, '''Constants should start with '«PREFIX_CONSTANT_NAME»'.''', MAJOR,
+					ISSUE_CONSTANT_NAME, '''Always prefix constants with '«PREFIX_CONSTANT_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 			guidelines.put(TrivadisPlsqlNaming.ISSUE_SUBTYPE_NAME,
 				new PLSQLCopGuideline(TrivadisPlsqlNaming.
-					ISSUE_SUBTYPE_NAME, '''Subtypes should end with '«SUFFIX_SUBTYPE_NAME»'.''', MAJOR,
+					ISSUE_SUBTYPE_NAME, '''Always prefix subtypes with '«SUFFIX_SUBTYPE_NAME»'.''', MAJOR,
 					UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)))
 		}
 		return guidelines
