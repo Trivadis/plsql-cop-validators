@@ -62,7 +62,7 @@ class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 			guidelines = new HashMap<Integer, PLSQLCopGuideline>()
 			// register guidelines
 			guidelines.put(9501,
-				new PLSQLCopGuideline(9501, '''Parameter used in string expression of dynamic SQL. Use asserted local variable instead.''', CRITICAL, SECURITY_FEATURES,
+				new PLSQLCopGuideline(9501, '''Never use parameter in string expression of dynamic SQL. Use asserted local variable instead.''', CRITICAL, SECURITY_FEATURES,
 					Remediation.createConstantPerIssue(1)))
 		}
 		return guidelines
@@ -255,7 +255,7 @@ class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 			newExpressions.putAll(expressions)
 			newExpressions.putAll(recursiveExpressions)
 			for (key : recursiveExpressions.keySet) {
-				if (expressions.get(key) == null) {
+				if (expressions.get(key) === null) {
 					check(recursiveExpressions.get(key), newExpressions)
 				}
 			}

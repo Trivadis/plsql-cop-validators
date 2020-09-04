@@ -64,7 +64,7 @@ class GLPTest extends AbstractValidatorTest {
 		Assert.assertEquals(32, issue1.column)
 		Assert.assertEquals(1, issue1.length)
 		Assert.assertEquals("G-9003", issue1.code)
-		Assert.assertEquals("G-9003: Parameters should start with 'p_'.", issue1.message)
+		Assert.assertEquals("G-9003: Always prefix parameters with 'p_'.", issue1.message)
 		Assert.assertEquals("a IN INTEGER", issue1.data.get(0))
 		// b
 		val issue2 = issues.get(1)
@@ -72,7 +72,7 @@ class GLPTest extends AbstractValidatorTest {
 		Assert.assertEquals(46, issue2.column)
 		Assert.assertEquals(1, issue2.length)
 		Assert.assertEquals("G-9003", issue2.code)
-		Assert.assertEquals("G-9003: Parameters should start with 'p_'.", issue2.message)
+		Assert.assertEquals("G-9003: Always prefix parameters with 'p_'.", issue2.message)
 		Assert.assertEquals("b IN VARCHAR2", issue2.data.get(0))
 		// c
 		val issue3 = issues.get(2)
@@ -80,7 +80,7 @@ class GLPTest extends AbstractValidatorTest {
 		Assert.assertEquals(4, issue3.column)
 		Assert.assertEquals(1, issue3.length)
 		Assert.assertEquals("G-9002", issue3.code)
-		Assert.assertEquals("G-9002: Local variables should start with 'l_'.", issue3.message)
+		Assert.assertEquals("G-9002: Always prefix local variables with 'l_'.", issue3.message)
 		Assert.assertEquals("c INTEGER;", issue3.data.get(0))
 	}
 
@@ -146,7 +146,7 @@ class GLPTest extends AbstractValidatorTest {
 		Assert.assertEquals(4, issue1.column)
 		Assert.assertEquals(15, issue1.length)
 		Assert.assertEquals("G-9001", issue1.code)
-		Assert.assertEquals("G-9001: Global variables should start with 'g_'.", issue1.message)
+		Assert.assertEquals("G-9001: Always prefix global variables with 'g_'.", issue1.message)
 		Assert.assertEquals("global_variable INTEGER;", issue1.data.get(0))
 	}
 

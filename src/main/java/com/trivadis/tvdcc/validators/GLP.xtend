@@ -48,13 +48,13 @@ class GLP extends PLSQLJavaValidator implements PLSQLCopValidator {
 			}
 			// register guidelines
 			guidelines.put(9001,
-				new PLSQLCopGuideline(9001, '''Global variables should start with 'g_'.''', MAJOR, UNDERSTANDABILITY,
+				new PLSQLCopGuideline(9001, '''Always prefix global variables with 'g_'.''', MAJOR, UNDERSTANDABILITY,
 					Remediation.createConstantPerIssue(1)))
 			guidelines.put(9002,
-				new PLSQLCopGuideline(9002, '''Local variables should start with 'l_'.''', MAJOR, UNDERSTANDABILITY,
+				new PLSQLCopGuideline(9002, '''Always prefix local variables with 'l_'.''', MAJOR, UNDERSTANDABILITY,
 					Remediation.createConstantPerIssue(1)))
 			guidelines.put(9003,
-				new PLSQLCopGuideline(9003, '''Parameters should start with 'p_'.''', MAJOR, UNDERSTANDABILITY,
+				new PLSQLCopGuideline(9003, '''Always prefix parameters with 'p_'.''', MAJOR, UNDERSTANDABILITY,
 					Remediation.createConstantPerIssue(1)))
 		}
 		return guidelines
