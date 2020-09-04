@@ -22,21 +22,21 @@ This validator implements 15 guidelines to cover the chapter [2.2 Naming Convent
 
 Guideline | Message
 --------- | -----------
-G-9001    | Global variables should start with 'g_'.
-G-9002    | Local variables should start with 'l_'.
-G-9003    | Cursors should start with 'c_'
-G-9004    | Records should start with 'r_'.
-G-9005    | Collection types (arrays/tables) should start with 't_'.
-G-9006    | Objects should start with 'o_'.
-G-9007    | Cursor parameters should start with 'p_'.
-G-9008    | In parameters should start with 'in_'.
-G-9009    | Out parameters should start with 'out_'.
-G-9010    | In/out parameters should start with 'io_'.
-G-9011    | Record Type definitions should start with 'r_' and end with '_type'.
-G-9012    | Collection Type definitions (arrays/tables) should start with 't_' and end with '_type'.
-G-9013    | Exceptions should start with 'e_'.
-G-9014    | Constants should start with 'co_'.
-G-9015    | Subtypes should end with 'type'.
+G-9001    | Always prefix global variables with 'g_'.
+G-9002    | Always prefix local variables with 'l_'.
+G-9003    | Always prefix cursors with 'c_'
+G-9004    | Always prefix records with 'r_'.
+G-9005    | Always prefix collection types (arrays/tables) with 't_'.
+G-9006    | Always prefix objects with 'o_'.
+G-9007    | Always prefix cursor parameters with 'p_'.
+G-9008    | Always prefix in parameters with 'in_'.
+G-9009    | Always prefix out parameters with 'out_'.
+G-9010    | Always prefix in/out parameters with 'io_'.
+G-9011    | Always prefix record type definitions with 'r_' and add the suffix '_type'.
+G-9012    | Always prefix collection type definitions (arrays/tables) with 't_' and add the suffix '_type'.
+G-9013    | Always prefix exceptions with 'e_'.
+G-9014    | Always prefix constants with 'co_'.
+G-9015    | Always prefix subtypes with 'type'.
 
 These prefixes and suffixes can be customized by using a `TrivadisPlsqlNaming.properties` file. This file must be placed in the user's home directory (`$HOME` for Linux or macOS and `%HOMEDRIVE%%HOMEPATH%` for Windows). If a property is omitted it will fall back to the default value (see table above).
 
@@ -68,9 +68,9 @@ This is a simple validator to check the following naming convention guidelines:
 
 Guideline | Message
 --------- | -----------
-G-9001    | Global variables should start with 'g_'.
-G-9002    | Local variables should start with 'l_'.
-G-9003    | Parameters should start with 'p_'.
+G-9001    | Always prefix global variables with 'g_'.
+G-9002    | Always prefix local variables with 'l_'.
+G-9003    | Always prefix parameters with 'p_'.
 
 This validator checks just these three guidelines. It does not extend the [Trivadis PL/SQL & SQL Coding Guidelines](https://trivadis.github.io/plsql-and-sql-coding-guidelines/).
 
@@ -80,7 +80,7 @@ This validator implements the following guideline:
 
 Guideline | Message
 --------- | -----------
-G-9501    | Parameter used in string expression of dynamic SQL. Use asserted local variable instead.
+G-9501    | Never use parameter in string expression of dynamic SQL. Use asserted local variable instead.
 
 It looks for unasserted parameters used in [`EXECUTE IMMEDIATE`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/EXECUTE-IMMEDIATE-statement.html#GUID-C3245A95-B85B-4280-A01F-12307B108DC8) statements and [`OPEN FOR`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/OPEN-FOR-statement.html#GUID-EB7AF439-FDD3-4461-9E3F-B621E8ABFB96) statements. All parameters used in these statements must be asserted with one of the subprograms provided by [`DBMS_ASSERT`](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_ASSERT.html#GUID-27B4B484-7CD7-48FE-89A3-B630ADE1CB50).
 
