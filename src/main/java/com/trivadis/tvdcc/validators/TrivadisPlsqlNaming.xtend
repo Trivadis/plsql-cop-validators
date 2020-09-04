@@ -312,17 +312,19 @@ class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidato
 		val parent = p.eContainer
 		if (!(parent instanceof CursorDeclarationOrDefinition)) {
 			val name = p.parameter.value.toLowerCase
-			if (p.in && p.out) {
-				if (!name.startsWith(PREFIX_IN_OUT_PARAMETER_NAME)) {
-					warning(ISSUE_IN_OUT_PARAMETER_NAME, p.parameter, p)
-				}
-			} else if (p.out) {
-				if (!name.startsWith(PREFIX_OUT_PARAMETER_NAME)) {
-					warning(ISSUE_OUT_PARAMETER_NAME, p.parameter, p)
-				}
-			} else if (!p.self) {
-				if (!name.startsWith(PREFIX_IN_PARAMETER_NAME)) {
-					warning(ISSUE_IN_PARAMETER_NAME, p.parameter, p)
+			if (name != "self") {
+				if (p.in && p.out) {
+					if (!name.startsWith(PREFIX_IN_OUT_PARAMETER_NAME)) {
+						warning(ISSUE_IN_OUT_PARAMETER_NAME, p.parameter, p)
+					}
+				} else if (p.out) {
+					if (!name.startsWith(PREFIX_OUT_PARAMETER_NAME)) {
+						warning(ISSUE_OUT_PARAMETER_NAME, p.parameter, p)
+					}
+				} else {
+					if (!name.startsWith(PREFIX_IN_PARAMETER_NAME)) {
+						warning(ISSUE_IN_PARAMETER_NAME, p.parameter, p)
+					}
 				}
 			}
 		}
