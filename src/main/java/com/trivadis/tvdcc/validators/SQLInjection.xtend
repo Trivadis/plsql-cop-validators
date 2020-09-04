@@ -281,6 +281,9 @@ class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 				}
 			}
 		}
+		if (expressions.size == 0) {
+			expressions.put(n.value.toLowerCase, n);
+		}
 		return expressions;
 	}
 	
