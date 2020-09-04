@@ -416,4 +416,18 @@ class SQLInjectionTest extends AbstractValidatorTest {
 		Assert.assertEquals(7, issues.get(1).lineNumber)
 	}
 
+	@Test
+	def void issue24_using_parameter_without_expression_in_execute_immediate() {
+		val stmt = '''
+			CREATE PROCEDURE p (
+			   in_sql VARCHAR2
+			) IS
+			BEGIN
+			   EXECUTE IMMEDIATE in_sql;
+			END;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(1, issues.size)
+	}
+
 }
