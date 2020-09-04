@@ -415,6 +415,62 @@ class SQLInjectionTest extends AbstractValidatorTest {
 		Assert.assertEquals(7, issues.get(0).lineNumber)
 		Assert.assertEquals(7, issues.get(1).lineNumber)
 	}
+	
+	@Test
+	def void issue23_assign_parameter_in_declare_section_nok() {
+		val stmt = '''
+			CREATE OR REPLACE PROCEDURE get_record (
+			   user_name     IN   VARCHAR2,
+			   service_type  IN   VARCHAR2,
+			   rec           OUT  VARCHAR2
+			) IS
+			   l_user_name     VARCHAR2(4000) := user_name;
+			   l_service_type  VARCHAR2(4000) := service_type;
+			   query           VARCHAR2(4000);
+			BEGIN
+			   -- Following SELECT statement is vulnerable to modification
+			   -- because it uses concatenation to build WHERE clause.
+			   query := q'[SELECT value FROM secret_records WHERE user_name=']'
+			            || l_user_name
+			            || q'[' AND service_type=']'
+			            || l_service_type
+			            || q'[']';
+			   DBMS_OUTPUT.PUT_LINE('Query: ' || query);
+			   EXECUTE IMMEDIATE query INTO rec;
+			   DBMS_OUTPUT.PUT_LINE('Rec: ' || rec);
+			END;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(2, issues.size)
+	}
+
+	@Test
+	def void issue23_assign_parameter_in_declare_section_ok() {
+		val stmt = '''
+			CREATE OR REPLACE PROCEDURE get_record (
+			   user_name     IN   VARCHAR2,
+			   service_type  IN   VARCHAR2,
+			   rec           OUT  VARCHAR2
+			) IS
+			   l_user_name     VARCHAR2(4000) := sys.dbms_assert.enquote_name(user_name);
+			   l_service_type  VARCHAR2(4000) := sys.dbms_assert.enquote_name(service_type);
+			   query           VARCHAR2(4000);
+			BEGIN
+			   -- Following SELECT statement is vulnerable to modification
+			   -- because it uses concatenation to build WHERE clause.
+			   query := q'[SELECT value FROM secret_records WHERE user_name=']'
+			            || l_user_name
+			            || q'[' AND service_type=']'
+			            || l_service_type
+			            || q'[']';
+			   DBMS_OUTPUT.PUT_LINE('Query: ' || query);
+			   EXECUTE IMMEDIATE query INTO rec;
+			   DBMS_OUTPUT.PUT_LINE('Rec: ' || rec);
+			END;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.size)
+	}
 
 	@Test
 	def void issue24_using_parameter_without_expression_in_execute_immediate() {
@@ -429,5 +485,5 @@ class SQLInjectionTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(1, issues.size)
 	}
-
+	
 }
