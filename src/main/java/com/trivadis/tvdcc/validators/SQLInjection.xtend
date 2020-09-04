@@ -21,18 +21,21 @@ import com.trivadis.oracle.plsql.plsql.Body
 import com.trivadis.oracle.plsql.plsql.ConstructorDeclaration
 import com.trivadis.oracle.plsql.plsql.CreateFunction
 import com.trivadis.oracle.plsql.plsql.CreateProcedure
+import com.trivadis.oracle.plsql.plsql.DeclareSection
 import com.trivadis.oracle.plsql.plsql.ExecuteImmediateStatement
 import com.trivadis.oracle.plsql.plsql.FuncDeclInType
 import com.trivadis.oracle.plsql.plsql.FunctionDefinition
 import com.trivadis.oracle.plsql.plsql.FunctionOrParenthesisParameter
 import com.trivadis.oracle.plsql.plsql.OpenForStatement
 import com.trivadis.oracle.plsql.plsql.ParameterDeclaration
+import com.trivadis.oracle.plsql.plsql.PlsqlBlock
 import com.trivadis.oracle.plsql.plsql.ProcDeclInType
 import com.trivadis.oracle.plsql.plsql.ProcedureCallOrAssignmentStatement
 import com.trivadis.oracle.plsql.plsql.ProcedureDefinition
 import com.trivadis.oracle.plsql.plsql.SimpleExpressionNameValue
 import com.trivadis.oracle.plsql.plsql.SimpleExpressionStringValue
 import com.trivadis.oracle.plsql.plsql.UserDefinedType
+import com.trivadis.oracle.plsql.plsql.VariableDeclaration
 import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline
 import com.trivadis.oracle.plsql.validation.PLSQLCopValidator
 import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
@@ -213,8 +216,11 @@ class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 	
 	
 	def isAsserted(SimpleExpressionNameValue n) {
-		val body = EcoreUtil2.getContainerOfType(n, Body)
-		val usages = EcoreUtil2.getAllContentsOfType(body, SimpleExpressionNameValue).filter[it.value.equalsIgnoreCase(n.value)]
+		var EObject obj = EcoreUtil2.getContainerOfType(n, Body)
+		if (obj === null) {
+			obj = EcoreUtil2.getContainerOfType(n, DeclareSection)
+		}
+		val usages = EcoreUtil2.getAllContentsOfType(obj, SimpleExpressionNameValue).filter[it.value.equalsIgnoreCase(n.value)]
 		for (usage : usages) {
 			val name = usage.qualifiedFunctionName
 			for (assertPackage : ASSERT_PACKAGES) {
@@ -262,6 +268,32 @@ class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 		}
 	}
 	
+	def getDeclareSection(Body body) {
+		val parent = body.eContainer
+		var DeclareSection declareSection;
+		if (parent instanceof CreateFunction) {
+			declareSection = parent.declareSection
+		} else if (parent instanceof CreateProcedure) {
+			declareSection = parent.declareSection
+		} else if (parent instanceof FuncDeclInType) {
+			declareSection = parent.declareSection
+		} else if (parent instanceof ProcDeclInType) {
+			declareSection = parent.declareSection
+		} else if (parent instanceof ConstructorDeclaration) {
+			declareSection = parent.declareSection
+		} else if (parent instanceof PlsqlBlock) {
+			declareSection = parent.declareSection
+		} else if (parent instanceof FunctionDefinition) {
+			declareSection = parent.declareSection
+		} else if (parent instanceof ProcedureDefinition) {
+			declareSection = parent.declareSection
+		} else {
+			// CreatePackageBody, CreateTrigger, CreateTypeBody
+			declareSection = null;
+		}
+		return declareSection;		
+	}
+
 	def HashMap<String, SimpleExpressionNameValue> getSimpleExpressinNamesFromAssignments(SimpleExpressionNameValue n) {
 		val expressions = new HashMap<String, SimpleExpressionNameValue>
 		val body = EcoreUtil2.getContainerOfType(n, Body)
@@ -281,8 +313,16 @@ class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 				}
 			}
 		}
-		if (expressions.size == 0) {
-			expressions.put(n.value.toLowerCase, n);
+		val declareSection = body.declareSection
+		if (declareSection !== null) {
+			val variable = EcoreUtil2.getAllContentsOfType(declareSection, VariableDeclaration).findFirst [
+				it.variable.value.equalsIgnoreCase(n.value) && it.getDefault() !== null
+			]
+			if (variable !== null) {
+				for (name : getRelevantSimplExpressionNameValues(variable.getDefault())) {
+					expressions.put(name.value.toLowerCase, name)
+				}
+			}
 		}
 		return expressions;
 	}
@@ -292,6 +332,9 @@ class SQLInjection extends PLSQLJavaValidator implements PLSQLCopValidator {
 		if (obj !== null) {
 			if (obj instanceof SimpleExpressionNameValue) {
 				expressions.putAll(obj.simpleExpressinNamesFromAssignments)
+				if (expressions.size == 0) {
+					expressions.put(obj.value.toLowerCase, obj);
+				}
 			} else {
 				for (name : getRelevantSimplExpressionNameValues(obj)) {
 					expressions.put(name.value.toLowerCase, name)
