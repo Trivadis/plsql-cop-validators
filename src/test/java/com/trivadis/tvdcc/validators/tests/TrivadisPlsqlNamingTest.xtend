@@ -312,6 +312,23 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 	}
 
 	@Test
+	def void SelfInParameterNameOk() {
+		val stmt = '''
+			CREATE OR REPLACE TYPE rectangle AUTHID definer AS OBJECT (
+			   rect_length  NUMBER,
+			   rect_width   NUMBER, 
+			   member FUNCTION get_surface (
+			      self IN rectangle
+			   ) RETURN NUMBER
+			);
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.filter[it.code == "G-9008"].size)
+	}
+
+
+
+	@Test
 	def void outParameterNameNok() {
 		val stmt = '''
 			CREATE PROCEDURE p1 (param OUT INTEGER) IS
@@ -370,6 +387,22 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			CREATE PACKAGE p IS
 			   PROCEDURE p2 (io_param IN OUT INTEGER);
 			END p;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.filter[it.code == "G-9010"].size)
+	}
+
+	@Test
+	def void SelfInOutParameterNameOk() {
+		val stmt = '''
+			CREATE OR REPLACE TYPE rectangle AUTHID definer AS OBJECT (
+			   rect_length  NUMBER,
+			   rect_width   NUMBER, 
+			   CONSTRUCTOR FUNCTION rectangle (
+			      self                 IN OUT NOCOPY rectangle,
+			      in_length_and_width  IN NUMBER
+			   ) RETURN SELF AS RESULT
+			);
 		'''
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.filter[it.code == "G-9010"].size)
