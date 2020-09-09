@@ -21,7 +21,7 @@ import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
 import java.util.HashMap
 import org.eclipse.xtext.validation.ComposedChecks
 
-@ComposedChecks(validators = #[OverrideTrivadisGuidelines, SQLInjection, TrivadisPlsqlNaming])
+@ComposedChecks(validators = #[OverrideTrivadisGuidelines, SQLInjection, TrivadisPlsqlNaming, Hint])
 class TrivadisGuidelines3Plus extends PLSQLJavaValidator implements PLSQLCopValidator {
 
 	val TrivadisGuidelines3 converter = new TrivadisGuidelines3
