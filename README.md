@@ -13,6 +13,7 @@ Class | Description
 TrivadisPlsqlNaming | Checks [Naming Conventions](https://trivadis.github.io/plsql-and-sql-coding-guidelines/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql) of the Trivadis PL/SQL & SQL Coding Guidelines
 GLP | Checks naming of global and local variables and parameters 
 SQLInjection | Looks for SQL injection vulnerabilities, e.g. unasserted parameters in dynamic SQL
+Hint | Looks for unknown hints and invalid table references
 OverrideTrivadisGuidelines | Extends TrivadisGuidelines3 and overrides check for [G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v3.6/4-language-usage/1-general/g-1050/).
 TrivadisGuidelines3Plus | Combines the validators TrivadisPlsqlNaming, SQLInjection and OverrideTrivadisGuidelines. 
 
@@ -121,6 +122,23 @@ CREATE OR REPLACE PACKAGE BODY pkg IS
     END f;
 END pkg;
 ```
+
+### Hint
+
+This validator implements the following guidelines:
+
+Guideline | Message
+--------- | -----------
+G-9600    | Never define more than one comment with hints.
+G-9601    | Never use unknown hints.
+G-9602    | Always use the alias name instead of the table name.
+G-9603    | Never reference an unknown table/alias.
+
+Only the first comment containing hints is considered by the optimizer, therefore all hints violating `G-9600` are treated as ordinary comments by the Oracle Database.
+
+Using unknown hints might invalidate all subsequent hints. This happens when you use for example `NOLOGGING`. That's expected and not a bug. See MOS note 285285.1 or bug 8432870 for details. So, do not ignore `G-9601` violations.
+
+There are various hints that reference a table. The validator checks if the reference is valid. If alias is defined for a table, but the table name is used in the hint then  `G-9602` violation is reported. If the table reference in the hint is neither a table name nor an alias then a `G-9603` violation is thrown. These violations should not be ignored either. However, the vadiator does not consider the optional query block name in the hint, therfore some false positives are possible.
 
 ### OverrideTrivadisGuidelines
 
