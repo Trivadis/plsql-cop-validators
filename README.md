@@ -154,7 +154,14 @@ Literals as part of a [Logger](https://github.com/OraOpenSource/Logger) package 
 
 ### TrivadisGuidelines3Plus
 
-This validator combines the validators [TrivadisPlsqlNaming](#trivadisplsqlnaming), [SQLInjection](#sqlinjection) and [OverrideTrivadisGuidelines](#overridetrivadisguidelines). This way you can deal with an unbound number of validators without comproming the maintainablity.
+This validator combines the validators
+
+- [TrivadisPlsqlNaming](#trivadisplsqlnaming), 
+- [SQLInjection](#sqlinjection), 
+- [OverrideTrivadisGuidelines](#overridetrivadisguidelines) and
+- [Hint](#hint). 
+
+This way you can deal with an unbound number of validators without comproming the maintainablity.
 
 ## Use in PL/SQL Cop
 
