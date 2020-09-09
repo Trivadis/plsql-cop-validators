@@ -138,7 +138,7 @@ Only the first comment containing hints is considered by the optimizer, therefor
 
 Using unknown hints might invalidate all subsequent hints. This happens when you use for example `NOLOGGING`. That's expected and not a bug. See MOS note 285285.1 or bug 8432870 for details. So, do not ignore `G-9601` violations.
 
-There are various hints that reference a table. The validator checks if the reference is valid. If alias is defined for a table, but the table name is used in the hint then  `G-9602` violation is reported. If the table reference in the hint is neither a table name nor an alias then a `G-9603` violation is thrown. These violations should not be ignored either. However, the vadiator does not consider the optional query block name in the hint, therfore some false positives are possible.
+There are various hints that reference a table. The validator checks if the reference is valid. If an alias is defined for a table, but the table name is used in the hint then a `G-9602` violation is reported. If the table reference in the hint is neither a table name nor an alias then a `G-9603` violation is thrown. These violations should not be ignored either. However, the vadiator does not consider the optional query block name in the hint, therfore some false positives are possible.
 
 ### OverrideTrivadisGuidelines
 
