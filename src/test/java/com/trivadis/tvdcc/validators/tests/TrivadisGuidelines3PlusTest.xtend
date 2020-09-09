@@ -38,25 +38,21 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 	
 	@Test
 	def void getGuidelineId_mapped_via_Trivadis2() {
-		val validator = new TrivadisGuidelines3Plus
 		Assert.assertEquals("G-1010", validator.getGuidelineId(1))
 	}
 	
 	@Test
 	def void getGuidelineId_of_Trivadis3() {
-		val validator = new TrivadisGuidelines3Plus
 		Assert.assertEquals("G-2130", validator.getGuidelineId(2130))
 	}
 
 	@Test
 	def void getGuidelineMsg_mapped_via_Trivadis2() {
-		val validator = new TrivadisGuidelines3Plus
 		Assert.assertEquals("G-1010: Try to label your sub blocks.", validator.getGuidelineMsg(1))
 	}
 
 	@Test
 	def void getGuidelineMsg_mapped_via_Trivadis3() {
-		val validator = new TrivadisGuidelines3Plus
 		Assert.assertEquals("G-2130: Try to use subtypes for constructs used often in your code.", validator.getGuidelineMsg(2130))
 	}
 
