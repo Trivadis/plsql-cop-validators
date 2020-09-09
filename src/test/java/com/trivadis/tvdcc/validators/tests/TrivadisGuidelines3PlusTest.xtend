@@ -31,7 +31,7 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 	@Test
 	def void guidelines() {
 		val guidelines = (getValidator() as TrivadisGuidelines3Plus).guidelines
-		Assert.assertEquals(16, guidelines.values.filter[it.id >= 9000].size)
+		Assert.assertEquals(20, guidelines.values.filter[it.id >= 9000].size)
 		Assert.assertEquals(92, guidelines.values.filter[it.id < 9000].size)
 		Assert.assertEquals(79, guidelines.values.filter[it.id < 1000].size)
 	}
@@ -143,5 +143,15 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(1, issues.filter[it.code == "G-9001"].size)
 	}
+	
+	// issue thrown by Hint
+	@Test
+	def void unknownHint() {
+		val stmt = '''
+			INSERT /*+ NOLOGGING APPEND */ INTO sales_hist SELECT * FROM sales;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(1, issues.filter[it.code == "G-9601"].size);
+	}	
 
 }
