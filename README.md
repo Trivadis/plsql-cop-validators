@@ -158,8 +158,8 @@ This validator combines the validators
 
 - [TrivadisPlsqlNaming](#trivadisplsqlnaming), 
 - [SQLInjection](#sqlinjection), 
-- [OverrideTrivadisGuidelines](#overridetrivadisguidelines) and
-- [Hint](#hint). 
+- [Hint](#hint) and 
+- [OverrideTrivadisGuidelines](#overridetrivadisguidelines)
 
 This way you can deal with an unbound number of validators without comproming the maintainablity.
 
