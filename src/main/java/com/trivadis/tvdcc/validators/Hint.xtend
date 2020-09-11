@@ -292,12 +292,16 @@ class Hint extends PLSQLJavaValidator implements PLSQLCopValidator {
 	}
 	
 	def private void checkTabspec(HintOrComment h, String hint, String tabspec, int tabspecOffset, List<Pair<String, String>> tabrefs) {
-		val alias = tabspec.getTableAliasOfReferencedTable(tabrefs)
-		if (alias !== null) {
-			warning(9602, '''Use «alias» instead of «tabspec» in «hint» hint.''', h, tabspecOffset, tabspec.length)
-		}
-		if (!tabspec.isTableReference(tabrefs)) {
-			warning(9603, '''(«tabspec» in «hint» hint).''', h, tabspecOffset, tabspec.length)
+		if (tabspec.startsWith(">") || tabspec.contains("@")) {
+			// do not check validity of tabspec to avoid false positives, see issue #33
+		} else {
+			val alias = tabspec.getTableAliasOfReferencedTable(tabrefs)
+			if (alias !== null) {
+				warning(9602, '''Use «alias» instead of «tabspec» in «hint» hint.''', h, tabspecOffset, tabspec.length)
+			}
+			if (!tabspec.isTableReference(tabrefs)) {
+				warning(9603, '''(«tabspec» in «hint» hint).''', h, tabspecOffset, tabspec.length)
+			}
 		}
 	}
 
