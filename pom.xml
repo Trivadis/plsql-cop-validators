@@ -11,6 +11,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<tvdcc.basedir>/usr/local/bin/tvdcc</tvdcc.basedir>
+		<xtext.version>2.23.0</xtext.version>
 	</properties>
 	<profiles>
 		<profile>
@@ -45,14 +46,14 @@
 		<!-- other dependencies -->
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
-			<artifactId>org.eclipse.xtext.xtext</artifactId>
-			<version>2.10.0</version>
+			<artifactId>org.eclipse.xtext</artifactId>
+			<version>${xtext.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
-			<artifactId>org.eclipse.xtext.junit4</artifactId>
-			<version>2.10.0</version>
+			<artifactId>org.eclipse.xtext.testing</artifactId>
+			<version>${xtext.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -80,7 +81,7 @@
 			<plugin>
 				<groupId>org.eclipse.xtend</groupId>
 				<artifactId>xtend-maven-plugin</artifactId>
-				<version>2.16.0</version>
+				<version>${xtext.version}</version>
 				<executions>
 					<execution>
 						<id>main</id>
