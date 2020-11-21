@@ -46,7 +46,7 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: mv $(Pipeline.Workspace)/tvdcc-2.3.1.jar $(Pipeline.Workspace)/tvdcc.jar
+    script: mv $(Pipeline.Workspace)/tvdcc-3.0.0.jar $(Pipeline.Workspace)/tvdcc.jar
 
 - task: DownloadPackage@1
   inputs:
@@ -60,7 +60,7 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: mv $(Pipeline.Workspace)/lib/plsql-2.1.14.jar $(Pipeline.Workspace)/lib/plsql.jar
+    script: mv $(Pipeline.Workspace)/lib/plsql-3.0.0.jar $(Pipeline.Workspace)/lib/plsql.jar
 
 - task: Maven@3
   displayName: 'Maven com.trivadis.tvdcc'
