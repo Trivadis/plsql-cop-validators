@@ -31,7 +31,7 @@
 			<!-- contains TrivadisGuidelines3 -->
 			<groupId>trivadis.tvdcc</groupId>
 			<artifactId>tvdcc</artifactId>
-			<version>2.2.0</version>
+			<version>3.0.0</version>
 			<scope>system</scope>
 			<systemPath>${tvdcc.basedir}/tvdcc.jar</systemPath>
 		</dependency>
@@ -39,7 +39,7 @@
 			<!-- contains PLSQLJavaValidator -->
 			<groupId>trivadis.oracle</groupId>
 			<artifactId>plsql</artifactId>
-			<version>2.1.10</version>
+			<version>3.0.0</version>
 			<scope>system</scope>
 			<systemPath>${tvdcc.basedir}/lib/plsql.jar</systemPath>
 		</dependency>
