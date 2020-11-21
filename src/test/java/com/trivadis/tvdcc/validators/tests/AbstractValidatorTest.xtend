@@ -29,12 +29,13 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.xtext.validation.CheckMode
-import static org.hamcrest.core.AnyOf.*
-import static org.hamcrest.core.StringStartsWith.*
+import org.hamcrest.MatcherAssert
 import org.junit.AfterClass
-import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
+
+import static org.hamcrest.core.AnyOf.*
+import static org.hamcrest.core.StringStartsWith.*
 
 abstract class AbstractValidatorTest {
 
@@ -73,7 +74,7 @@ abstract class AbstractValidatorTest {
 	def void guidelineTitleStartsWithKeyword() {
 		val guidelines = getValidator().guidelines.values.filter[it.id >= 9000]
 		for (g : guidelines) {
-			Assert.assertThat(
+			MatcherAssert.assertThat(
 				'"' + g.msg + "' does not start with keyword",
 				g.msg,
 				anyOf(startsWith("Always"), startsWith("Never"), startsWith("Avoid"), startsWith("Try"))
