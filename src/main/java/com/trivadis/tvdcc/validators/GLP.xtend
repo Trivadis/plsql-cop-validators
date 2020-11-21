@@ -21,13 +21,13 @@ import com.trivadis.oracle.plsql.plsql.ParameterDeclaration
 import com.trivadis.oracle.plsql.plsql.VariableDeclaration
 import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline
 import com.trivadis.oracle.plsql.validation.PLSQLCopValidator
-import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
+import com.trivadis.oracle.plsql.validation.PLSQLValidator
 import com.trivadis.oracle.plsql.validation.Remediation
 import java.util.HashMap
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 
-class GLP extends PLSQLJavaValidator implements PLSQLCopValidator {
+class GLP extends PLSQLValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
 
 	// must be overridden to avoid duplicate issues when used via ComposedChecks 

@@ -17,7 +17,7 @@ package com.trivadis.tvdcc.validators.tests
 
 import com.google.inject.Injector
 import com.trivadis.oracle.plsql.PLSQLStandaloneSetup
-import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
+import com.trivadis.oracle.plsql.validation.PLSQLValidator
 import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -102,6 +102,6 @@ abstract class AbstractValidatorTest {
 	}
 	
 	def getValidator() {
-		return injector.getInstance(PLSQLJavaValidator)
+		return injector.getInstance(PLSQLValidator)
 	}
 }

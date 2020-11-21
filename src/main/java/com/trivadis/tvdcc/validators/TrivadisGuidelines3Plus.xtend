@@ -17,12 +17,12 @@ package com.trivadis.tvdcc.validators
 
 import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline
 import com.trivadis.oracle.plsql.validation.PLSQLCopValidator
-import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
+import com.trivadis.oracle.plsql.validation.PLSQLValidator
 import java.util.HashMap
 import org.eclipse.xtext.validation.ComposedChecks
 
 @ComposedChecks(validators = #[OverrideTrivadisGuidelines, SQLInjection, TrivadisPlsqlNaming, Hint])
-class TrivadisGuidelines3Plus extends PLSQLJavaValidator implements PLSQLCopValidator {
+class TrivadisGuidelines3Plus extends PLSQLValidator implements PLSQLCopValidator {
 
 	val TrivadisGuidelines3 converter = new TrivadisGuidelines3
 	var HashMap<Integer, PLSQLCopGuideline> guidelines

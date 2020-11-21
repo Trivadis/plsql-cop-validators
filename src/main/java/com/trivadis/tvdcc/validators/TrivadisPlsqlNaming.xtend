@@ -29,7 +29,7 @@ import com.trivadis.oracle.plsql.plsql.UserDefinedType
 import com.trivadis.oracle.plsql.plsql.VariableDeclaration
 import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline
 import com.trivadis.oracle.plsql.validation.PLSQLCopValidator
-import com.trivadis.oracle.plsql.validation.PLSQLJavaValidator
+import com.trivadis.oracle.plsql.validation.PLSQLValidator
 import com.trivadis.oracle.plsql.validation.Remediation
 import java.io.File
 import java.io.FileInputStream
@@ -42,7 +42,7 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 
-class TrivadisPlsqlNaming extends PLSQLJavaValidator implements PLSQLCopValidator {
+class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
 
 	public static val PROPERTIES_FILE_NAME = "TrivadisPlsqlNaming.properties"
