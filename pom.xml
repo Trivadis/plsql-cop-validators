@@ -5,12 +5,13 @@
 	<!-- The Basics -->
 	<groupId>trivadis.tvdcc</groupId>
 	<artifactId>trivadis.tvdcc.validators</artifactId>
-	<version>1.6.2-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.6</jdk.version>
+		<jdk.version>1.8</jdk.version>
 		<tvdcc.basedir>/usr/local/bin/tvdcc</tvdcc.basedir>
+		<xtext.version>2.23.0</xtext.version>
 	</properties>
 	<profiles>
 		<profile>
@@ -26,40 +27,11 @@
 		</profile>
 	</profiles>
 	<dependencies>
-		<!-- dependencies from Xtext 2.10.0 use for plsql -->
-		<!-- problems due to release of emf 2.15.0, see https://github.com/eclipse/xtext/issues/1231 -->
-		<dependency>
-		    <groupId>org.eclipse.emf</groupId>
-		    <artifactId>org.eclipse.emf.common</artifactId>
-		    <version>2.12.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.eclipse.emf</groupId>
-		    <artifactId>org.eclipse.emf.ecore</artifactId>
-		    <version>2.12.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.eclipse.emf</groupId>
-		    <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-		    <version>2.12.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.eclipse.emf</groupId>
-		    <artifactId>org.eclipse.emf.codegen</artifactId>
-		    <version>2.11.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>org.eclipse.emf.codegen.ecore</artifactId>
-			<version>2.12.0</version>
-		</dependency>
-		<!-- stop dependencies from Xtext 2.10.0 use for plsql -->
-		<!-- PL/SQL Cop specific dependencies not not available in public Maven repositories -->
 		<dependency>
 			<!-- contains TrivadisGuidelines3 -->
 			<groupId>trivadis.tvdcc</groupId>
 			<artifactId>tvdcc</artifactId>
-			<version>2.2.0</version>
+			<version>3.0.0</version>
 			<scope>system</scope>
 			<systemPath>${tvdcc.basedir}/tvdcc.jar</systemPath>
 		</dependency>
@@ -67,21 +39,27 @@
 			<!-- contains PLSQLJavaValidator -->
 			<groupId>trivadis.oracle</groupId>
 			<artifactId>plsql</artifactId>
-			<version>2.1.10</version>
+			<version>3.0.0</version>
 			<scope>system</scope>
 			<systemPath>${tvdcc.basedir}/lib/plsql.jar</systemPath>
 		</dependency>
 		<!-- other dependencies -->
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
-			<artifactId>org.eclipse.xtext.xtext</artifactId>
-			<version>2.10.0</version>
+			<artifactId>org.eclipse.xtext</artifactId>
+			<version>${xtext.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
-			<artifactId>org.eclipse.xtext.junit4</artifactId>
-			<version>2.10.0</version>
+			<artifactId>org.eclipse.xtext.testing</artifactId>
+			<version>${xtext.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.xtext</groupId>
+			<artifactId>org.eclipse.xtext.common.types</artifactId>
+			<version>${xtext.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -109,7 +87,7 @@
 			<plugin>
 				<groupId>org.eclipse.xtend</groupId>
 				<artifactId>xtend-maven-plugin</artifactId>
-				<version>2.16.0</version>
+				<version>${xtext.version}</version>
 				<executions>
 					<execution>
 						<id>main</id>
@@ -135,7 +113,7 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<version>3.5.1</version>
+				<version>3.8.1</version>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>${jdk.version}</source>
@@ -148,7 +126,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
+				<version>2.22.1</version>
 				<executions>
 					<execution>
 						<id>default-test</id>
