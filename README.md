@@ -1,6 +1,6 @@
 # PL/SQL Cop Validators
 
-PL/SQL Cop supports custom validators. A validator must implement the PLSQLCopValidator Java interface and has to be a direct or indirect descendant of the PLSQLJavaValidator class.
+PL/SQL Cop supports custom validators. A validator must implement the `PLSQLCopValidator` Java interface and has to be a direct or indirect descendant of the `PLSQLValidator` class.
 
 You may use these validators as is or amend/extend them to suit your needs.
 
@@ -183,11 +183,11 @@ This way you can deal with an unbound number of validators without comproming th
 
 3. Download Validator
 
-   Download `validators.jar` from [here](https://github.com/Trivadis/cop-validators/releases).
+   Download `trivadis.tvdcc.validators-3.x.x.jar` from [here](https://github.com/Trivadis/cop-validators/releases).
 
 4. Install Validator
 
-   Copy the previously downloaded `validator.jar` into the `plugin` folder of your `TVDCC_HOME` folder.
+   Copy the previously downloaded jar file into the `plugin` folder of your `TVDCC_HOME` folder.
 
 5. Run PL/SQL Cop with Custom Validator
 
@@ -248,13 +248,13 @@ This way you can deal with an unbound number of validators without comproming th
 
    Clone or download this repository. 
 
-4. Build `validators.jar`
+4. Build validator jar file
 
    Open a terminal window in the cop-validators root folder and maven build by the following command
 
 		mvn -Dtvdcc.basedir=/usr/local/bin/tvdcc clean package
 
-	Amend the parameter `tvdcc.basedir` to match your `TVDCC_HOME` directory. This folder is used to reference PL/SQL Cop  jar files which are not available in public Maven repositories
+	Amend the parameter `tvdcc.basedir` to match your `TVDCC_HOME` directory. This folder is used to reference PL/SQL Cop jar files which are not available in public Maven repositories
 
 ## Issues
 Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/).
