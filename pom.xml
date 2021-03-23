@@ -5,13 +5,13 @@
 	<!-- The Basics -->
 	<groupId>trivadis.tvdcc</groupId>
 	<artifactId>trivadis.tvdcc.validators</artifactId>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>4.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<tvdcc.basedir>/usr/local/bin/tvdcc</tvdcc.basedir>
-		<xtext.version>2.23.0</xtext.version>
+		<xtext.version>2.24.0</xtext.version>
 	</properties>
 	<profiles>
 		<profile>
@@ -31,17 +31,17 @@
 			<!-- contains TrivadisGuidelines3 -->
 			<groupId>trivadis.tvdcc</groupId>
 			<artifactId>tvdcc</artifactId>
-			<version>3.0.0</version>
+			<version>4.0.0</version>
 			<scope>system</scope>
 			<systemPath>${tvdcc.basedir}/tvdcc.jar</systemPath>
 		</dependency>
 		<dependency>
-			<!-- contains PLSQLJavaValidator -->
+			<!-- contains PLSQLValidator -->
 			<groupId>trivadis.oracle</groupId>
 			<artifactId>plsql</artifactId>
-			<version>3.0.0</version>
+			<version>4.0.1</version>
 			<scope>system</scope>
-			<systemPath>${tvdcc.basedir}/lib/plsql.jar</systemPath>
+			<systemPath>${tvdcc.basedir}/lib/plsql-4.0.1.jar</systemPath>
 		</dependency>
 		<!-- other dependencies -->
 		<dependency>
