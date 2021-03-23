@@ -235,7 +235,7 @@ class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
 	def isParameterName(SimpleExpressionNameValue n) {
 		if (n.eContainer instanceof FunctionOrParenthesisParameter) {
 			val param = n.eContainer as FunctionOrParenthesisParameter
-			if (param.paramaterName === n) {
+			if (param.parameterName === n) {
 				return true
 			}
 		}
