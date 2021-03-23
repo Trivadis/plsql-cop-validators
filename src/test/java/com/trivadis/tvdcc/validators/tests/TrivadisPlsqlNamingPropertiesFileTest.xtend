@@ -42,7 +42,7 @@ class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
 			END example;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9002"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9102"].size)
 	}
 
 	// check that new prefix from file is accepted
@@ -58,7 +58,7 @@ class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
 			END example;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9002"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9102"].size)
 	}
 
 	// check that defaults are used if not specified in the properties-file
@@ -71,7 +71,7 @@ class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
 			/
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9001"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9101"].size)
 	}
 
 	// check that defaults are used if not specified in the properties-file
@@ -83,7 +83,7 @@ class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
 			END example;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9001"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9101"].size)
 
 	}
 

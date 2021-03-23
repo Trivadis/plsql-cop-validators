@@ -47,21 +47,21 @@ class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValidator {
 
 	public static val PROPERTIES_FILE_NAME = "TrivadisPlsqlNaming.properties"
 
-	public static val ISSUE_GLOBAL_VARIABLE_NAME = 9001
-	public static val ISSUE_LOCAL_VARIABLE_NAME = 9002
-	public static val ISSUE_CURSOR_NAME = 9003
-	public static val ISSUE_RECORD_NAME = 9004
-	public static val ISSUE_ARRAY_NAME = 9005
-	public static val ISSUE_OBJECT_NAME = 9006
-	public static val ISSUE_CURSOR_PARAMETER_NAME = 9007
-	public static val ISSUE_IN_PARAMETER_NAME = 9008
-	public static val ISSUE_OUT_PARAMETER_NAME = 9009
-	public static val ISSUE_IN_OUT_PARAMETER_NAME = 9010
-	public static val ISSUE_RECORD_TYPE_NAME = 9011
-	public static val ISSUE_ARRAY_TYPE_NAME = 9012
-	public static val ISSUE_EXCEPTION_NAME = 9013
-	public static val ISSUE_CONSTANT_NAME = 9014
-	public static val ISSUE_SUBTYPE_NAME = 9015
+	public static val ISSUE_GLOBAL_VARIABLE_NAME = 9101
+	public static val ISSUE_LOCAL_VARIABLE_NAME = 9102
+	public static val ISSUE_CURSOR_NAME = 9103
+	public static val ISSUE_RECORD_NAME = 9104
+	public static val ISSUE_ARRAY_NAME = 9105
+	public static val ISSUE_OBJECT_NAME = 9106
+	public static val ISSUE_CURSOR_PARAMETER_NAME = 9107
+	public static val ISSUE_IN_PARAMETER_NAME = 9108
+	public static val ISSUE_OUT_PARAMETER_NAME = 9109
+	public static val ISSUE_IN_OUT_PARAMETER_NAME = 9110
+	public static val ISSUE_RECORD_TYPE_NAME = 9111
+	public static val ISSUE_ARRAY_TYPE_NAME = 9112
+	public static val ISSUE_EXCEPTION_NAME = 9113
+	public static val ISSUE_CONSTANT_NAME = 9114
+	public static val ISSUE_SUBTYPE_NAME = 9115
 
 	static var PREFIX_GLOBAL_VARIABLE_NAME = "g_"
 	static var PREFIX_LOCAL_VARIABLE_NAME = "l_"
