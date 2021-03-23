@@ -57,8 +57,7 @@ public class TrivadisGuidelines3PlusGenmodel {
 		String tempDir = Files.createTempDirectory("genmodel_").toString();
 		copy(tvdccSampleDir, tempDir);
 		copy("./src/main/resources/TrivadisGuidelines3Plus/sample", tempDir);
-		String targetDir = "./src/main/resources/TrivadisGuidelines3Plus";
-		gen.generate(targetDir, tempDir.toString());
+		gen.generate("./src/main/resources/TrivadisGuidelines3Plus", tempDir.toString());
 	}
 
 	public static void main(String[] args) throws URISyntaxException, IOException {
