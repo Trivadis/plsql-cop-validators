@@ -4,9 +4,9 @@
 
 	<!-- The Basics -->
 	<groupId>trivadis.tvdcc</groupId>
-	<artifactId>trivadis.tvdcc.validators</artifactId>
-	<version>4.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<artifactId>sonar-plsql-cop-custom-validators-plugin</artifactId>
+	<version>4.0.0-SNAPSHOT</version>
+	<packaging>sonar-plugin</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
@@ -43,6 +43,22 @@
 			<scope>system</scope>
 			<systemPath>${tvdcc.basedir}/lib/plsql-4.0.1.jar</systemPath>
 		</dependency>
+		<dependency>
+			<!-- required to build SonarQube plugin for minimal target version -->
+			<groupId>org.sonarsource.sonarqube</groupId>
+			<artifactId>sonar-plugin-api</artifactId>
+			<version>7.9</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<!-- common features of a secondary SonarQube plugin -->
+			<groupId>com.trivadis.tvdcc</groupId>
+			<artifactId>sonar-plsql-cop-common</artifactId>
+			<version>8.0.1-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${tvdcc.basedir}/lib/sonar-plsql-cop-common-8.0.1-SNAPSHOT.jar</systemPath>
+		</dependency>
+		
 		<!-- other dependencies -->
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
@@ -72,9 +88,7 @@
 
 	<!-- Build Settings -->
 	<build>
-		<finalName>validators</finalName>
 		<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-		<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -110,6 +124,17 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+				<artifactId>sonar-packaging-maven-plugin</artifactId>
+				<version>1.18.0.372</version>
+				<extensions>true</extensions>
+				<configuration>
+				<pluginKey>plsql-cop-custom-validators</pluginKey>
+				<pluginClass>com.trivadis.tvdcc.sonar.child.plugin.PlsqlCustomPlugin</pluginClass>
+				<basePlugin>plsqlcop</basePlugin>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
