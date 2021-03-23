@@ -17,23 +17,24 @@
 package com.trivadis.tvdcc.sonar.child.plugin;
 
 import com.trivadis.sonar8.plugins.plsqlcop.ValidatorConfig;
-import com.trivadis.tvdcc.validators.OverrideTrivadisGuidelines;
+import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus;
 
-public class OverrideTrivadisGuidelinesValidatorConfig implements ValidatorConfig<OverrideTrivadisGuidelines> {
+public class TrivadisGuidelines3PlusValidatorConfig implements ValidatorConfig<TrivadisGuidelines3Plus> {
 
 	@Override
 	public String getModelResourcePath() {
-		return null;
+		return "/TrivadisGuidelines3Plus/genmodel/plsqlcop-model.xml";
 	}
 
 	@Override
 	public String getRulesResourcePath() {
-		return null;
+		return "/TrivadisGuidelines3Plus/genmodel/rules.xml";
 	}
 
+
 	@Override
-	public Class<OverrideTrivadisGuidelines> getValidatorClass() {
-		return OverrideTrivadisGuidelines.class;
+	public Class<TrivadisGuidelines3Plus> getValidatorClass() {
+		return TrivadisGuidelines3Plus.class;
 	}
 
 }
