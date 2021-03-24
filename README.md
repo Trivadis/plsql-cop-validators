@@ -14,7 +14,7 @@ TrivadisPlsqlNaming | Checks [Naming Conventions](https://trivadis.github.io/pls
 GLP | Checks naming of global and local variables and parameters 
 SQLInjection | Looks for SQL injection vulnerabilities, e.g. unasserted parameters in dynamic SQL
 Hint | Looks for unknown hints and invalid table references
-OverrideTrivadisGuidelines | Extends TrivadisGuidelines3 and overrides check for [G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v3.6/4-language-usage/1-general/g-1050/).
+OverrideTrivadisGuidelines | Extends TrivadisGuidelines3 and overrides check for [G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.0/4-language-usage/1-general/g-1050/).
 TrivadisGuidelines3Plus | Combines the validators TrivadisPlsqlNaming, SQLInjection and OverrideTrivadisGuidelines. 
 
 ### TrivadisPlsqlNaming
@@ -150,7 +150,7 @@ The following guideline is overriden:
 
 Guideline | Message
 --------- | -----------
-[G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v3.6/4-language-usage/1-general/g-1050/) | Avoid using literals in your code.
+[G-1050](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.0/4-language-usage/1-general/g-1050/) | Avoid using literals in your code.
 
 Literals as part of a [Logger](https://github.com/OraOpenSource/Logger) package call are not reported (see also [issue 8](https://github.com/Trivadis/plsql-cop-validators/issues/8)).
 
