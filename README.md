@@ -23,21 +23,21 @@ This validator implements 15 guidelines to cover the chapter [2.2 Naming Convent
 
 Guideline | Message
 --------- | -----------
-G-9001    | Always prefix global variables with 'g_'.
-G-9002    | Always prefix local variables with 'l_'.
-G-9003    | Always prefix cursors with 'c_'
-G-9004    | Always prefix records with 'r_'.
-G-9005    | Always prefix collection types (arrays/tables) with 't_'.
-G-9006    | Always prefix objects with 'o_'.
-G-9007    | Always prefix cursor parameters with 'p_'.
-G-9008    | Always prefix in parameters with 'in_'.
-G-9009    | Always prefix out parameters with 'out_'.
-G-9010    | Always prefix in/out parameters with 'io_'.
-G-9011    | Always prefix record type definitions with 'r_' and add the suffix '_type'.
-G-9012    | Always prefix collection type definitions (arrays/tables) with 't_' and add the suffix '_type'.
-G-9013    | Always prefix exceptions with 'e_'.
-G-9014    | Always prefix constants with 'co_'.
-G-9015    | Always prefix subtypes with 'type'.
+G-9101    | Always prefix global variables with 'g_'.
+G-9102    | Always prefix local variables with 'l_'.
+G-9103    | Always prefix cursors with 'c_'
+G-9104    | Always prefix records with 'r_'.
+G-9105    | Always prefix collection types (arrays/tables) with 't_'.
+G-9106    | Always prefix objects with 'o_'.
+G-9107    | Always prefix cursor parameters with 'p_'.
+G-9108    | Always prefix in parameters with 'in_'.
+G-9109    | Always prefix out parameters with 'out_'.
+G-9110    | Always prefix in/out parameters with 'io_'.
+G-9111    | Always prefix record type definitions with 'r_' and add the suffix '_type'.
+G-9112    | Always prefix collection type definitions (arrays/tables) with 't_' and add the suffix '_type'.
+G-9113    | Always prefix exceptions with 'e_'.
+G-9114    | Always prefix constants with 'co_'.
+G-9115    | Always prefix subtypes with 'type'.
 
 These prefixes and suffixes can be customized by using a `TrivadisPlsqlNaming.properties` file. This file must be placed in the user's home directory (`$HOME` for Linux or macOS and `%HOMEDRIVE%%HOMEPATH%` for Windows). If a property is omitted it will fall back to the default value (see table above).
 
@@ -85,43 +85,7 @@ G-9501    | Never use parameter in string expression of dynamic SQL. Use asserte
 
 It looks for unasserted parameters used in [`EXECUTE IMMEDIATE`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/EXECUTE-IMMEDIATE-statement.html#GUID-C3245A95-B85B-4280-A01F-12307B108DC8) statements and [`OPEN FOR`](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/OPEN-FOR-statement.html#GUID-EB7AF439-FDD3-4461-9E3F-B621E8ABFB96) statements. All parameters used in these statements must be asserted with one of the subprograms provided by [`DBMS_ASSERT`](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_ASSERT.html#GUID-27B4B484-7CD7-48FE-89A3-B630ADE1CB50).
 
-#### Example (bad)
-
-The input parameter `in_table_name` is copied to the local variable `l_table_name` and then used without an assert to build the `l_sql` variable. Hence, the execute immediate statement is considered vulnerable to SQL injection, e.g. by passing `DEPT CASCADE CONSTRAINTS`.
-
-```sql
-CREATE OR REPLACE PACKAGE BODY pkg IS
-    FUNCTION f (in_table_name IN VARCHAR2) RETURN BOOLEAN AS
-        co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
-        l_table_name VARCHAR2(128 BYTE);
-        l_sql        VARCHAR2(4000 BYTE);
-    BEGIN
-        l_table_name := in_table_name;
-        l_sql := replace(l_templ, '#in_table_name#', l_table_name);
-        EXECUTE IMMEDIATE l_sql;
-        RETURN true;
-    END f;
-END pkg;
-```
-
-#### Example (good)
-
-SQL injection is not possible, because the input parameter `in_table_name` is checked/modified with [`sys.dbms_assert.enquote_name`](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_ASSERT.html#GUID-19E5AEEB-BB75-4B95-98C7-53921D2A9515).
-
-```sql
-CREATE OR REPLACE PACKAGE BODY pkg IS
-    FUNCTION f (in_table_name IN VARCHAR2) RETURN BOOLEAN AS
-        co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
-        l_table_name VARCHAR2(128 BYTE);
-        l_sql        VARCHAR2(4000 BYTE);
-    BEGIN
-        l_table_name := sys.dbms_assert.enquote_name(in_table_name);
-        l_sql := replace(l_templ, '#in_table_name#', l_table_name);
-        EXECUTE IMMEDIATE l_sql;
-        RETURN true;
-    END f;
-END pkg;
-```
+See [example](src/main/resources/TrivadisGuidelines3Plus/sample/guideline_9501.sql)
 
 ### Hint
 
@@ -173,9 +137,9 @@ This way you can deal with an unbound number of validators without comproming th
 
 2. Install PL/SQL Cop
 
-   - Uncompress the distributed PL/SQL Cop archive file (e.g. tvdcc-2.2.1.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `/usr/local/bin/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
+   - Uncompress the distributed PL/SQL Cop archive file (e.g. tvdcc-4.0.0.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `/usr/local/bin/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
 
-   - For Windows platforms only: Amend the settings for JAVA_HOME in the tvdcc.cmd file to meet your environment settings. Use at least a Java 7 runtime environment (JRE) or development kit (JDK).
+   - For Windows platforms only: Amend the settings for JAVA_HOME in the tvdcc.cmd file to meet your environment settings. Use at least a Java 8 runtime environment (JRE) or development kit (JDK).
 
    - Include `TVDCC_HOME` in your PATH environment variable for handy interactive usage.
 
@@ -183,7 +147,7 @@ This way you can deal with an unbound number of validators without comproming th
 
 3. Download Validator
 
-   Download `trivadis.tvdcc.validators-3.x.x.jar` from [here](https://github.com/Trivadis/cop-validators/releases).
+   Download `sonar-plsql-cop-custom-validators-plugin-4.x.x.jar` from [here](https://github.com/Trivadis/cop-validators/releases).
 
 4. Install Validator
 
@@ -191,10 +155,10 @@ This way you can deal with an unbound number of validators without comproming th
 
 5. Run PL/SQL Cop with Custom Validator
 
-   Open a terminal window, change to the `TVDCC_HOME` directory and run the following command to all files in `$HOME/github/utPLSQL/source` with the custom validator `com.trivadis.tvdcc.validators.SQLInjection`:
+   Open a terminal window, change to the `TVDCC_HOME` directory and run the following command to all files in `$HOME/github/utPLSQL/source` with the custom validator `com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus`:
 
    ```
-   ./tvdcc.sh path=$HOME/github/utPLSQL/source validator=com.trivadis.tvdcc.validators.SQLInjection
+   ./tvdcc.sh path=$HOME/github/utPLSQL/source validator=com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus
    ```
 
    The `tvdcc_report.html` file contain the results. Here's an excerpt:
@@ -234,6 +198,11 @@ This way you can deal with an unbound number of validators without comproming th
 
    ![Check](./images/sqldev-check-result.png)
 
+
+## Use in PL/SQL Cop for SonarQube
+
+... TODO ...
+
 ## How to Build
 
 1. Install PL/SQL Cop 
@@ -242,7 +211,7 @@ This way you can deal with an unbound number of validators without comproming th
 
 2. Install Maven
 
-   [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.6.1
+   [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.6.3
 
 3. Clone the cop-validators repository
 
