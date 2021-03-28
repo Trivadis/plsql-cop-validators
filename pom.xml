@@ -50,14 +50,6 @@
 			<version>7.9</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<!-- common features of a secondary SonarQube plugin -->
-			<groupId>com.trivadis.tvdcc</groupId>
-			<artifactId>sonar-plsql-cop-common</artifactId>
-			<version>8.0.1-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${tvdcc.basedir}/lib/sonar-plsql-cop-common-8.0.1-SNAPSHOT.jar</systemPath>
-		</dependency>
 		
 		<!-- other dependencies -->
 		<dependency>
