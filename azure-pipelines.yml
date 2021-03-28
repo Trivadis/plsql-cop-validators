@@ -39,28 +39,28 @@ steps:
     packageType: 'maven'
     feed: '18837db9-b003-4158-aea6-2cbe5db0f9f0/2243676f-5a13-4f9a-842a-0d4b65c80104'
     definition: 'trivadis.tvdcc:tvdcc'
-    version: '3.0.0'
+    version: '4.0.0-SNAPSHOT'
     files: '*.jar'
     downloadPath: '$(Pipeline.Workspace)'
 
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: mv $(Pipeline.Workspace)/tvdcc-3.0.0.jar $(Pipeline.Workspace)/tvdcc.jar
+    script: mv $(Pipeline.Workspace)/tvdcc-4.0.0-SNAPSHOT.jar $(Pipeline.Workspace)/tvdcc.jar
 
 - task: DownloadPackage@1
   inputs:
     packageType: 'maven'
     feed: '18837db9-b003-4158-aea6-2cbe5db0f9f0/2243676f-5a13-4f9a-842a-0d4b65c80104'
     definition: 'trivadis.oracle:plsql'
-    version: '3.0.0'
+    version: '4.0.1'
     files: '*.jar'
     downloadPath: '$(Pipeline.Workspace)/lib'
 
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: mv $(Pipeline.Workspace)/lib/plsql-3.0.0.jar $(Pipeline.Workspace)/lib/plsql.jar
+    script: mv $(Pipeline.Workspace)/lib/plsql-4.0.1.jar $(Pipeline.Workspace)/lib/plsql-4-0.1.jar
 
 - task: Maven@3
   displayName: 'Maven com.trivadis.tvdcc'
