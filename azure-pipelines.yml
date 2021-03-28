@@ -57,11 +57,6 @@ steps:
     files: '*.jar'
     downloadPath: '$(Pipeline.Workspace)/lib'
 
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: mv $(Pipeline.Workspace)/lib/plsql-4.0.1.jar $(Pipeline.Workspace)/lib/plsql-4.0.1.jar
-
 - task: Maven@3
   displayName: 'Maven com.trivadis.tvdcc'
   inputs:
