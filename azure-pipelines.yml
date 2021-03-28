@@ -64,3 +64,4 @@ steps:
     mavenOptions: '$(MAVEN_OPTS)'
     goals: '-Dtvdcc.basedir=$(Pipeline.Workspace) -DaltDeploymentRepository=plsqlcop::default::https://tvdvsts.pkgs.visualstudio.com/2001.5038513/_packaging/plsqlcop/maven/v1 clean deploy'
     publishJUnitResults: true
+    jdkVersion: 1.8
