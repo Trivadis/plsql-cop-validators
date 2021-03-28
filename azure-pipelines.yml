@@ -46,7 +46,7 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: mv $(Pipeline.Workspace)/tvdcc-4.0.0*.jar $(Pipeline.Workspace)/tvdcc.jar
+    script: for f in $(Pipeline.Workspace)/tvdcc-4.0.0*.jar; do echo $f; mv $f $(Pipeline.Workspace)/tvdcc.jar; done
 
 - task: DownloadPackage@1
   inputs:
