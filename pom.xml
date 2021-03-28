@@ -12,12 +12,14 @@
 		<jdk.version>1.8</jdk.version>
 		<tvdcc.basedir>/usr/local/bin/tvdcc</tvdcc.basedir>
 		<xtext.version>2.24.0</xtext.version>
+		<skip.genmodel>false</skip.genmodel>
 	</properties>
 	<profiles>
 		<profile>
 			<id>fallback</id>
 			<properties>
 				<tvdcc.basedir>${basedir}/../..</tvdcc.basedir>
+				<skip.genmodel>true</skip.genmodel>
 			</properties>
 			<activation>
 				<file>
@@ -155,7 +157,7 @@
 							<mainClass>com.trivadis.tvdcc.generators.GLPGenmodel</mainClass>
 							<classpathScope>compile</classpathScope>
 							<cleanupDaemonThreads>false</cleanupDaemonThreads>
-							<skip>true</skip>
+							<skip>${skip.genmodel}</skip>
 						</configuration>
 					</execution>
 					<execution>
@@ -168,7 +170,7 @@
 							<mainClass>com.trivadis.tvdcc.generators.TrivadisGuidelines3PlusGenmodel</mainClass>
 							<classpathScope>compile</classpathScope>
 							<cleanupDaemonThreads>false</cleanupDaemonThreads>
-							<skip>true</skip>
+							<skip>${skip.genmodel}</skip>
 						</configuration>
 					</execution>
 				</executions>
