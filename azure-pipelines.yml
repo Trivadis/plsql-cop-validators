@@ -46,7 +46,7 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: mv $(Pipeline.Workspace)/tvdcc-4.0.0-snapshot.jar $(Pipeline.Workspace)/tvdcc.jar
+    script: mv $(Pipeline.Workspace)/tvdcc-4.0.0-SNAPSHOT.jar $(Pipeline.Workspace)/tvdcc.jar
 
 - task: DownloadPackage@1
   inputs:
