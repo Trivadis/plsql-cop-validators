@@ -347,8 +347,8 @@
 	</build>
 
 	<!-- More Project Information -->
-	<name>trivadis.tvdcc.validators</name>
-	<description>PL/SQL Cop example validators.</description>
+	<name>db* CODECOP for SonarQube (Child)</name>
+	<description>db* CODECOP custom validators.</description>
 	<url>https://www.trivadis.com/en/plsql-cop</url>
 	<inceptionYear>2017</inceptionYear>
 	<licenses>

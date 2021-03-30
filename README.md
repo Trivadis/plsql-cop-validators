@@ -1,6 +1,6 @@
-# PL/SQL Cop Validators
+# db* CODECOP Validators
 
-PL/SQL Cop supports custom validators. A validator must implement the `PLSQLCopValidator` Java interface and has to be a direct or indirect descendant of the `PLSQLValidator` class.
+db* CODECOP supports custom validators. A validator must implement the `PLSQLCopValidator` Java interface and has to be a direct or indirect descendant of the `PLSQLValidator` class.
 
 You may use these validators as is or amend/extend them to suit your needs.
 
@@ -129,15 +129,15 @@ This validator combines the validators
 
 This way you can deal with an unbound number of validators without comproming the maintainablity.
 
-## Use in PL/SQL Cop
+## Use in db* CODECOP
 
-1. Download PL/SQL Cop
+1. Download db* CODECOP (CLI)
 
-   Download PL/SQL Cop from [here](https://www.salvis.com/blog/plsql-cop/). 
+   Download db* CODECOP (CLI) from [here](https://github.com/Trivadis/plsql-cop-cli/releases). 
 
-2. Install PL/SQL Cop
+2. Install db* CODECOP (CLI)
 
-   - Uncompress the distributed PL/SQL Cop archive file (e.g. tvdcc-4.0.0.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `/usr/local/bin/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
+   - Uncompress the distributed db* CODECOP archive file (e.g. tvdcc-4.0.0.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `/usr/local/bin/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
 
    - For Windows platforms only: Amend the settings for JAVA_HOME in the tvdcc.cmd file to meet your environment settings. Use at least a Java 8 runtime environment (JRE) or development kit (JDK).
 
@@ -145,15 +145,15 @@ This way you can deal with an unbound number of validators without comproming th
 
    - Optionally copy your commercial license file into the `TVDCC_HOME` directory. For simplicity name the file tvdcc.lic.
 
-3. Download Validator
+3. Download Custom Validators
 
    Download `sonar-plsql-cop-custom-validators-plugin-4.x.x.jar` from [here](https://github.com/Trivadis/cop-validators/releases).
 
-4. Install Validator
+4. Install Custom Validators
 
    Copy the previously downloaded jar file into the `plugin` folder of your `TVDCC_HOME` folder.
 
-5. Run PL/SQL Cop with Custom Validator
+5. Run db* CODECOP with a Custom Validator
 
    Open a terminal window, change to the `TVDCC_HOME` directory and run the following command to all files in `$HOME/github/utPLSQL/source` with the custom validator `com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus`:
 
@@ -163,19 +163,19 @@ This way you can deal with an unbound number of validators without comproming th
 
    The `tvdcc_report.html` file contain the results. Here's an excerpt:
 
-   ![PL/SQL Cop Report - File Issues](./images/cop-file-issues.png)
+   ![db* CODECOP Report - File Issues](./images/cop-file-issues.png)
 
-## Use in PL/SQL Cop for SQL Developer
+## Use in db* CODECOP for SQL Developer
 
-1. Install PL/SQL Cop 
+1. Install db* CODECOP (CLI) 
 
-   As explained [above](README.md#use-in-plsql-cop).
+   As explained [above](README.md#use-in-db*-codecop).
 
-2. Download PL/SQL Cop for SQL Developer
+2. Download db* CODECOP for SQL Developer
 
-   Download PL/SQL Cop for SQL Developer from [here](https://www.salvis.com/blog/plsql-cop-for-sql-developer/).
+   Download db* CODECOP for SQL Developer from [here](https://www.salvis.com/blog/plsql-cop-for-sql-developer/).
 
-3. Install PL/SQL Cop for SQL Developer
+3. Install db* CODECOP for SQL Developer
 
    - Start SQL Developer
    - Select `Check for Updates…` in the help menu.
@@ -199,7 +199,7 @@ This way you can deal with an unbound number of validators without comproming th
    ![Check](./images/sqldev-check-result.png)
 
 
-## Use in PL/SQL Cop for SonarQube
+## Use in db* CODECOP for SonarQube
 
 1. Install SonarQube
 
@@ -227,9 +227,9 @@ This way you can deal with an unbound number of validators without comproming th
 
 ## How to Build
 
-1. Install PL/SQL Cop 
+1. Install db* CODECOP (CLI) 
 
-   As explained [above](README.md#use-in-plsql-cop).
+   As explained [above](README.md#use-in-db*-codecop).
 
 2. Install Maven
 
@@ -245,7 +245,7 @@ This way you can deal with an unbound number of validators without comproming th
 
 		mvn -Dtvdcc.basedir=/usr/local/bin/tvdcc clean package
 
-	Amend the parameter `tvdcc.basedir` to match your `TVDCC_HOME` directory. This folder is used to reference PL/SQL Cop jar files which are not available in public Maven repositories
+	Amend the parameter `tvdcc.basedir` to match your `TVDCC_HOME` directory. This folder is used to reference db* CODECOP jar files which are not available in public Maven repositories
 
 ## Issues
 Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/).
@@ -257,4 +257,4 @@ Please file your bug reports, enhancement requests, questions and other support 
 
 ## License
 
-The PL/SQL Cop Validators are licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License. You may obtain a copy of the License at https://creativecommons.org/licenses/by-nc-nd/3.0/.
+The db* CODECOP Validators are licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License. You may obtain a copy of the License at https://creativecommons.org/licenses/by-nc-nd/3.0/.
