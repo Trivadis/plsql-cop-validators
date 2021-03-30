@@ -201,7 +201,29 @@ This way you can deal with an unbound number of validators without comproming th
 
 ## Use in PL/SQL Cop for SonarQube
 
-... TODO ...
+1. Install SonarQube
+
+   TODO
+
+2. Install Standalone or Secondary Plugin
+
+   TODO
+
+3. Install Child Plugin (Custom Validator Plugin)
+
+   TODO
+
+4. Configure Validator Config Class
+
+   Login as Administrator in SonarQube. Go to `Administration`. Select `General Settings` from `Configuration` and click on `db* CODECOP`. Type one of the following into the `Validator Config class` field:
+
+   - com.trivadis.sonar.plugin.GLPValidatorConfig
+   - com.trivadis.sonar.plugin.TrivadisGuidelines3PlusValidatorConfig
+   
+5. Restart SonarQube
+
+   Select `System` in the `Administration` menu and click on `Restart Server`.
+
 
 ## How to Build
 
