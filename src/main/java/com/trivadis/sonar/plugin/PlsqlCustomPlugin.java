@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.trivadis.tvdcc.sonar.child.plugin;
+package com.trivadis.sonar.plugin;
 
 import org.sonar.api.Plugin;
 

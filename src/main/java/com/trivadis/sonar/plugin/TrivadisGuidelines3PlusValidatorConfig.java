@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.trivadis.tvdcc.sonar.child.plugin;
+package com.trivadis.sonar.plugin;
 
-import com.trivadis.sonar8.plugins.plsqlcop.ValidatorConfig;
 import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus;
 
 public class TrivadisGuidelines3PlusValidatorConfig implements ValidatorConfig<TrivadisGuidelines3Plus> {

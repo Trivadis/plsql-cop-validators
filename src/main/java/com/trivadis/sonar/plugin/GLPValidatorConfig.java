@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.trivadis.tvdcc.sonar.child.plugin;
+package com.trivadis.sonar.plugin;
 
-import com.trivadis.sonar8.plugins.plsqlcop.ValidatorConfig;
 import com.trivadis.tvdcc.validators.GLP;
 
 public class GLPValidatorConfig implements ValidatorConfig<GLP> {

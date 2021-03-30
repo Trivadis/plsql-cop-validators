@@ -126,7 +126,7 @@
 				<extensions>true</extensions>
 				<configuration>
 				<pluginKey>plsql-cop-custom-validators</pluginKey>
-				<pluginClass>com.trivadis.tvdcc.sonar.child.plugin.PlsqlCustomPlugin</pluginClass>
+				<pluginClass>com.trivadis.sonar.plugin.PlsqlCustomPlugin</pluginClass>
 				<basePlugin>plsqlcop</basePlugin>
 				</configuration>
 			</plugin>
