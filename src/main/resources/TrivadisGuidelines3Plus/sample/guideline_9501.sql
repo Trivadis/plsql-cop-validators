@@ -21,7 +21,7 @@ create or replace package body pkg is
         l_sql        varchar2(4000 byte);
     begin
         l_table_name := in_table_name;
-        l_sql := replace(l_templ, '#in_table_name#', l_table_name);
+        l_sql := replace(co_templ, '#in_table_name#', l_table_name);
         execute immediate l_sql;
         return true;
     end f;
@@ -38,7 +38,7 @@ create or replace package body pkg is
         l_sql        varchar2(4000 byte);
     begin
         l_table_name := sys.dbms_assert.enquote_name(in_table_name);
-        l_sql := replace(l_templ, '#in_table_name#', l_table_name);
+        l_sql := replace(co_templ, '#in_table_name#', l_table_name);
         execute immediate l_sql;
         return true;
     end f;
