@@ -131,13 +131,13 @@ This way you can deal with an unbound number of validators without comproming th
 
 ## Use in db* CODECOP
 
-1. Download db* CODECOP (CLI)
+1. Download db* CODECOP Command Line
 
-   Download db* CODECOP (CLI) from [here](https://github.com/Trivadis/plsql-cop-cli/releases). 
+   Download db* CODECOP Command Line from [here](https://github.com/Trivadis/plsql-cop-cli/releases). 
 
-2. Install db* CODECOP (CLI)
+2. Install db* CODECOP Command Line
 
-   - Uncompress the distributed db* CODECOP archive file (e.g. tvdcc-4.0.0.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `/usr/local/bin/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
+   - Uncompress the distributed db* CODECOP archive file (e.g. tvdcc-4.x.x.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `/usr/local/bin/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
 
    - For Windows platforms only: Amend the settings for JAVA_HOME in the tvdcc.cmd file to meet your environment settings. Use at least a Java 8 runtime environment (JRE) or development kit (JDK).
 
@@ -167,7 +167,7 @@ This way you can deal with an unbound number of validators without comproming th
 
 ## Use in db* CODECOP for SQL Developer
 
-1. Install db* CODECOP (CLI) 
+1. Install db* CODECOP Command Line
 
    As explained [above](README.md#use-in-db*-codecop).
 
@@ -203,11 +203,11 @@ This way you can deal with an unbound number of validators without comproming th
 
 1. Install SonarQube
 
-   TODO
+   [See documentation](https://docs.sonarqube.org/latest/setup/install-server/).
 
 2. Install Standalone or Secondary Plugin
 
-   TODO
+   [See documentation](https://github.com/Trivadis/plsql-cop-sonar/tree/main#installation)
 
 3. Install Child Plugin (Custom Validator Plugin)
 
@@ -227,7 +227,7 @@ This way you can deal with an unbound number of validators without comproming th
 
 ## How to Build
 
-1. Install db* CODECOP (CLI) 
+1. Install db* CODECOP Command Line
 
    As explained [above](README.md#use-in-db*-codecop).
 
