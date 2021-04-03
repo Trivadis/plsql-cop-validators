@@ -224,6 +224,18 @@ This way you can deal with an unbound number of validators without comproming th
 
    Select `System` in the `Administration` menu and click on `Restart Server`.
 
+6. Run Analysis
+
+   Start an analysis from the command line as follows (see [docs](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/) for more information):
+
+   ```
+   cd $HOME/github/trivadis/plsql-cop-validators/src/main/resources
+   sonar-scanner -Dsonar.projectKey="plsql-cop-validators"
+   ```
+
+   By default the source code in the current directory is analyzed. Here's the result:
+
+   ![SonarQube Issues in Code](./images/sonarqube-issues-in-code.png)
 
 ## How to Build
 
