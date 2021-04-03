@@ -4,20 +4,22 @@
 
 	<!-- The Basics -->
 	<groupId>trivadis.tvdcc</groupId>
-	<artifactId>trivadis.tvdcc.validators</artifactId>
-	<version>3.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<artifactId>sonar-plsql-cop-custom-validators-plugin</artifactId>
+	<version>4.0.0-SNAPSHOT</version>
+	<packaging>sonar-plugin</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<tvdcc.basedir>/usr/local/bin/tvdcc</tvdcc.basedir>
-		<xtext.version>2.23.0</xtext.version>
+		<xtext.version>2.24.0</xtext.version>
+		<skip.genmodel>false</skip.genmodel>
 	</properties>
 	<profiles>
 		<profile>
 			<id>fallback</id>
 			<properties>
 				<tvdcc.basedir>${basedir}/../..</tvdcc.basedir>
+				<skip.genmodel>true</skip.genmodel>
 			</properties>
 			<activation>
 				<file>
@@ -31,18 +33,26 @@
 			<!-- contains TrivadisGuidelines3 -->
 			<groupId>trivadis.tvdcc</groupId>
 			<artifactId>tvdcc</artifactId>
-			<version>3.0.0</version>
+			<version>4.0.0</version>
 			<scope>system</scope>
 			<systemPath>${tvdcc.basedir}/tvdcc.jar</systemPath>
 		</dependency>
 		<dependency>
-			<!-- contains PLSQLJavaValidator -->
+			<!-- contains PLSQLValidator -->
 			<groupId>trivadis.oracle</groupId>
 			<artifactId>plsql</artifactId>
-			<version>3.0.0</version>
+			<version>4.0.1</version>
 			<scope>system</scope>
-			<systemPath>${tvdcc.basedir}/lib/plsql.jar</systemPath>
+			<systemPath>${tvdcc.basedir}/lib/plsql-4.0.1.jar</systemPath>
 		</dependency>
+		<dependency>
+			<!-- required to build SonarQube plugin for minimal target version -->
+			<groupId>org.sonarsource.sonarqube</groupId>
+			<artifactId>sonar-plugin-api</artifactId>
+			<version>7.9</version>
+			<scope>provided</scope>
+		</dependency>
+		
 		<!-- other dependencies -->
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
@@ -72,9 +82,7 @@
 
 	<!-- Build Settings -->
 	<build>
-		<finalName>validators</finalName>
 		<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-		<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -112,6 +120,17 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+				<artifactId>sonar-packaging-maven-plugin</artifactId>
+				<version>1.18.0.372</version>
+				<extensions>true</extensions>
+				<configuration>
+				<pluginKey>plsql-cop-custom-validators</pluginKey>
+				<pluginClass>com.trivadis.sonar.plugin.PlsqlCustomPlugin</pluginClass>
+				<basePlugin>plsqlcop</basePlugin>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<version>3.8.1</version>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -122,6 +141,44 @@
 						<include>**/*.java</include>
 					</includes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>glp</id>
+						<phase>compile</phase> 
+						<goals>
+				    		<goal>java</goal>
+				    	</goals>
+				    	<configuration>
+							<mainClass>com.trivadis.tvdcc.generators.GLPGenmodel</mainClass>
+							<classpathScope>compile</classpathScope>
+							<cleanupDaemonThreads>false</cleanupDaemonThreads>
+							<skip>${skip.genmodel}</skip>
+						</configuration>
+					</execution>
+					<execution>
+						<id>guidelines3plus</id>
+						<phase>compile</phase> 
+						<goals>
+				    		<goal>java</goal>
+				    	</goals>
+				    	<configuration>
+							<mainClass>com.trivadis.tvdcc.generators.TrivadisGuidelines3PlusGenmodel</mainClass>
+							<classpathScope>compile</classpathScope>
+							<cleanupDaemonThreads>false</cleanupDaemonThreads>
+							<skip>${skip.genmodel}</skip>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -252,11 +309,46 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											exec-maven-plugin
+										</artifactId>
+										<versionRange>
+											[3.0.0,)
+										</versionRange>
+										<goals>
+											<goal>java</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<!-- More Project Information -->
-	<name>trivadis.tvdcc.validators</name>
-	<description>PL/SQL Cop example validators.</description>
+	<name>db* CODECOP for SonarQube (Child)</name>
+	<description>db* CODECOP custom validators.</description>
 	<url>https://www.trivadis.com/en/plsql-cop</url>
 	<inceptionYear>2017</inceptionYear>
 	<licenses>

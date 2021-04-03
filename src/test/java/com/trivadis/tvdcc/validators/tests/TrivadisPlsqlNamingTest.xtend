@@ -37,7 +37,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			/
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9001"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9101"].size)
 	}
 
 	@Test
@@ -48,7 +48,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END example;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9001"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9101"].size)
 	}
 
 	@Test
@@ -63,7 +63,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END example;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9002"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9102"].size)
 	}
 
 	@Test
@@ -78,7 +78,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END example;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9002"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9102"].size)
 	}
 
 	@Test
@@ -91,7 +91,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9003"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9103"].size)
 	}
 	
 	@Test
@@ -104,7 +104,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9003"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9103"].size)
 	}
 
 	@Test
@@ -118,7 +118,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			/
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9003"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9103"].size)
 	}
 
 	@Test
@@ -132,7 +132,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			/
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9003"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9103"].size)
 	}
 
 	@Test
@@ -151,7 +151,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(2, issues.filter[it.code == "G-9004"].size)
+		Assert.assertEquals(2, issues.filter[it.code == "G-9104"].size)
 	}
 
 	@Test
@@ -170,7 +170,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9004"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9104"].size)
 	}
 
 	@Test
@@ -188,7 +188,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(3, issues.filter[it.code == "G-9005"].size)
+		Assert.assertEquals(3, issues.filter[it.code == "G-9105"].size)
 	}
 
 	@Test
@@ -206,7 +206,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9005"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9105"].size)
 	}
 
 	@Test
@@ -225,7 +225,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9006"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9106"].size)
 	}
 
 	@Test
@@ -244,7 +244,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9006"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9106"].size)
 	}
 
 	@Test
@@ -260,7 +260,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9007"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9107"].size)
 	}
 
 	@Test
@@ -276,7 +276,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9007"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9107"].size)
 	}
 
 	@Test
@@ -292,7 +292,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END p;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(2, issues.filter[it.code == "G-9008"].size)
+		Assert.assertEquals(2, issues.filter[it.code == "G-9108"].size)
 	}
 
 	@Test
@@ -308,7 +308,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END p;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9008"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9108"].size)
 	}
 
 	@Test
@@ -323,7 +323,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			);
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9008"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9108"].size)
 	}
 
 
@@ -341,7 +341,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END p;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(2, issues.filter[it.code == "G-9009"].size)
+		Assert.assertEquals(2, issues.filter[it.code == "G-9109"].size)
 	}
 
 	@Test
@@ -357,7 +357,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END p;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9009"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9109"].size)
 	}
 
 	@Test
@@ -373,7 +373,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END p;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(2, issues.filter[it.code == "G-9010"].size)
+		Assert.assertEquals(2, issues.filter[it.code == "G-9110"].size)
 	}
 
 	@Test
@@ -389,7 +389,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END p;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9010"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9110"].size)
 	}
 
 	@Test
@@ -405,7 +405,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			);
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9010"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9110"].size)
 	}
 
 	@Test
@@ -422,7 +422,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9011"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9111"].size)
 	}
 
 	@Test
@@ -439,7 +439,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9011"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9111"].size)
 	}
 
 	@Test
@@ -454,7 +454,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(3, issues.filter[it.code == "G-9012"].size)
+		Assert.assertEquals(3, issues.filter[it.code == "G-9112"].size)
 	}
 
 	@Test
@@ -469,7 +469,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9012"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9112"].size)
 	}
 
 	@Test
@@ -482,7 +482,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9013"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9113"].size)
 	}
 
 	@Test
@@ -495,7 +495,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9013"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9113"].size)
 	}
 
 	@Test
@@ -508,7 +508,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9014"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9114"].size)
 	}
 
 	@Test
@@ -521,7 +521,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9014"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9114"].size)
 	}
 
 	@Test
@@ -534,7 +534,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9015"].size)
+		Assert.assertEquals(1, issues.filter[it.code == "G-9115"].size)
 	}
 
 	@Test
@@ -547,7 +547,7 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 			END;
 		'''
 		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9015"].size)
+		Assert.assertEquals(0, issues.filter[it.code == "G-9115"].size)
 	}
 
 }
