@@ -1,6 +1,8 @@
 # db* CODECOP Validators
 
-db* CODECOP supports custom validators. A validator must implement the `PLSQLCopValidator` Java interface and has to be a direct or indirect descendant of the `PLSQLValidator` class.
+db* CODECOP supports custom validators. A validator must implement the `PLSQLCopValidator` Java interface and has to be a direct or indirect descendant of the `PLSQLValidator` class. Such a class can be used in the command line utility and the SQL Developer extension. 
+
+For SonarQube a `ValidationConfig` is required. A config defines the validator with its rules and quality profile for SonarQube. See [GLPValidatorConfig](src/main/java/com/trivadis/sonar/plugin/GLPValidatorConfig.java). The referenced XML files are generated based on the validator and the optional [sample guidelines](src/main/resources/GLP/sample).
 
 You may use these validators as is or amend/extend them to suit your needs.
 
