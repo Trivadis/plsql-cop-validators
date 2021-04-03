@@ -211,7 +211,7 @@ This way you can deal with an unbound number of validators without comproming th
 
 3. Install Child Plugin (Custom Validator Plugin)
 
-   Download the `sonar-plsql-cop-custom-validators-plugin-x.x.x.jar` from releases. Then copy it to the extensions/plugins folder of your [SonarQube](http://docs.sonarqube.org/display/SONAR/Installing+a+Plugin) installation and restart the SonarQube server.
+   Download the `sonar-plsql-cop-custom-validators-plugin-x.x.x.jar` from [releases](https://github.com/Trivadis/plsql-cop-validators/releases). Then copy it to the extensions/plugins folder of your [SonarQube](http://docs.sonarqube.org/display/SONAR/Installing+a+Plugin) installation and restart the SonarQube server.
 
 4. Configure Validator Config Class
 
