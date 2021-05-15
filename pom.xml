@@ -33,7 +33,7 @@
 			<!-- contains TrivadisGuidelines3 -->
 			<groupId>trivadis.tvdcc</groupId>
 			<artifactId>tvdcc</artifactId>
-			<version>4.0.0</version>
+			<version>4.1.3</version>
 			<scope>system</scope>
 			<systemPath>${tvdcc.basedir}/tvdcc.jar</systemPath>
 		</dependency>
