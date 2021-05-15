@@ -39,7 +39,7 @@ steps:
     packageType: 'maven'
     feed: '18837db9-b003-4158-aea6-2cbe5db0f9f0/2243676f-5a13-4f9a-842a-0d4b65c80104'
     definition: 'trivadis.tvdcc:tvdcc'
-    version: '4.0.3'
+    version: '4.1.3'
     files: '*.jar'
     downloadPath: '$(Pipeline.Workspace)'
 
@@ -53,7 +53,7 @@ steps:
     packageType: 'maven'
     feed: '18837db9-b003-4158-aea6-2cbe5db0f9f0/2243676f-5a13-4f9a-842a-0d4b65c80104'
     definition: 'trivadis.oracle:plsql'
-    version: '4.0.1'
+    version: '4.1.1'
     files: '*.jar'
     downloadPath: '$(Pipeline.Workspace)/lib'
 
