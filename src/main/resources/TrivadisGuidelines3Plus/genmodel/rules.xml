@@ -422,7 +422,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-1080</key>
-		<name><![CDATA[G-1080: Avoid using the same expression on both sides of a relational comparison operator or a logical operator. (not implemented)]]></name>
+		<name><![CDATA[G-1080: Avoid using the same expression on both sides of a relational comparison operator or a logical operator.]]></name>
 		<internalKey>G-1080</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -435,21 +435,21 @@ end;
 			<p>This rule ignores operators <code>+</code>, <code>*</code> and <code>||</code>, and expressions:
 			<code>1=1<c/ode>, <code>1&lt;&gt;</<code>, <code>1!=1</code>, <code>1~=1</code> and <code>1^=1</code>.</p>
 			<h2>Bad</h2>
-<pre>begin
-   /* comment one -- nested comment two */
-   null;
-   -- comment three /* nested comment four */
-   null;
-end;
-/</pre>
+<pre>select emp.first_name
+      ,emp.last_name
+      ,emp.salary 
+      ,emp.hire_date
+  from employees emp
+ where emp.salary &gt; 3000 or emp.salary &gt; 3000
+ order by emp.last_name, emp.first_name;</pre>
 			<h2>Good</h2>
-<pre>begin
-   /* comment one, comment two */
-   null;
-   -- comment three, comment four
-   null;
-end;
-/</pre>
+<pre>select emp.first_name
+      ,emp.last_name
+      ,emp.salary 
+      ,emp.hire_date
+  from employees emp
+ where emp.salary &gt; 3000
+ order by emp.last_name, emp.first_name;</pre>
 			<p></p>]]></description>
 		<tag>avoid</tag>
 	</rule>
@@ -588,7 +588,7 @@ end my_package;
 	</rule>
 	<rule>
 		<key>G-2135</key>
-		<name><![CDATA[G-2135: Avoid assigning values to local variables that are not used by a subsequent statement. (not implemented)]]></name>
+		<name><![CDATA[G-2135: Avoid assigning values to local variables that are not used by a subsequent statement.]]></name>
 		<internalKey>G-2135</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -669,7 +669,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-2145</key>
-		<name><![CDATA[G-2145: Never self-assign a variable. (not implemented)]]></name>
+		<name><![CDATA[G-2145: Never self-assign a variable.]]></name>
 		<internalKey>G-2145</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1262,7 +1262,7 @@ end example_package;
 	</rule>
 	<rule>
 		<key>G-2610</key>
-		<name><![CDATA[G-2610: Never use self-defined weak ref cursor types. (not implemented)]]></name>
+		<name><![CDATA[G-2610: Never use self-defined weak ref cursor types.]]></name>
 		<internalKey>G-2610</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1273,36 +1273,35 @@ end example_package;
 			might be discontinued in future ORACLE releases.</p>
 			<p>There are many constraints to <code>long</code> datatypes in comparison to the <code>lob</code> types.</p>
 			<h2>Bad</h2>
-<pre>create or replace package example_package is
-   g_long long;
-   g_raw  long raw;
-
-   procedure do_something;
-end example_package;
-/
-
-create or replace package body example_package is
-   procedure do_something is
-   begin 
-      null;
-   end do_something;
-end example_package;
+<pre>declare
+   type local_weak_cursor_type is ref cursor;
+   cv_data  local_weak_cursor_type;
+begin
+   if configuration.use_employee then
+      open cv_data for
+         select e.employee_id, e.first_name, e.last_name
+           from employees e;
+   else
+      open cv_data for
+         select e.emp_id, e.name
+           from emp e;
+   end if;
+end;
 /</pre>
 			<h2>Good</h2>
-<pre>create or replace package example_package is
-   procedure do_something;
-end example_package;
-/
-
-create or replace package body example_package is
-   g_long clob;
-   g_raw  blob;
-
-   procedure do_something is
-   begin 
-      null;
-   end do_something;
-end example_package;
+<pre>declare
+   cv_data  sys_refcursor;
+begin
+   if configuration.use_employee then
+      open cv_data for
+         select e.employee_id, e.first_name, e.last_name
+           from employees e;
+   else
+      open cv_data for
+         select e.emp_id, e.name
+           from emp e;
+   end if;
+end;
 /</pre>
 			<p></p>]]></description>
 		<tag>never</tag>
@@ -1338,7 +1337,7 @@ end example_package;
 	</rule>
 	<rule>
 		<key>G-3115</key>
-		<name><![CDATA[G-3115: Avoid self-assigning a column. (not implemented)]]></name>
+		<name><![CDATA[G-3115: Avoid self-assigning a column.]]></name>
 		<internalKey>G-3115</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1610,7 +1609,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-3170</key>
-		<name><![CDATA[G-3170: Always use DEFAULT ON NULL declarations to assign default values to table columns if you refuse to store NULL values.]]></name>
+		<name><![CDATA[G-3170: Always use DEFAULT ON NULL declarations to assign default values to table columns if you refuse to store NULL values. (not implemented)]]></name>
 		<internalKey>G-3170</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1698,7 +1697,7 @@ TEST_CASE  COLUMN_DEF
 	</rule>
 	<rule>
 		<key>G-3185</key>
-		<name><![CDATA[G-3185: Never use ROWNUM at the same query level as ORDER BY. (not implemented)]]></name>
+		<name><![CDATA[G-3185: Never use ROWNUM at the same query level as ORDER BY.]]></name>
 		<internalKey>G-3185</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1799,7 +1798,7 @@ Executive                      De Haan                   Lex
 	</rule>
 	<rule>
 		<key>G-3195</key>
-		<name><![CDATA[G-3195: Always use wildcards in a LIKE clause. (not implemented)]]></name>
+		<name><![CDATA[G-3195: Always use wildcards in a LIKE clause.]]></name>
 		<internalKey>G-3195</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1883,7 +1882,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-3310</key>
-		<name><![CDATA[G-3310: Never commit within a cursor loop. (not implemented)]]></name>
+		<name><![CDATA[G-3310: Never commit within a cursor loop.]]></name>
 		<internalKey>G-3310</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1969,7 +1968,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-3320</key>
-		<name><![CDATA[G-3320: Try to move transactions within a non-cursor loop into procedures. (not implemented)]]></name>
+		<name><![CDATA[G-3320: Try to move transactions within a non-cursor loop into procedures.]]></name>
 		<internalKey>G-3320</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2435,7 +2434,7 @@ from dual;</pre>
 	</rule>
 	<rule>
 		<key>G-4250</key>
-		<name><![CDATA[G-4250: Avoid using identical conditions in different branches of the same IF or CASE statement. (not implemented)]]></name>
+		<name><![CDATA[G-4250: Avoid using identical conditions in different branches of the same IF or CASE statement.]]></name>
 		<internalKey>G-4250</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2481,7 +2480,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-4260</key>
-		<name><![CDATA[G-4260: Avoid inverting boolean conditions with NOT. (not implemented)]]></name>
+		<name><![CDATA[G-4260: Avoid inverting boolean conditions with NOT.]]></name>
 		<internalKey>G-4260</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2513,7 +2512,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-4270</key>
-		<name><![CDATA[G-4270: Avoid comparing boolean values to boolean literals. (not implemented)]]></name>
+		<name><![CDATA[G-4270: Avoid comparing boolean values to boolean literals.]]></name>
 		<internalKey>G-4270</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2732,7 +2731,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-4325</key>
-		<name><![CDATA[G-4325: Never reuse labels in inner scopes. (not implemented)]]></name>
+		<name><![CDATA[G-4325: Never reuse labels in inner scopes.]]></name>
 		<internalKey>G-4325</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3641,7 +3640,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-5080</key>
-		<name><![CDATA[G-5080: Always use FORMAT_ERROR_BACKTRACE when using FORMAT_ERROR_STACK or SQLERRM. (not implemented)]]></name>
+		<name><![CDATA[G-5080: Always use FORMAT_ERROR_BACKTRACE when using FORMAT_ERROR_STACK or SQLERRM.]]></name>
 		<internalKey>G-5080</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3864,7 +3863,7 @@ end employee_api;
 	</rule>
 	<rule>
 		<key>G-7125</key>
-		<name><![CDATA[G-7125: Always use CREATE OR REPLACE instead of CREATE alone. (not implemented)]]></name>
+		<name><![CDATA[G-7125: Always use CREATE OR REPLACE instead of CREATE alone.]]></name>
 		<internalKey>G-7125</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4421,6 +4420,66 @@ end employee_api;
 		<tag>avoid</tag>
 	</rule>
 	<rule>
+		<key>G-7250</key>
+		<name><![CDATA[G-7250: Never use RETURN in package initialization block.]]></name>
+		<internalKey>G-7250</internalKey>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>The purpose of the initialization block of a package body is to set initial values of the global
+			variables of the package (initialize the package state). Although <code>return</code> is syntactically allowed
+			in this block, it makes no sense. If it is the last keyword of the block, it is superfluous. If it is not
+			the last keyword, then all code after the <code>return</code> is unreachable and thus dead code.</p>
+			<h2>Bad</h2>
+<pre>create or replace package body employee_api as
+   g_salary_increase types_up.sal_increase_type(4,2);
+
+   procedure set_salary_increase (in_increase in types_up.sal_increase_type) is
+   begin
+      g_salary_increase := greatest(least(in_increase
+                                         ,constants_up.max_salary_increase())
+                                   ,constants_up.min_salary_increase());
+   end set_salary_increase;
+
+   function salary_increase return types_up.sal_increase_type is
+   begin
+      return g_salary_increase;
+   end salary_increase;
+
+begin
+   g_salary_increase := constants_up.min_salary_increase();
+
+   return;
+
+   set_salary_increase(constants_up.min_salary_increase()); -- dead code
+end employee_api;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package body employee_api as
+   g_salary_increase types_up.sal_increase_type(4,2);
+
+   procedure set_salary_increase (in_increase in types_up.sal_increase_type) is
+   begin
+      g_salary_increase := greatest(least(in_increase
+                                         ,constants_up.max_salary_increase())
+                                   ,constants_up.min_salary_increase());
+   end set_salary_increase;
+
+   function salary_increase return types_up.sal_increase_type is
+   begin
+      return g_salary_increase;
+   end salary_increase;
+
+begin
+   g_salary_increase := constants_up.min_salary_increase();
+end employee_api;
+/</pre>
+			<p></p>]]></description>
+		<tag>never</tag>
+	</rule>
+	<rule>
 		<key>G-7310</key>
 		<name><![CDATA[G-7310: Avoid standalone procedures – put your procedures in packages.]]></name>
 		<internalKey>G-7310</internalKey>
@@ -4506,7 +4565,7 @@ end my_package;
 	</rule>
 	<rule>
 		<key>G-7330</key>
-		<name><![CDATA[G-7330: Always assign values to OUT parameters. (not implemented)]]></name>
+		<name><![CDATA[G-7330: Always assign values to OUT parameters.]]></name>
 		<internalKey>G-7330</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4525,7 +4584,7 @@ end my_package;
       l_message varchar2(100 char);
    begin
       l_message := 'Hello, ' || in_name;
-   end my_procedure;
+   end greet;
 end my_package;
 /</pre>
 			<h2>Good</h2>
@@ -4536,7 +4595,7 @@ end my_package;
    ) is
    begin
       out_greeting := 'Hello, ' || in_name;
-   end my_procedure;
+   end greet;
 end my_package;
 /</pre>
 			<p></p>]]></description>
@@ -4853,7 +4912,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-7720</key>
-		<name><![CDATA[G-7720: Never use multiple UPDATE OF in trigger event clause. (not implemented)]]></name>
+		<name><![CDATA[G-7720: Never use multiple UPDATE OF in trigger event clause.]]></name>
 		<internalKey>G-7720</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4897,7 +4956,7 @@ end;
 	</rule>
 	<rule>
 		<key>G-7730</key>
-		<name><![CDATA[G-7730: Avoid multiple DML events per trigger if primary key is assigned in trigger. (not implemented)]]></name>
+		<name><![CDATA[G-7730: Avoid multiple DML events per trigger if primary key is assigned in trigger.]]></name>
 		<internalKey>G-7730</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4969,7 +5028,7 @@ end;
 			would imply a context switch).</p>
 			<h2>Bad</h2>
 <pre>declare
-   l_sequence_number employees.emloyee_id%type;
+   l_sequence_number employees.employee_id%type;
 begin
    select employees_seq.nextval
      into l_sequence_number
@@ -4978,7 +5037,7 @@ end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   l_sequence_number employees.emloyee_id%type;
+   l_sequence_number employees.employee_id%type;
 begin
    l_sequence_number := employees_seq.nextval;
 end;
@@ -5334,7 +5393,7 @@ end employee_api;
 	</rule>
 	<rule>
 		<key>G-9010</key>
-		<name><![CDATA[G-9010: Always use a format model in string to date/time conversion functions. (not implemented)]]></name>
+		<name><![CDATA[G-9010: Always use a format model in string to date/time conversion functions.]]></name>
 		<internalKey>G-9010</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5354,7 +5413,7 @@ end employee_api;
 <pre>create package body employee_api is
    procedure set_dob (in_employee_id in employees.employee_id%type, in_dob_str in varchar2) is
    begin
-      update employee
+      update employees
       set date_of_birth = to_date(in_dob_str)
       where employee_id = in_employee_id;
    end set_dob;
@@ -5364,7 +5423,7 @@ end employee_api;
 <pre>create package body employee_api is
    procedure set_dob (in_employee_id in employees.employee_id%type, in_dob_str in varchar2) is
    begin
-      update employee
+      update employees
       set date_of_birth = to_date(in_dob_str, 'YYYY-MM-DD')
       where employee_id = in_employee_id;
    end set_dob;
@@ -5375,7 +5434,7 @@ end employee_api;
 	</rule>
 	<rule>
 		<key>G-9020</key>
-		<name><![CDATA[G-9020: Try to use a format model and NLS_NUMERIC_CHARACTERS in string to number conversion functions. (not implemented)]]></name>
+		<name><![CDATA[G-9020: Try to use a format model and NLS_NUMERIC_CHARACTERS in string to number conversion functions.]]></name>
 		<internalKey>G-9020</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5397,7 +5456,7 @@ end employee_api;
 <pre>create package body employee_api is
    procedure set_salary (in_employee_id in employees.employee_id%type, in_salary in varchar2) is
    begin
-      update employee
+      update employees
       set salary = to_number(in_salary)
       where employee_id = in_employee_id;
    end set_dob;
@@ -5407,7 +5466,7 @@ end employee_api;
 <pre>create package body employee_api is
    procedure set_salary (in_employee_id in employees.employee_id%type, in_salary in varchar2) is
    begin
-      update employee
+      update employees
       set salary = to_number(in_salary, '99999999999999999999.99999', q'[nls_numeric_characters='.,']')
       where employee_id = in_employee_id;
    end set_dob;
@@ -5418,7 +5477,7 @@ end employee_api;
 	</rule>
 	<rule>
 		<key>G-9030</key>
-		<name><![CDATA[G-9030: Try to define a default value on conversion errors. (not implemented)]]></name>
+		<name><![CDATA[G-9030: Try to define a default value on conversion errors.]]></name>
 		<internalKey>G-9030</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5433,7 +5492,7 @@ end employee_api;
 <pre>create package body employee_api is
    procedure set_salary (in_employee_id in employees.employee_id%type, in_salary in varchar2) is
    begin
-      update employee
+      update employees
       set salary = to_number(in_salary)
       where employee_id = in_employee_id;
    end set_dob;
@@ -5443,7 +5502,7 @@ end employee_api;
 <pre>create package body employee_api is
    procedure set_salary (in_employee_id in employees.employee_id%type, in_salary in varchar2) is
    begin
-      update employee
+      update employees
       set salary = to_number(in_salary, '99999999999999999999.99999', q'[nls_numeric_characters='.,']')
       where employee_id = in_employee_id;
    end set_dob;

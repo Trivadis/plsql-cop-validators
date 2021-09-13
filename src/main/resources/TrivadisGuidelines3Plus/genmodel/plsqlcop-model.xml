@@ -106,7 +106,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always use a format model in string to date/time conversion functions. (not implemented) -->
+			<!-- Always use a format model in string to date/time conversion functions. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9010</rule-key>
@@ -125,7 +125,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Try to use a format model and NLS_NUMERIC_CHARACTERS in string to number conversion functions. (not implemented) -->
+			<!-- Try to use a format model and NLS_NUMERIC_CHARACTERS in string to number conversion functions. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9020</rule-key>
@@ -148,7 +148,7 @@
 		<chc>
 			<key>LOGIC_CHANGEABILITY</key>
 			<name>Logic changeability</name>
-			<!-- Never use self-defined weak ref cursor types. (not implemented) -->
+			<!-- Never use self-defined weak ref cursor types. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-2610</rule-key>
@@ -194,7 +194,7 @@
 		<chc>
 			<key>CPU_EFFICIENCY</key>
 			<name>Cpu efficiency</name>
-			<!-- Avoid assigning values to local variables that are not used by a subsequent statement. (not implemented) -->
+			<!-- Avoid assigning values to local variables that are not used by a subsequent statement. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-2135</rule-key>
@@ -232,7 +232,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Never commit within a cursor loop. (not implemented) -->
+			<!-- Never commit within a cursor loop. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-3310</rule-key>
@@ -270,6 +270,25 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
+			<!-- Never use RETURN in package initialization block. -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-7250</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>LINEAR_OFFSET</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>1.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>5.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
 			<!-- Try to define your packaged/standalone function deterministic if appropriate. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
@@ -289,7 +308,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Avoid multiple DML events per trigger if primary key is assigned in trigger. (not implemented) -->
+			<!-- Avoid multiple DML events per trigger if primary key is assigned in trigger. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-7730</rule-key>
@@ -666,7 +685,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Avoid using the same expression on both sides of a relational comparison operator or a logical operator. (not implemented) -->
+			<!-- Avoid using the same expression on both sides of a relational comparison operator or a logical operator. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-1080</rule-key>
@@ -704,7 +723,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Never self-assign a variable. (not implemented) -->
+			<!-- Never self-assign a variable. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-2145</rule-key>
@@ -742,7 +761,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Try to move transactions within a non-cursor loop into procedures. (not implemented) -->
+			<!-- Try to move transactions within a non-cursor loop into procedures. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-3320</rule-key>
@@ -761,7 +780,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Avoid using identical conditions in different branches of the same IF or CASE statement. (not implemented) -->
+			<!-- Avoid using identical conditions in different branches of the same IF or CASE statement. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-4250</rule-key>
@@ -780,7 +799,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Avoid inverting boolean conditions with NOT. (not implemented) -->
+			<!-- Avoid inverting boolean conditions with NOT. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-4260</rule-key>
@@ -799,7 +818,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Avoid comparing boolean values to boolean literals. (not implemented) -->
+			<!-- Avoid comparing boolean values to boolean literals. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-4270</rule-key>
@@ -1050,7 +1069,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Avoid self-assigning a column. (not implemented) -->
+			<!-- Avoid self-assigning a column. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-3115</rule-key>
@@ -1107,7 +1126,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always use wildcards in a LIKE clause. (not implemented) -->
+			<!-- Always use wildcards in a LIKE clause. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-3195</rule-key>
@@ -1202,7 +1221,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Never reuse labels in inner scopes. (not implemented) -->
+			<!-- Never reuse labels in inner scopes. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-4325</rule-key>
@@ -1354,7 +1373,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always use FORMAT_ERROR_BACKTRACE when using FORMAT_ERROR_STACK or SQLERRM. (not implemented) -->
+			<!-- Always use FORMAT_ERROR_BACKTRACE when using FORMAT_ERROR_STACK or SQLERRM. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-5080</rule-key>
@@ -1373,7 +1392,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always use CREATE OR REPLACE instead of CREATE alone. (not implemented) -->
+			<!-- Always use CREATE OR REPLACE instead of CREATE alone. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-7125</rule-key>
@@ -1449,7 +1468,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always assign values to OUT parameters. (not implemented) -->
+			<!-- Always assign values to OUT parameters. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-7330</rule-key>
@@ -1525,7 +1544,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Never use multiple UPDATE OF in trigger event clause. (not implemented) -->
+			<!-- Never use multiple UPDATE OF in trigger event clause. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-7720</rule-key>
@@ -1563,7 +1582,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Try to define a default value on conversion errors. (not implemented) -->
+			<!-- Try to define a default value on conversion errors. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9030</rule-key>
@@ -2421,7 +2440,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always use DEFAULT ON NULL declarations to assign default values to table columns if you refuse to store NULL values. -->
+			<!-- Always use DEFAULT ON NULL declarations to assign default values to table columns if you refuse to store NULL values. (not implemented) -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-3170</rule-key>
@@ -2459,7 +2478,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Never use ROWNUM at the same query level as ORDER BY. (not implemented) -->
+			<!-- Never use ROWNUM at the same query level as ORDER BY. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-3185</rule-key>
