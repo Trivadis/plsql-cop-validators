@@ -11,7 +11,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<tvdcc.basedir>/usr/local/bin/tvdcc</tvdcc.basedir>
-		<xtext.version>2.25.0</xtext.version>
+		<xtext.version>2.26.0.M2</xtext.version>
 		<skip.genmodel>false</skip.genmodel>
 	</properties>
 	<profiles>
