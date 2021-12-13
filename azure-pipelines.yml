@@ -18,6 +18,7 @@ pool:
 variables:
   MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)/.m2/repository
   MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+  Agent.Source.Git.ShallowFetchDepth: 1
 
 steps:
 - task: MavenAuthenticate@0
