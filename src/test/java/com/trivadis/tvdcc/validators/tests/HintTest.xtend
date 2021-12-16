@@ -430,5 +430,29 @@ class HintTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.size)
 	}
+	
+	// -- issue 44 https://github.com/Trivadis/plsql-cop-validators/issues/44
+	
+	@Test
+	def void falsePositiveForHintsReferringTableAliasInUsingClauseOfMerge() {
+		val stmt = '''
+			merge /*+ use_hash (d s) */ into bonuses d
+			using (select employee_id, salary, department_id
+			         from employees
+			        where department_id = 80) s
+			   on (d.employee_id = s.employee_id)
+			 when matched then
+			      update
+			         set d.bonus = d.bonus + s.salary *.01
+			      delete
+			       where (s.salary > 8000)
+			 when not matched then
+			      insert (d.employee_id, d.bonus)
+			      values (s.employee_id, s.salary *.01)
+			       where (s.salary <= 8000);
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.size)
+	}
 
 }
