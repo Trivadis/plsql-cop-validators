@@ -256,6 +256,7 @@ class Hint extends PLSQLValidator implements PLSQLCopValidator {
 	def private dispatch getTableReference(MergeStatement stmt) {
 		val result = new ArrayList<Pair<String, String>>
 		result.add(new Pair(stmt.intoClause?.table?.value, stmt.intoClause?.alias?.value))
+		result.add(new Pair(stmt.usingClause?.table?.value, stmt.usingClause?.alias?.value))
 		return result
 	}
 
