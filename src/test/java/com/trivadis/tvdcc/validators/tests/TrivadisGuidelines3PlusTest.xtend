@@ -31,8 +31,8 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 	@Test
 	def void guidelines() {
 		val guidelines = (getValidator() as TrivadisGuidelines3Plus).guidelines
-		Assert.assertEquals(20, guidelines.values.filter[it.id >= 9100].size)  // last guideline in v4.0 is G-9030
-		Assert.assertEquals(115, guidelines.values.filter[it.id < 9100].size)  // v4.0 provides 23 additional guidelines
+		Assert.assertEquals(20, guidelines.values.filter[it.id >= 9100].size)  // last guideline in v4.2 is G-9040
+		Assert.assertEquals(121, guidelines.values.filter[it.id < 9100].size)
 		Assert.assertEquals(79, guidelines.values.filter[it.id < 1000].size)
 	}
 	
