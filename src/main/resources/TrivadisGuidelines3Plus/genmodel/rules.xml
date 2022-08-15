@@ -18,9 +18,10 @@
 begin
    sys.dbms_output.put_line(l_value);
 end;
-/</pre>
-			<h2>Still bad</h2>
-<pre>declare
+/
+
+-- Still bad
+declare
    l_value pls_integer := null;
 begin
    sys.dbms_output.put_line(l_value);
@@ -48,7 +49,7 @@ end;
 			<p>It's a good alternative for comments to indicate the start and end of a named processing.</p>
 			<h2>Bad</h2>
 <pre>begin
-   begin 
+   begin
       null;
    end;
 
@@ -60,7 +61,7 @@ end;
 			<h2>Good</h2>
 <pre>begin
    &lt;&lt;prepare_data&gt;&gt;
-   begin 
+   begin
       null;
    end prepare_data;
 
@@ -89,13 +90,13 @@ end good;
 			</ul>
 			<h2>Bad</h2>
 <pre>declare
-   i integer;
+   i            integer;
    co_min_value constant integer := 1;
    co_max_value constant integer := 10;
    co_increment constant integer := 1;
 begin
    &lt;&lt;prepare_data&gt;&gt;
-   begin 
+   begin
       null;
    end;
 
@@ -106,32 +107,32 @@ begin
 
    i := co_min_value;
    &lt;&lt;while_loop&gt;&gt;
-   while (i &lt;= co_max_value) 
-   loop 
-      i := i + co_increment; 
+   while (i &lt;= co_max_value)
+   loop
+      i := i + co_increment;
    end loop;
 
    &lt;&lt;basic_loop&gt;&gt;
-   loop 
+   loop
       exit basic_loop;
    end loop;
 
    &lt;&lt;for_loop&gt;&gt;
    for i in co_min_value..co_max_value
-   loop 
+   loop
       sys.dbms_output.put_line(i);
    end loop;
 end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   i integer;
+   i            integer;
    co_min_value constant integer := 1;
    co_max_value constant integer := 10;
    co_increment constant integer := 1;
 begin
    &lt;&lt;prepare_data&gt;&gt;
-   begin 
+   begin
       null;
    end prepare_data;
 
@@ -142,20 +143,20 @@ begin
 
    i := co_min_value;
    &lt;&lt;while_loop&gt;&gt;
-   while (i &lt;= co_max_value) 
-   loop 
-      i := i + co_increment; 
+   while (i &lt;= co_max_value)
+   loop
+      i := i + co_increment;
    end loop while_loop;
 
    &lt;&lt;basic_loop&gt;&gt;
-   loop 
+   loop
       exit basic_loop;
    end loop basic_loop;
 
    &lt;&lt;for_loop&gt;&gt;
    for i in co_min_value..co_max_value
-   loop 
-     sys.dbms_output.put_line(i);
+   loop
+      sys.dbms_output.put_line(i);
    end loop for_loop;
 end;
 /</pre>
@@ -175,27 +176,29 @@ end;
 			<h2>Bad</h2>
 <pre>create or replace package body my_package is
    procedure my_proc is
-      l_last_name  employees.last_name%type;
-      l_first_name employees.first_name%type;
+      l_last_name      employees.last_name%type;
+      l_first_name     employees.first_name%type;
       co_department_id constant departments.department_id%type := 10;
-      e_good exception;
+      e_good           exception;
    begin
       select e.last_name
         into l_last_name
         from employees e
        where e.department_id = co_department_id;
    exception
-      when no_data_found then null; -- handle_no_data_found;
-      when too_many_rows then null; -- handle_too_many_rows;
+      when no_data_found then
+         null; -- handle_no_data_found;
+      when too_many_rows then
+         null; -- handle_too_many_rows;
    end my_proc;
 end my_package;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body my_package is
    procedure my_proc is
-      l_last_name  employees.last_name%type;
+      l_last_name      employees.last_name%type;
       co_department_id constant departments.department_id%type := 10;
-      e_good exception;
+      e_good           exception;
    begin
       select e.last_name
         into l_last_name
@@ -204,8 +207,10 @@ end my_package;
 
       raise e_good;
    exception
-      when no_data_found then null; -- handle_no_data_found;
-      when too_many_rows then null; -- handle_too_many_rows;
+      when no_data_found then
+         null; -- handle_no_data_found;
+      when too_many_rows then
+         null; -- handle_too_many_rows;
    end my_proc;
 end my_package;
 /</pre>
@@ -227,7 +232,7 @@ end my_package;
 <pre>declare
    co_dept_purchasing constant departments.department_id%type := 30;
 begin
-   if 2=3 then
+   if 2 = 3 then
       null; -- some dead code here
    end if;
 
@@ -235,13 +240,13 @@ begin
 
    &lt;&lt;my_loop&gt;&gt;
    loop
-      exit my_loop;    
+      exit my_loop;
       null; -- some dead code here
    end loop my_loop;
 
    null; -- some other enabled code here
 
-   case 
+   case
       when 1 = 1 and 'x' = 'y' then
          null; -- some dead code here
       else
@@ -249,12 +254,14 @@ begin
    end case;
 
    &lt;&lt;my_loop2&gt;&gt;
-   for r_emp in (select last_name
-                   from employees
-                  where department_id = co_dept_purchasing
-                     or commission_pct is not null 
-                    and 5=6) 
-                -- "or commission_pct is not null" is dead code 
+   for r_emp in (
+      select last_name
+        from employees
+       where department_id = co_dept_purchasing
+          or commission_pct is not null
+         and 5 = 6
+   ) 
+   -- "or commission_pct is not null" is dead code 
    loop
       sys.dbms_output.put_line(r_emp.last_name);
    end loop my_loop2;
@@ -272,10 +279,12 @@ begin
    null; -- some further enabled code here
 
    &lt;&lt;my_loop2&gt;&gt;
-   for r_emp in (select last_name
-                   from employees
-                  where department_id = co_dept_admin
-                     or commission_pct is not null) 
+   for r_emp in (
+      select last_name
+        from employees
+       where department_id = co_dept_admin
+          or commission_pct is not null
+   )
    loop
       sys.dbms_output.put_line(r_emp.last_name);
    end loop my_loop2;
@@ -316,9 +325,9 @@ begin
       null;
    end if;
 exception
-   when no_data_found then 
+   when no_data_found then
       null; -- handle_no_data_found;
-   when too_many_rows then 
+   when too_many_rows then
       null; -- handle_too_many_rows; 
 end;
 /</pre>
@@ -340,9 +349,9 @@ begin
       null;
    end if;
 exception
-   when no_data_found then 
+   when no_data_found then
       null; -- handle_no_data_found;
-   when too_many_rows then 
+   when too_many_rows then
       null; -- handle_too_many_rows; 
 end;
 /</pre>
@@ -365,11 +374,13 @@ end;
 			column(s).</p>
 			<h2>Bad</h2>
 <pre>begin
-   insert into employees_log (employee_id
-                             ,last_name
-                             ,first_name
-                             ,rid)
-   select employee_id 
+   insert into employees_log (
+      employee_id
+     ,last_name
+     ,first_name
+     ,rid
+   )
+   select employee_id
          ,last_name
          ,first_name
          ,rowid
@@ -378,10 +389,12 @@ end;
 /</pre>
 			<h2>Good</h2>
 <pre>begin
-   insert into employees_log (employee_id
-                             ,last_name
-                             ,first_name)
-   select employee_id 
+   insert into employees_log (
+      employee_id
+     ,last_name
+     ,first_name
+   )
+   select employee_id
          ,last_name
          ,first_name
      from employees;
@@ -437,19 +450,20 @@ end;
 			<h2>Bad</h2>
 <pre>select emp.first_name
       ,emp.last_name
-      ,emp.salary 
-      ,emp.hire_date
-  from employees emp
- where emp.salary &gt; 3000 or emp.salary &gt; 3000
- order by emp.last_name, emp.first_name;</pre>
-			<h2>Good</h2>
-<pre>select emp.first_name
-      ,emp.last_name
-      ,emp.salary 
+      ,emp.salary
       ,emp.hire_date
   from employees emp
  where emp.salary &gt; 3000
- order by emp.last_name, emp.first_name;</pre>
+    or emp.salary &gt; 3000
+ order by emp.last_name,emp.first_name;</pre>
+			<h2>Good</h2>
+<pre>select emp.first_name
+      ,emp.last_name
+      ,emp.salary
+      ,emp.hire_date
+  from employees emp
+ where emp.salary &gt; 3000
+ order by emp.last_name,emp.first_name;</pre>
 			<p></p>]]></description>
 		<tag>avoid</tag>
 	</rule>
@@ -476,8 +490,10 @@ end;
         from employees e
        where rownum = co_first_row;
    exception
-      when no_data_found then null; -- handle no_data_found
-      when too_many_rows then null; -- handle too_many_rows (impossible)
+      when no_data_found then
+         null; -- handle no_data_found
+      when too_many_rows then
+         null; -- handle too_many_rows (impossible)
    end my_proc;
 end my_package;
 /</pre>
@@ -492,8 +508,10 @@ end my_package;
         from employees e
        where rownum = co_first_row;
    exception
-      when no_data_found then null; -- handle no_data_found
-      when too_many_rows then null; -- handle too_many_rows (impossible)
+      when no_data_found then
+         null; -- handle no_data_found
+      when too_many_rows then
+         null; -- handle too_many_rows (impossible)
    end my_proc;
 end my_package;
 /</pre>
@@ -554,7 +572,7 @@ end my_package;
 			definition.</p>
 			<p>Examples of possible subtype definitions:</p>
 			<ul>
-			   <li>ora_name_type - Object corresponding to the ORACLE naming conventions (table,
+			   <li>ora_name_type - Object corresponding to the Oracle naming conventions (table,
 			   variable, column, package, etc.).</li>
 			   <li>max_vc2_type - String variable with maximal VARCHAR2 size.</li>
 			   <li>array_index_type - Best fitting data type for array navigation.</li>
@@ -601,8 +619,8 @@ end my_package;
 <pre>create or replace package body my_package is
    procedure my_proc is
       co_employee_id constant employees.employee_id%type := 1042;
-      l_last_name  employees.last_name%type;
-      l_message    varchar2(100 char);
+      l_last_name    employees.last_name%type;
+      l_message      varchar2(100 char);
    begin
       select emp.last_name
         into l_last_name
@@ -611,8 +629,10 @@ end my_package;
 
       l_message := 'Hello, ' || l_last_name;
    exception
-      when no_data_found then null; -- handle_no_data_found;
-      when too_many_rows then null; -- handle_too_many_rows;
+      when no_data_found then
+         null; -- handle_no_data_found;
+      when too_many_rows then
+         null; -- handle_too_many_rows;
    end my_proc;
 end my_package;
 /</pre>
@@ -620,8 +640,8 @@ end my_package;
 <pre>create or replace package body my_package is
    procedure my_proc is
       co_employee_id constant employees.employee_id%type := 1042;
-      l_last_name  employees.last_name%type;
-      l_message    varchar2(100 char);
+      l_last_name    employees.last_name%type;
+      l_message      varchar2(100 char);
    begin
       select emp.last_name
         into l_last_name
@@ -632,8 +652,10 @@ end my_package;
 
       message_api.send_message(l_message);
    exception
-      when no_data_found then null; -- handle_no_data_found;
-      when too_many_rows then null; -- handle_too_many_rows;
+      when no_data_found then
+         null; -- handle_no_data_found;
+      when too_many_rows then
+         null; -- handle_too_many_rows;
    end my_proc;
 end my_package;
 /</pre>
@@ -744,8 +766,8 @@ end;
 			<p>If your initialization fails, you will not be able to handle the error in your exceptions block.</p>
 			<h2>Bad</h2>
 <pre>declare
-   co_department_id constant integer := 100;
-   l_department_name departments.department_name%type := 
+   co_department_id  constant integer := 100;
+   l_department_name departments.department_name%type :=
       department_api.name_by_id(in_id =&gt; co_department_id);
 begin
    sys.dbms_output.put_line(l_department_name);
@@ -753,7 +775,7 @@ end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   co_department_id  constant integer := 100;
+   co_department_id  constant integer                          := 100;
    co_unkown_name    constant departments.department_name%type := 'unknown';
    l_department_name departments.department_name%type;
 begin
@@ -782,37 +804,41 @@ end;
 			<h2>Reason</h2>
 			<p>The readability of your code will be higher when you do not overload variables.</p>
 			<h2>Bad</h2>
-<pre>begin 
+<pre>begin
    &lt;&lt;main&gt;&gt;
    declare
-      co_main constant user_objects.object_name%type := 'test_main';
-      co_sub constant user_objects.object_name%type := 'test_sub';
-      co_sep constant user_objects.object_name%type := ' - ';
-      l_variable user_objects.object_name%type := co_main;
+      co_main    constant user_objects.object_name%type := 'test_main';
+      co_sub     constant user_objects.object_name%type := 'test_sub';
+      co_sep     constant user_objects.object_name%type := ' - ';
+      l_variable user_objects.object_name%type          := co_main;
    begin
       &lt;&lt;sub&gt;&gt;
       declare
          l_variable user_objects.object_name%type := co_sub;
       begin
-         sys.dbms_output.put_line(l_variable || co_sep || main.l_variable);
+         sys.dbms_output.put_line(l_variable
+            || co_sep
+            || main.l_variable);
       end sub;
    end main;
 end;
 /</pre>
 			<h2>Good</h2>
-<pre>begin 
+<pre>begin
    &lt;&lt;main&gt;&gt;
    declare
-      co_main constant user_objects.object_name%type := 'test_main';
-      co_sub constant user_objects.object_name%type := 'test_sub';
-      co_sep constant user_objects.object_name%type := ' - ';
-      l_main_variable user_objects.object_name%type := co_main;
+      co_main         constant user_objects.object_name%type := 'test_main';
+      co_sub          constant user_objects.object_name%type := 'test_sub';
+      co_sep          constant user_objects.object_name%type := ' - ';
+      l_main_variable user_objects.object_name%type          := co_main;
    begin
       &lt;&lt;sub&gt;&gt;
       declare
          l_sub_variable user_objects.object_name%type := co_sub;
       begin
-         sys.dbms_output.put_line(l_sub_variable || co_sep || l_main_variable);
+         sys.dbms_output.put_line(l_sub_variable
+            || co_sep
+            || l_main_variable);
       end sub;
    end main;
 end;
@@ -832,8 +858,8 @@ end;
 			<p>Quoted identifiers make your code hard to read and maintain.</p>
 			<h2>Bad</h2>
 <pre>declare
-   "sal+comm" integer;
-   "my constant" constant integer := 1;
+   "sal+comm"     integer;
+   "my constant"  constant integer := 1;
    "my exception" exception;
 begin
    "sal+comm" := "my constant";
@@ -846,7 +872,7 @@ end;
 <pre>declare
    l_sal_comm     integer;
    co_my_constant constant integer := 1;
-   e_my_exception exception;   
+   e_my_exception exception;
 begin
    l_sal_comm := co_my_constant;
 exception
@@ -873,7 +899,7 @@ end;
 <pre>declare
    i integer;
    c constant integer := 1;
-   e exception;   
+   e exception;
 begin
    i := c;
 exception
@@ -885,7 +911,7 @@ end;
 <pre>declare
    l_sal_comm     integer;
    co_my_constant constant integer := 1;
-   e_my_exception exception;   
+   e_my_exception exception;
 begin
    l_sal_comm := co_my_constant;
 exception
@@ -914,19 +940,19 @@ end;
 			<h2>Bad</h2>
 <pre>declare
    l_department_name departments.department_name%type;
-   l_rowid rowid;
+   l_rowid           rowid;
 begin
-   update departments 
+   update departments
       set department_name = l_department_name
     where rowid = l_rowid;
 end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   l_department_name  departments.department_name%type;
-   l_department_id    departments.department_id%type;
+   l_department_name departments.department_name%type;
+   l_department_id   departments.department_id%type;
 begin
-   update departments 
+   update departments
       set department_name = l_department_name
     where department_id = l_department_id;
 end;
@@ -1017,11 +1043,11 @@ end constants_up;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Restriction</h2>
-			<p>ORACLE 11g or later</p>
+			<p>Oracle Database 11g or later</p>
 			<h2>Reason</h2>
 			<p><code>simple_integer</code> does no checks on numeric overflow, which results in better performance
 			compared to the other numeric datatypes.</p>
-			<p>With ORACLE 11g, the new data type <code>simple_integer</code> has been introduced. It is a sub-type of
+			<p>With Oracle Database 11g, the new data type <code>simple_integer</code> has been introduced. It is a sub-type of
 			<code>pls_integer</code> and covers the same range. The basic difference is that <code>simple_integer</code> is
 			always not null. When the value of the declared variable is never going to be null then you can
 			declare it as <code>simple_integer</code>. Another major difference is that you will never face a numeric
@@ -1033,7 +1059,9 @@ end constants_up;
 <pre>create or replace package body constants_up is
    co_big_increase constant number(5,0) := 1;
 
-   function big_increase return number deterministic is
+   function big_increase return number
+      deterministic
+   is
    begin
       return co_big_increase;
    end big_increase;
@@ -1043,7 +1071,9 @@ end constants_up;
 <pre>create or replace package body constants_up is
    co_big_increase constant simple_integer := 1;
 
-   function big_increase return simple_integer deterministic is
+   function big_increase return simple_integer
+      deterministic
+   is
    begin
       return co_big_increase;
    end big_increase;
@@ -1065,13 +1095,13 @@ end constants_up;
 			columns/variables are always filled to its specified lengths; this may lead to unwanted side
 			effects and undesired results.</p>
 			<h2>Bad</h2>
-<pre>create or replace package types_up 
+<pre>create or replace package types_up
 is
    subtype description_type is char(200);
 end types_up;
 /</pre>
 			<h2>Good</h2>
-<pre>create or replace package types_up 
+<pre>create or replace package types_up
 is
    subtype description_type is varchar2(200 char);
 end types_up;
@@ -1114,24 +1144,24 @@ end types_up;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>Today zero-length strings and <code>null</code> are currently handled identical by ORACLE. There is no
+			<p>Today zero-length strings and <code>null</code> are currently handled identical by Oracle. There is no
 			guarantee that this will still be the case in future releases, therefore if you mean <code>null</code> use <code>null</code>.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body constants_up is
    co_null_string constant varchar2(1) := '';
 
-   function null_string return varchar2 is 
+   function null_string return varchar2 is
    begin
-       return co_null_string;
+      return co_null_string;
    end null_string;
 end constants_up;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body constants_up is
 
-   function empty_string return varchar2 is 
+   function empty_string return varchar2 is
    begin
-       return null;
+      return null;
    end empty_string;
 end constants_up;
 /</pre>
@@ -1192,7 +1222,7 @@ end;
 <pre>declare
    co_newfile constant pls_integer := 1000;
    co_oldfile constant pls_integer := 500;
-   l_bigger  boolean;
+   l_bigger   boolean;
 begin
    if co_newfile &lt; co_oldfile then
       l_bigger := true;
@@ -1205,9 +1235,9 @@ end;
 <pre>declare
    co_newfile constant pls_integer := 1000;
    co_oldfile constant pls_integer := 500;
-   l_bigger  boolean;
+   l_bigger   boolean;
 begin
-   l_bigger := nvl(co_newfile &lt; co_oldfile, false);
+   l_bigger := nvl(co_newfile &lt; co_oldfile,false);
 end;
 /</pre>
 			<p></p>]]></description>
@@ -1222,13 +1252,13 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p><code>long</code> and <code>long raw</code> data types have been deprecated by ORACLE since version 8i - support
-			might be discontinued in future ORACLE releases.</p>
+			<p><code>long</code> and <code>long raw</code> data types have been deprecated by Oracle since version 8i - support
+			might be discontinued in future Oracle releases.</p>
 			<p>There are many constraints to <code>long</code> datatypes in comparison to the <code>lob</code> types.</p>
 			<h2>Bad</h2>
 <pre>create or replace package example_package is
    g_long long;
-   g_raw  long raw;
+   g_raw long raw;
 
    procedure do_something;
 end example_package;
@@ -1236,7 +1266,7 @@ end example_package;
 
 create or replace package body example_package is
    procedure do_something is
-   begin 
+   begin
       null;
    end do_something;
 end example_package;
@@ -1252,7 +1282,7 @@ create or replace package body example_package is
    g_raw  blob;
 
    procedure do_something is
-   begin 
+   begin
       null;
    end do_something;
 end example_package;
@@ -1269,36 +1299,36 @@ end example_package;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p><code>long</code> and <code>long raw</code> data types have been deprecated by ORACLE since version 8i - support
-			might be discontinued in future ORACLE releases.</p>
+			<p><code>long</code> and <code>long raw</code> data types have been deprecated by Oracle since version 8i - support
+			might be discontinued in future Oracle releases.</p>
 			<p>There are many constraints to <code>long</code> datatypes in comparison to the <code>lob</code> types.</p>
 			<h2>Bad</h2>
 <pre>declare
    type local_weak_cursor_type is ref cursor;
-   cv_data  local_weak_cursor_type;
+   cv_data local_weak_cursor_type;
 begin
    if configuration.use_employee then
       open cv_data for
-         select e.employee_id, e.first_name, e.last_name
+         select e.employee_id,e.first_name,e.last_name
            from employees e;
    else
       open cv_data for
-         select e.emp_id, e.name
+         select e.emp_id,e.name
            from emp e;
    end if;
 end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   cv_data  sys_refcursor;
+   cv_data sys_refcursor;
 begin
    if configuration.use_employee then
       open cv_data for
-         select e.employee_id, e.first_name, e.last_name
+         select e.employee_id,e.first_name,e.last_name
            from employees e;
    else
       open cv_data for
-         select e.emp_id, e.name
+         select e.emp_id,e.name
            from emp e;
    end if;
 end;
@@ -1319,19 +1349,22 @@ end;
 			change-resistant code.</p>
 			<h2>Bad</h2>
 <pre>insert into departments
-     values (departments_seq.nextval
-            ,'Support'
-            ,100
-            ,10);</pre>
+values (
+   departments_seq.nextval
+  ,'Support'
+  ,100
+  ,10);</pre>
 			<h2>Good</h2>
-<pre>insert into departments (department_id 
-                        ,department_name
-                        ,manager_id
-                        ,location_id)
-     values (departments_seq.nextval
-            ,'Support'
-            ,100
-            ,10);</pre>
+<pre>insert into departments (
+   department_id
+  ,department_name
+  ,manager_id
+  ,location_id)
+values (
+   departments_seq.nextval
+  ,'Support'
+  ,100
+  ,10);</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -1373,44 +1406,51 @@ end;
 <pre>select last_name
       ,first_name
       ,department_name
-  from      employees  
-       join departments using (department_id)
- where extract(month from hire_date) = extract(month from sysdate);</pre>
+  from employees
+  join departments
+ using (department_id)
+ where extract(month from hire_date) = extract(month from sysdate);
+ 
+-- If the jobs table has no employee_id column and employees has one this query will not raise
+-- an error but return all rows of the employees table as a subquery is allowed to access columns
+-- of all its parent tables - this construct is known as correlated subquery.
+select last_name
+      ,first_name
+  from employees
+ where employee_id in (
+          select employee_id
+            from jobs
+           where job_title like '%Manager%'
+       );</pre>
 			<h2>Better</h2>
 <pre>select e.last_name
       ,e.first_name
       ,d.department_name
-  from      employees   e
-       join departments d on (e.department_id = d.department_id)
+  from employees e
+  join departments d
+    on (e.department_id = d.department_id)
  where extract(month from e.hire_date) = extract(month from sysdate);</pre>
 			<h2>Good</h2>
 <pre>-- Using meaningful aliases improves the readability of your code.
 select emp.last_name
       ,emp.first_name
       ,dept.department_name
-  from      employees   emp
-       join departments dept on (emp.department_id = dept.department_id)
- where extract(month from emp.hire_date) = extract(month from sysdate);</pre>
-			<h2>Bad (subquery, no error)</h2>
-<pre>-- If the jobs table has no employee_id column and employees has one this query will not raise
--- an error but return all rows of the employees table as a subquery is allowed to access columns
--- of all its parent tables - this construct is known as correlated subquery.
-select last_name
-      ,first_name
-  from employees
- where employee_id in (select employee_id
-                         from jobs
-                        where job_title like '%Manager%');</pre>
-			<h2>Good (subquery, ORA-00904: "J"."EMPLOYEE_ID": invalid identifier)</h2>
-<pre>-- If the jobs table has no employee_id column this query will return an error due to the directive
+  from employees emp
+  join departments dept
+    on (emp.department_id = dept.department_id)
+ where extract(month from emp.hire_date) = extract(month from sysdate);
+
+-- If the jobs table has no employee_id column this query will return an error due to the directive
 -- (given by adding the table alias to the column) to read the employee_id column from the jobs
 -- table.
 select emp.last_name
       ,emp.first_name
   from employees emp
- where emp.employee_id in (select j.employee_id
-                             from jobs j
-                            where j.job_title like '%Manager%');</pre>
+ where emp.employee_id in (
+          select j.employee_id
+            from jobs j
+           where j.job_title like '%Manager%'
+       );</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -1431,7 +1471,7 @@ select emp.last_name
       ,e.first_name
       ,d.department_name
   from employees e
-      ,departments d 
+      ,departments d
  where e.department_id = d.department_id
    and extract(month from e.hire_date) = extract(month from sysdate);</pre>
 			<h2>Good</h2>
@@ -1439,8 +1479,9 @@ select emp.last_name
       ,emp.last_name
       ,emp.first_name
       ,dept.department_name
-  from      employees   emp
-       join departments dept on dept.department_id = emp.department_id
+  from employees emp
+  join departments dept
+    on dept.department_id = emp.department_id
  where extract(month from emp.hire_date) = extract(month from sysdate);</pre>
 			<p></p>]]></description>
 		<tag>try</tag>
@@ -1459,19 +1500,19 @@ select emp.last_name
 			<h2>Bad</h2>
 <pre>declare
    cursor c_employees is
-      select employee_id, first_name, last_name
+      select employee_id,first_name,last_name
         from employees;
    l_employee_id employees.employee_id%type;
    l_first_name  employees.first_name%type;
    l_last_name   employees.last_name%type;
 begin
    open c_employees;
-   fetch c_employees into l_employee_id, l_first_name, l_last_name;
+   fetch c_employees into l_employee_id,l_first_name,l_last_name;
    &lt;&lt;process_employees&gt;&gt;
    while c_employees%found
    loop
       -- do something with the data
-      fetch c_employees into l_employee_id, l_first_name, l_last_name;
+      fetch c_employees into l_employee_id,l_first_name,l_last_name;
    end loop process_employees;
    close c_employees;
 end;
@@ -1479,7 +1520,7 @@ end;
 			<h2>Good</h2>
 <pre>declare
    cursor c_employees is
-      select employee_id, first_name, last_name
+      select employee_id,first_name,last_name
         from employees;
    r_employee c_employees%rowtype;
 begin
@@ -1498,6 +1539,60 @@ end;
 		<tag>try</tag>
 	</rule>
 	<rule>
+		<key>G-3145</key>
+		<name><![CDATA[G-3145: Avoid using SELECT * directly from a table or view.]]></name>
+		<internalKey>G-3145</internalKey>
+		<severity>MAJOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>Use of SELECT * when querying a table or view makes it impossible for the
+			optimizer to take into account which columns will actually be used by the
+			application, potentially leading to sub-optimal execution plans (for example full
+			scanning the table where a full scan of an index might have sufficed.) Also
+			SELECT * possibly can break your code in the future in case of changes to the
+			table structure (for example new or invisible columns.)</p>
+			<p>Exceptions to the rule can be when querying an inline view (where the SELECT *
+			is just to avoid repeating same columns as inside the inline view), or when
+			fetching into records defined as MYTABLE%ROWTYPE for the purpose of processing
+			all columns of the record.</p>
+			<h2>Bad</h2>
+<pre>begin
+   &lt;&lt;raise_salary&gt;&gt;
+   for r_employee in (
+      select *
+        from employees
+   )
+   loop
+      employee_api.calculate_raise_by_seniority(
+         id_in       =&gt; r_employee.id
+        ,salary_in   =&gt; r_employee.salary
+        ,hiredate_in =&gt; r_employee.hiredate
+      );
+   end loop raise_salary;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>begin
+   &lt;&lt;raise_salary&gt;&gt;
+   for r_employee in (
+      select id,salary,hiredate
+        from employees
+   )
+   loop
+      employee_api.calculate_raise_by_seniority(
+         id_in       =&gt; r_employee.id
+        ,salary_in   =&gt; r_employee.salary
+        ,hiredate_in =&gt; r_employee.hiredate
+      );
+   end loop raise_salary;
+end;
+/</pre>
+			<p></p>]]></description>
+		<tag>avoid</tag>
+	</rule>
+	<rule>
 		<key>G-3150</key>
 		<name><![CDATA[G-3150: Try to use identity columns for surrogate keys.]]></name>
 		<internalKey>G-3150</internalKey>
@@ -1506,28 +1601,28 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Restriction</h2>
-			<p>ORACLE 12c</p>
+			<p>Oracle Database 12c</p>
 			<h2>Reason</h2>
 			<p>An identity column is a surrogate key by design – there is no reason why we should not take
 			advantage of this natural implementation when the keys are generated on database level. Using
 			identity column (and therefore assigning sequences as default values on columns) has a huge
 			performance advantage over a trigger solution.</p>
 			<h2>Bad</h2>
-<pre>CREATE TABLE locations (
-   location_id   NUMBER(10)        NOT NULL,
-   location_name VARCHAR2(60 CHAR) NOT NULL,
-   city          VARCHAR2(30 CHAR) NOT NULL,
-   CONSTRAINT locations_pk PRIMARY KEY (location_id)
+<pre>create table locations (
+   location_id   number(10)        not null
+  ,location_name varchar2(60 char) not null
+  ,city          varchar2(30 char) not null
+  ,constraint locations_pk primary key (location_id)
 );
 
-CREATE SEQUENCE location_seq START WITH 1 CACHE 20;
+create sequence location_seq start with 1 cache 20;
 
-CREATE OR REPLACE TRIGGER location_br_i
-   BEFORE INSERT ON locations
-   FOR EACH ROW
-BEGIN
+create or replace trigger location_br_i
+before insert on locations
+for each row
+begin
    :new.location_id := location_seq.nextval;
-END;
+end;
 /</pre>
 			<h2>Good</h2>
 <pre>-- GENERATED ALWAYS AS IDENTITY ensures that the location_id is populated by a sequence. 
@@ -1537,11 +1632,11 @@ END;
 -- GENERATED BY DEFAULT ON NULL AS IDENTITY option. 
 -- This has the downside that the application may pass a value, which might lead to an
 -- immediate or delayed ORA-00001: unique constraint violated error.
-CREATE TABLE locations (
-   location_id   NUMBER(10) GENERATED ALWAYS AS IDENTITY,
-   location_name VARCHAR2(60 CHAR) NOT NULL,
-   city          VARCHAR2(30 CHAR) NOT NULL,
-   CONSTRAINT locations_pk PRIMARY KEY (location_id)
+create table locations (
+   location_id   number(10) generated always as identity
+  ,location_name varchar2(60 char) not null
+  ,city          varchar2(30 char) not null
+  ,constraint locations_pk primary key (location_id)
 );</pre>
 			<p></p>]]></description>
 		<tag>try</tag>
@@ -1555,7 +1650,7 @@ CREATE TABLE locations (
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Restriction</h2>
-			<p>ORACLE 12c</p>
+			<p>Oracle Database 12c</p>
 			<h2>Reason</h2>
 			<p>In contrast to visible columns, invisible columns are not part of a record defined using <code>%rowtype</code>
 			construct. This is helpful as a virtual column may not be programmatically populated. If your
@@ -1570,9 +1665,9 @@ CREATE TABLE locations (
 
 declare
    r_employee employees%rowtype;
-   l_id employees.employee_id%type := 107;
+   l_id       employees.employee_id%type := 107;
 begin
-   r_employee := employee_api.employee_by_id(l_id);
+   r_employee        := employee_api.employee_by_id(l_id);
    r_employee.salary := r_employee.salary * constants_up.small_increase();
 
    update employees
@@ -1588,15 +1683,15 @@ ORA-06512: at line 9
 */</pre>
 			<h2>Good</h2>
 <pre>alter table employees
-   add total_salary invisible generated always as 
+   add total_salary invisible generated always as
       (salary + nvl(commission_pct,0) * salary)
 /
 
 declare
    r_employee employees%rowtype;
-   co_id constant employees.employee_id%type := 107;
+   co_id      constant employees.employee_id%type := 107;
 begin
-   r_employee := employee_api.employee_by_id(co_id);
+   r_employee        := employee_api.employee_by_id(co_id);
    r_employee.salary := r_employee.salary * constants_up.small_increase();
 
    update employees
@@ -1616,10 +1711,10 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Restriction</h2>
-			<p>ORACLE 12c</p>
+			<p>Oracle Database 12c</p>
 			<h2>Reason</h2>
-			<p>Default values have been nullifiable until ORACLE 12c. Meaning any tool sending null as a value
-			for a column having a default value bypassed the default value. Starting with ORACLE 12c default
+			<p>Default values have been nullifiable until Oracle Database 12c. Meaning any tool sending null as a value
+			for a column having a default value bypassed the default value. Starting with Oracle Database 12c default
 			definitions may have an <code>on null</code> definition in addition, which will assign the default value in
 			case of a <code>null</code> value too.
 			
@@ -1629,9 +1724,9 @@ end;
    test_case        number(2) not null
   ,column_defaulted varchar2(10 char) default 'Default')
 /
-insert into null_test(test_case, column_defaulted) values (1,'Value');
-insert into null_test(test_case, column_defaulted) values (2,default);
-insert into null_test(test_case, column_defaulted) values (3,null);
+insert into null_test(test_case,column_defaulted) values (1,'Value');
+insert into null_test(test_case,column_defaulted) values (2,default);
+insert into null_test(test_case,column_defaulted) values (3,null);
 
 select * from null_test;
 
@@ -1647,9 +1742,9 @@ TEST_CASE  COLUMN_DEF
    test_case        number(2) not null
   ,column_defaulted varchar2(10 char) default on null 'Default')
 /
-insert into null_test(test_case, column_defaulted) values (1,'Value');
-insert into null_test(test_case, column_defaulted) values (2,default);
-insert into null_test(test_case, column_defaulted) values (3,null);
+insert into null_test(test_case,column_defaulted) values (1,'Value');
+insert into null_test(test_case,column_defaulted) values (2,default);
+insert into null_test(test_case,column_defaulted) values (3,null);
 
 select * from null_test;
 
@@ -1677,21 +1772,21 @@ TEST_CASE  COLUMN_DEF
 			readers of the code, if they have to count the columns in the <code>select</code> list to know the way the
 			result is ordered.</p>
 			<h2>Bad</h2>
-<pre>select upper(first_name) 
-      ,last_name 
-      ,salary 
-      ,hire_date 
+<pre>select upper(first_name)
+      ,last_name
+      ,salary
+      ,hire_date
   from employees
  order by 4,1,3;</pre>
 			<h2>Good</h2>
-<pre>select upper(first_name) as first_name  
-      ,last_name 
-      ,salary 
+<pre>select upper(first_name) as first_name
+      ,last_name
+      ,salary
       ,hire_date
   from employees
- order by hire_date 
-         ,first_name 
-         ,salary;</pre>
+ order by hire_date
+      ,first_name
+      ,salary;</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -1712,25 +1807,25 @@ TEST_CASE  COLUMN_DEF
 			<h2>Bad</h2>
 <pre>select first_name
       ,last_name
-      ,salary 
+      ,salary
       ,hire_date
       ,rownum as salary_rank
   from employees
  where rownum &lt;= 5
  order by salary desc;</pre>
 			<h2>Good</h2>
-<pre>select first_name 
-      ,last_name 
-      ,salary 
-      ,hire_date 
+<pre>select first_name
+      ,last_name
+      ,salary
+      ,hire_date
       ,rownum as salary_rank
   from (
-   select first_name 
-         ,last_name 
-         ,salary 
-         ,hire_date 
-     from employees
-    order by salary desc
+          select first_name
+                ,last_name
+                ,salary
+                ,hire_date
+            from employees
+           order by salary desc
        )
  where rownum &lt;= 5;</pre>
 			<p></p>]]></description>
@@ -1749,12 +1844,13 @@ TEST_CASE  COLUMN_DEF
 			but adding logging columns to a table (<code>changed_by</code>, <code>changed_date</code>) will result in inappropriate
 			join conditions.</p>
 			<h2>Bad</h2>
-<pre>select d.department_name 
-      ,e.last_name 
-      ,e.first_name 
-  from employees e natural join departments d
- order by d.department_name 
-         ,e.last_name;
+<pre>select d.department_name
+      ,e.last_name
+      ,e.first_name
+  from employees e
+natural join departments d
+ order by d.department_name
+      ,e.last_name;
 
 /*
 DEPARTMENT_NAME                LAST_NAME                 FIRST_NAME         
@@ -1767,24 +1863,26 @@ Executive                      De Haan                   Lex
 alter table departments add modified_at date default on null sysdate;
 alter table employees add modified_at date default on null sysdate;
 
-select d.department_name 
-      ,e.last_name 
-      ,e.first_name 
-  from employees e natural join departments d
- order by d.department_name 
-         ,e.last_name;
+select d.department_name
+      ,e.last_name
+      ,e.first_name
+  from employees e
+natural join departments d
+ order by d.department_name
+      ,e.last_name;
 
 /*
 No data found
 */</pre>
 			<h2>Good</h2>
-<pre>select d.department_name 
-      ,e.last_name 
-      ,e.first_name 
-  from employees   e
-  join departments d on (e.department_id = d.department_id)
- order by d.department_name 
-         ,e.last_name;
+<pre>select d.department_name
+      ,e.last_name
+      ,e.first_name
+  from employees e
+  join departments d
+    on (e.department_id = d.department_id)
+ order by d.department_name
+      ,e.last_name;
 
 /*
 DEPARTMENT_NAME                LAST_NAME                 FIRST_NAME         
@@ -1817,11 +1915,13 @@ Executive                      De Haan                   Lex
   from employees e
  where e.last_name like 'Smith';</pre>
 			<h2>Good</h2>
-<pre>select e.employee_id
+<pre>-- Using a wildcard:
+select e.employee_id
       ,e.last_name
   from employees e
  where e.last_name like 'Smith%';
 
+-- Change to equality operator instead:
 select e.employee_id
       ,e.last_name
   from employees e
@@ -1845,8 +1945,8 @@ select e.employee_id
 			done by the PL/SQL compiler automatically.)</p>
 			<h2>Bad</h2>
 <pre>declare
-   t_employee_ids employee_api.t_employee_ids_type;
-   co_increase constant employees.salary%type := 0.1;
+   t_employee_ids   employee_api.t_employee_ids_type;
+   co_increase      constant employees.salary%type          := 0.1;
    co_department_id constant departments.department_id%type := 10;
 begin
    t_employee_ids := employee_api.employee_ids_by_department(
@@ -1864,7 +1964,7 @@ end;
 			<h2>Good</h2>
 <pre>declare
    t_employee_ids   employee_api.t_employee_ids_type;
-   co_increase      constant employees.salary%type := 0.1;
+   co_increase      constant employees.salary%type          := 0.1;
    co_department_id constant departments.department_id%type := 10;
 begin
    t_employee_ids := employee_api.employee_ids_by_department(
@@ -1875,6 +1975,66 @@ begin
       update employees
          set salary = salary + (salary * co_increase)
        where employee_id = t_employee_ids(i);
+end;
+/</pre>
+			<p></p>]]></description>
+		<tag>always</tag>
+	</rule>
+	<rule>
+		<key>G-3220</key>
+		<name><![CDATA[G-3220: Always process saved exceptions from a FORALL statement.]]></name>
+		<internalKey>G-3220</internalKey>
+		<severity>MAJOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>Using save exceptions in a forall statement without actually processing the saved exceptions is just
+			wasted work.</p>
+			<p>If your use of forall is meant to be atomic (all or nothing), don't use save exceptions. If you want
+			to handle errors of individual rows and do use save exceptions, always include an exception handler
+			block with a loop to process the saved exceptions.</p>
+			<h2>Bad</h2>
+<pre>declare
+   t_employee_ids   employee_api.t_employee_ids_type;
+   co_increase      constant employees.salary%type          := 0.1;
+   co_department_id constant departments.department_id%type := 10;
+   e_bulk_errors    exception;
+   pragma exception_init(e_bulk_errors,-24381);
+begin
+   t_employee_ids := employee_api.employee_ids_by_department(
+                        id_in =&gt; co_department_id
+                     );
+   &lt;&lt;process_employees&gt;&gt;
+   forall i in 1..t_employee_ids.count() save exceptions
+      update employees
+         set salary = salary + (salary * co_increase)
+       where employee_id = t_employee_ids(i);
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   t_employee_ids   employee_api.t_employee_ids_type;
+   co_increase      constant employees.salary%type          := 0.1;
+   co_department_id constant departments.department_id%type := 10;
+   e_bulk_errors    exception;
+   pragma exception_init(e_bulk_errors,-24381);
+begin
+   t_employee_ids := employee_api.employee_ids_by_department(
+                        id_in =&gt; co_department_id
+                     );
+   &lt;&lt;process_employees&gt;&gt;
+   forall i in 1..t_employee_ids.count() save exceptions
+      update employees
+         set salary = salary + (salary * co_increase)
+       where employee_id = t_employee_ids(i);
+exception
+   when e_bulk_errors then
+      &lt;&lt;handle_bulk_exceptions&gt;&gt;
+      for i in 1..sql%bulk_exceptions.count
+      loop
+         logger.log(sql%bulk_exceptions(i).error_code);
+      end loop handle_bulk_exceptions;
 end;
 /</pre>
 			<p></p>]]></description>
@@ -1904,21 +2064,22 @@ end;
 			</ul>
 			<h2>Bad</h2>
 <pre>declare
-   l_counter   integer := 0;
-   l_discount  discount.percentage%type;
+   l_counter  integer := 0;
+   l_discount discount.percentage%type;
 begin
    for r_order in (
-      select o.order_id, o.customer_id
+      select o.order_id,o.customer_id
         from orders o
        where o.order_status = 'New'
-   ) loop
+   )
+   loop
       l_discount := sales_api.calculate_discount(p_customer_id =&gt; r_order.customer_id);
 
       update order_lines ol
          set ol.discount = l_discount
        where ol.order_id = r_order.order_id;
 
-      l_counter := l_counter + 1;
+      l_counter  := l_counter + 1;
       if l_counter = 100 then
          commit;
          l_counter := 0;
@@ -1929,15 +2090,16 @@ begin
    end if;
 end;
 /</pre>
-			<h2>Better</h2>
+			<h2>Good</h2>
 <pre>declare
-   l_discount  discount.percentage%type;
+   l_discount discount.percentage%type;
 begin
    for r_order in (
-      select o.order_id, o.customer_id
+      select o.order_id,o.customer_id
         from orders o
        where o.order_status = 'New'
-   ) loop
+   )
+   loop
       l_discount := sales_api.calculate_discount(p_customer_id =&gt; r_order.customer_id);
 
       update order_lines ol
@@ -1948,17 +2110,17 @@ begin
    commit;
 end;
 /</pre>
-			<h2>Good</h2>
+			<h2>Best</h2>
 <pre>-- (Assuming suitable foreign key relationship exists to allow updating a join.)
 begin
    update (
-      select o.customer_id, ol.discount
-        from orders o
-        join order_lines ol
-             on ol.order_id = o.order_id
-       where o.order_status = 'New'
-   )
-   set discount = sales_api.calculate_discount(p_customer_id =&gt; customer_id);
+             select o.customer_id,ol.discount
+               from orders o
+               join order_lines ol
+                 on ol.order_id = o.order_id
+              where o.order_status = 'New'
+          )
+      set discount = sales_api.calculate_discount(p_customer_id =&gt; customer_id);
 
    commit;
 end;
@@ -1981,13 +2143,14 @@ end;
 			good modularity, enabling reuse and testing of a single call.</p>
 			<h2>Bad</h2>
 <pre>begin
-   for l_counter in 1..5 loop
-      insert into headers (id, text) values (l_counter, 'Number '||l_counter);
+   for l_counter in 1..5
+   loop
+      insert into headers (id,text) values (l_counter,'Number ' || l_counter);
 
-      insert into lines (header_id, line_no, text)
-      select l_counter, rownum, 'Line '||rownum
+      insert into lines (header_id,line_no,text)
+      select l_counter,rownum,'Line ' || rownum
         from dual
-      connect by level &lt;= 3;
+     connect by level &lt;= 3;
 
       commit;
    end loop;
@@ -1995,21 +2158,22 @@ end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   procedure create_rows (
-      p_header_id    in    headers.id%type
+   procedure create_rows(
+      p_header_id in headers.id%type
    ) is
    begin
-      insert into headers (id, text) values (p_header_id, 'Number '||p_header_id);
+      insert into headers (id,text) values (p_header_id,'Number ' || p_header_id);
 
-      insert into lines (header_id, line_no, text)
-      select p_header_id, rownum, 'Line '||rownum
+      insert into lines (header_id,line_no,text)
+      select p_header_id,rownum,'Line ' || rownum
         from dual
-      connect by level &lt;= 3;
+     connect by level &lt;= 3;
 
       commit;
    end;
 begin
-   for l_counter in 1..5 loop
+   for l_counter in 1..5
+   loop
       create_rows(l_counter);
    end loop;
 end;
@@ -2029,13 +2193,13 @@ end;
 			<p>The readability of your code will be higher when you avoid negative sentences.</p>
 			<h2>Bad</h2>
 <pre>declare
-   cursor c_employees is 
+   cursor c_employees is
       select last_name
             ,first_name
         from employees
        where commission_pct is not null;
 
-   r_employee  c_employees%rowtype;
+   r_employee c_employees%rowtype;
 begin
    open c_employees;
 
@@ -2050,13 +2214,13 @@ end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   cursor c_employees is 
+   cursor c_employees is
       select last_name
             ,first_name
         from employees
        where commission_pct is not null;
 
-   r_employee  c_employees%rowtype;
+   r_employee c_employees%rowtype;
 begin
    open c_employees;
 
@@ -2088,13 +2252,13 @@ end;
 -- attribute notfound is set to true as soon as the number of rows to be fetched defined by the
 -- limit clause is not fulfilled anymore.
 declare
-   cursor c_employees is 
+   cursor c_employees is
       select *
         from employees
        order by employee_id;
 
    type t_employees_type is table of c_employees%rowtype;
-   t_employees t_employees_type;
+   t_employees  t_employees_type;
    co_bulk_size constant simple_integer := 10;
 begin
    open c_employees;
@@ -2117,13 +2281,13 @@ end;
 			<h2>Better</h2>
 <pre>-- This example will show all 107 rows but execute one fetch too much (12 instead of 11).
 declare
-   cursor c_employees is 
+   cursor c_employees is
       select *
         from employees
        order by employee_id;
 
    type t_employees_type is table of c_employees%rowtype;
-   t_employees t_employees_type;
+   t_employees  t_employees_type;
    co_bulk_size constant simple_integer := 10;
 begin
    open c_employees;
@@ -2145,13 +2309,13 @@ end;
 			<h2>Good</h2>
 <pre>-- This example does the trick (11 fetches only to all rows)
 declare
-   cursor c_employees is 
+   cursor c_employees is
       select *
         from employees
        order by employee_id;
 
    type t_employees_type is table of c_employees%rowtype;
-   t_employees t_employees_type;
+   t_employees  t_employees_type;
    co_bulk_size constant simple_integer := 10;
 begin
    open c_employees;
@@ -2189,9 +2353,9 @@ end;
 			Oracle error of “ORA-01000: maximum open cursors exceeded”.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body employee_api as
-   function department_salary (in_dept_id in departments.department_id%type)
+   function department_salary(in_dept_id in departments.department_id%type)
       return number is
-      cursor c_department_salary(p_dept_id in departments.department_id%type) is 
+      cursor c_department_salary(p_dept_id in departments.department_id%type) is
          select sum(salary) as sum_salary
            from employees
           where department_id = p_dept_id;
@@ -2206,9 +2370,9 @@ end employee_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body employee_api as
-   function department_salary (in_dept_id in departments.department_id%type)
+   function department_salary(in_dept_id in departments.department_id%type)
       return number is
-      cursor c_department_salary(p_dept_id in departments.department_id%type) is 
+      cursor c_department_salary(p_dept_id in departments.department_id%type) is
          select sum(salary) as sum_salary
            from employees
           where department_id = p_dept_id;
@@ -2251,12 +2415,12 @@ end employee_api;
       null;
    end process_dept;
 
-   procedure remove_employee (in_employee_id in employees.employee_id%type) is
-      l_dept_id      employees.department_id%type;
+   procedure remove_employee(in_employee_id in employees.employee_id%type) is
+      l_dept_id employees.department_id%type;
    begin
       delete from employees
        where employee_id = in_employee_id
-       returning department_id into l_dept_id;
+   returning department_id into l_dept_id;
 
       process_dept(in_dept_id =&gt; l_dept_id);
 
@@ -2276,13 +2440,13 @@ end employee_api;
       null;
    end process_dept;
 
-   procedure remove_employee (in_employee_id in employees.employee_id%type) is
+   procedure remove_employee(in_employee_id in employees.employee_id%type) is
       l_dept_id      employees.department_id%type;
       l_deleted_emps simple_integer;
    begin
       delete from employees
        where employee_id = in_employee_id
-       returning department_id into l_dept_id;
+   returning department_id into l_dept_id;
 
       l_deleted_emps := sql%rowcount;
 
@@ -2326,13 +2490,14 @@ end;
    l_color types_up.color_code_type;
 begin
    case l_color
-      when constants_up.co_red   then 
+      when constants_up.co_red then
          my_package.do_red();
-      when constants_up.co_blue  then 
+      when constants_up.co_blue then
          my_package.do_blue();
-      when constants_up.co_black then 
+      when constants_up.co_black then
          my_package.do_black();
-      else null;
+      else
+         null;
    end case;
 end;
 /</pre>
@@ -2348,38 +2513,50 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p><code>decode</code> is an ORACLE specific function hard to understand and restricted to SQL only. The 
+			<p><code>decode</code> is an Oracle specific function hard to understand and restricted to SQL only. The 
 			“newer” <code>case</code> function is much more common, has a better readability and may be used within
 			PL/SQL too. Be careful that <code>decode</code> can handle <code>null</code> values, which the simple <code>case</code> cannot - for
 			such cases you must use the searched <code>case</code> and <code>is null</code> instead.</p>
 			<h2>Bad</h2>
-<pre>select decode(dummy, 'X', 1 
-                   , 'Y', 2
-                   , 'Z', 3
-                        , 0)
-  from dual;
+<pre>-- @formatter:off
+select decode(ctry.country_code, constants_up.co_ctry_uk, constants_up.co_lang_english 
+                               , constants_up.co_ctry_fr, constants_up.co_lang_french
+                               , constants_up.co_ctry_de, constants_up.co_lang_german
+                                                        , constants_up.co_lang_not_supported)
+  from countries ctry;
 
-select decode(dummy,  'X',  1 
-                   ,  'Y',  2
-                   , null, -1
-                         ,  0)
-  from dual;</pre>
+-- null values can be compared in decode:
+select decode(ctry.country_code, constants_up.co_ctry_uk, constants_up.co_lang_english 
+                               , constants_up.co_ctry_fr, constants_up.co_lang_french
+                               , null                   , constants_up.co_lang_unknown
+                                                        , constants_up.co_lang_not_supported)
+  from countries ctry;</pre>
 			<h2>Good</h2>
-<pre>select case dummy
-          when 'X' then 1
-          when 'Y' then 2
-          when 'Z' then 3
-          else 0
+<pre>-- @formatter:on
+select case ctry.country_code
+          when constants_up.co_ctry_uk then
+             constants_up.co_lang_english
+          when constants_up.co_ctry_fr then
+             constants_up.co_lang_french
+          when constants_up.co_ctry_de then
+             constants_up.co_lang_german
+          else
+             constants_up.co_lang_not_supported
        end
-  from dual;
+  from countries ctry;
 
+-- Simple case can not compare null values, instead the searched case expression must be used:
 select case
-          when dummy = 'X'   then  1
-          when dummy = 'Y'   then  2
-          when dummy is null then -1
-          else 0
+          when ctry.country_code = constants_up.co_ctry_uk then
+             constants_up.co_lang_english
+          when ctry.country_code = constants_up.co_ctry_fr then
+             constants_up.co_lang_french
+          when ctry.country_code is null then
+             constants_up.co_lang_unknown
+          else
+             constants_up.co_lang_not_supported
        end
-  from dual;</pre>
+  from countries ctry;</pre>
 			<p></p>]]></description>
 		<tag>try</tag>
 	</rule>
@@ -2397,10 +2574,10 @@ select case
 			regardless of whether parameter 1 contains a null value or not.</p>
 			<p>The coalesce function does not have this drawback.</p>
 			<h2>Bad</h2>
-<pre>select nvl(dummy, my_package.expensive_null(value_in =&gt; dummy))
+<pre>select nvl(dummy,my_package.expensive_null(value_in =&gt; dummy))
   from dual;</pre>
 			<h2>Good</h2>
-<pre>select coalesce(dummy, my_package.expensive_null(value_in =&gt; dummy))
+<pre>select coalesce(dummy,my_package.expensive_null(value_in =&gt; dummy))
   from dual;</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
@@ -2418,17 +2595,17 @@ select case
 			be harmful, if parameter 2 or 3 is either a function call or a select statement, as they will be
 			executed regardless of whether parameter 1 contains a null value or not.</p>
 			<h2>Bad</h2>
-<pre>select nvl2(dummy, my_package.expensive_nn(value_in =&gt; dummy), 
-                   my_package.expensive_null(value_in =&gt; dummy))
+<pre>select nvl2(dummy,my_package.expensive_nn(value_in =&gt; dummy)
+         ,my_package.expensive_null(value_in =&gt; dummy))
   from dual;</pre>
 			<h2>Good</h2>
 <pre>select case
-          when dummy is null then 
+          when dummy is null then
              my_package.expensive_null(value_in =&gt; dummy)
-          else 
+          else
              my_package.expensive_nn(value_in =&gt; dummy)
        end
-from dual;</pre>
+  from dual;</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -2450,13 +2627,14 @@ from dual;</pre>
    l_color types_up.color_code_type;
 begin
    case l_color
-      when constants_up.co_red   then 
+      when constants_up.co_red then
          my_package.do_red();
-      when constants_up.co_blue  then 
+      when constants_up.co_blue then
          my_package.do_blue();
       when constants_up.co_red then  -- never reached
          my_package.do_black();      -- dead code
-      else null;
+      else
+         null;
    end case;
 end;
 /</pre>
@@ -2465,13 +2643,14 @@ end;
    l_color types_up.color_code_type;
 begin
    case l_color
-      when constants_up.co_red   then 
+      when constants_up.co_red then
          my_package.do_red();
-      when constants_up.co_blue  then 
+      when constants_up.co_blue then
          my_package.do_blue();
-      when constants_up.co_black then 
+      when constants_up.co_black then
          my_package.do_black();
-      else null;
+      else
+         null;
    end case;
 end;
 /</pre>
@@ -2523,8 +2702,8 @@ end;
 			comparison condition comparing the boolean value to the literals <code>true</code> or <code>false</code>.</p>
 			<h2>Bad</h2>
 <pre>declare
-   l_string    varchar2(10 char) := '42';
-   l_is_valid  boolean;
+   l_string   varchar2(10 char) := '42';
+   l_is_valid boolean;
 begin
    l_is_valid := my_package.is_valid_number(l_string);
    if l_is_valid = true then
@@ -2534,8 +2713,8 @@ end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   l_string    varchar2(10 char) := '42';
-   l_is_valid  boolean;
+   l_string   varchar2(10 char) := '42';
+   l_is_valid boolean;
 begin
    l_is_valid := my_package.is_valid_number(l_string);
    if l_is_valid then
@@ -2568,12 +2747,12 @@ end;
 			<p>Excerpt of http://www.stevemcconnell.com/ccgoto.htm</p>
 			<h2>Bad</h2>
 <pre>create or replace package body my_package is
-   procedure password_check (in_password in varchar2) is 
-      co_digitarray  constant string(10 char)   := '0123456789';
-      co_lower_bound constant simple_integer := 1;
-      co_errno       constant simple_integer := -20501;
-      co_errmsg      constant string(100 char)  := 'Password must contain a digit.';
-      l_isdigit      boolean     := false;
+   procedure password_check(in_password in varchar2) is
+      co_digitarray  constant string(10 char)  := '0123456789';
+      co_lower_bound constant simple_integer   := 1;
+      co_errno       constant simple_integer   := -20501;
+      co_errmsg      constant string(100 char) := 'Password must contain a digit.';
+      l_isdigit      boolean                   := false;
       l_len_pw       pls_integer;
       l_len_array    pls_integer;
    begin
@@ -2581,12 +2760,12 @@ end;
       l_len_array := length(co_digitarray);
 
       &lt;&lt;check_digit&gt;&gt;
-      for i in co_lower_bound .. l_len_array
+      for i in co_lower_bound..l_len_array
       loop
          &lt;&lt;check_pw_char&gt;&gt;
-         for j in co_lower_bound .. l_len_pw
+         for j in co_lower_bound..l_len_pw
          loop
-            if substr(in_password, j, 1) = substr(co_digitarray, i, 1) then
+            if substr(in_password,j,1) = substr(co_digitarray,i,1) then
                l_isdigit := true;
                goto check_other_things;
             end if;
@@ -2597,19 +2776,19 @@ end;
       null;
 
       if not l_isdigit then
-         raise_application_error(co_errno, co_errmsg);
+         raise_application_error(co_errno,co_errmsg);
       end if;
    end password_check;
 end my_package;
 /</pre>
 			<h2>Better</h2>
 <pre>create or replace package body my_package is
-   procedure password_check (in_password in varchar2) is 
-      co_digitarray  constant string(10 char)   := '0123456789';
-      co_lower_bound constant simple_integer := 1;
-      co_errno       constant simple_integer := -20501;
-      co_errmsg      constant string(100 char)  := 'Password must contain a digit.';
-      l_isdigit      boolean     := false;
+   procedure password_check(in_password in varchar2) is
+      co_digitarray  constant string(10 char)  := '0123456789';
+      co_lower_bound constant simple_integer   := 1;
+      co_errno       constant simple_integer   := -20501;
+      co_errmsg      constant string(100 char) := 'Password must contain a digit.';
+      l_isdigit      boolean                   := false;
       l_len_pw       pls_integer;
       l_len_array    pls_integer;
    begin
@@ -2617,12 +2796,12 @@ end my_package;
       l_len_array := length(co_digitarray);
 
       &lt;&lt;check_digit&gt;&gt;
-      for i in co_lower_bound .. l_len_array
+      for i in co_lower_bound..l_len_array
       loop
          &lt;&lt;check_pw_char&gt;&gt;
-         for j in co_lower_bound .. l_len_pw
+         for j in co_lower_bound..l_len_pw
          loop
-            if substr(in_password, j, 1) = substr(co_digitarray, i, 1) then
+            if substr(in_password,j,1) = substr(co_digitarray,i,1) then
                l_isdigit := true;
                exit check_digit; -- early exit condition
             end if;
@@ -2633,21 +2812,20 @@ end my_package;
       null;
 
       if not l_isdigit then
-         raise_application_error(co_errno, co_errmsg);
+         raise_application_error(co_errno,co_errmsg);
       end if;
    end password_check;
 end my_package;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body my_package is
-   procedure password_check (in_password in varchar2) is
-      co_digitpattern constant string(10 char)   := '\d';
-      co_errno        constant simple_integer := -20501;
-      co_errmsg       constant string(100 char)  := 'Password must contain a digit.';
+   procedure password_check(in_password in varchar2) is
+      co_digitpattern constant string(10 char)  := '\d';
+      co_errno        constant simple_integer   := -20501;
+      co_errmsg       constant string(100 char) := 'Password must contain a digit.';
    begin
-      if not regexp_like(in_password, co_digitpattern) 
-      then
-         raise_application_error(co_errno, co_errmsg);
+      if not regexp_like(in_password,co_digitpattern) then
+         raise_application_error(co_errno,co_errmsg);
       end if;
    end password_check;
 end my_package;
@@ -2667,60 +2845,62 @@ end my_package;
 			<p>It's a good alternative for comments to indicate the start and end of a named loop processing.</p>
 			<h2>Bad</h2>
 <pre>declare
-   i integer;
+   i            integer;
    co_min_value constant simple_integer := 1;
    co_max_value constant simple_integer := 10;
    co_increment constant simple_integer := 1;
 begin
    i := co_min_value;
-   while (i &lt;= co_max_value) 
-   loop 
-      i := i + co_increment; 
+   while (i &lt;= co_max_value)
+   loop
+      i := i + co_increment;
    end loop;
 
-   loop 
+   loop
       exit;
    end loop;
 
    for i in co_min_value..co_max_value
-   loop 
+   loop
       sys.dbms_output.put_line(i);
    end loop;
 
    for r_employee in (select last_name from employees)
    loop
       sys.dbms_output.put_line(r_employee.last_name);
-   end loop;   
+   end loop;
 end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   i integer;
+   i            integer;
    co_min_value constant simple_integer := 1;
    co_max_value constant simple_integer := 10;
    co_increment constant simple_integer := 1;
 begin
    i := co_min_value;
    &lt;&lt;while_loop&gt;&gt;
-   while (i &lt;= co_max_value) 
-   loop 
-      i := i + co_increment; 
+   while (i &lt;= co_max_value)
+   loop
+      i := i + co_increment;
    end loop while_loop;
 
    &lt;&lt;basic_loop&gt;&gt;
-   loop 
+   loop
       exit basic_loop;
    end loop basic_loop;
 
    &lt;&lt;for_loop&gt;&gt;
    for i in co_min_value..co_max_value
-   loop 
+   loop
       sys.dbms_output.put_line(i);
    end loop for_loop;
 
    &lt;&lt;process_employees&gt;&gt;
-   for r_employee in (select last_name
-                        from employees)
+   for r_employee in (
+      select last_name
+        from employees
+   )
    loop
       sys.dbms_output.put_line(r_employee.last_name);
    end loop process_employees;
@@ -2752,12 +2932,12 @@ end;
       begin
          &lt;&lt;my_label&gt;&gt;
          for i in co_min_value..co_max_value
-         loop 
+         loop
             sys.dbms_output.put_line(i);
          end loop my_label;
       end my_label;
    end p;
-end pkg
+end pkg;
 /</pre>
 			<h2>Good</h2>
 <pre>create package body pkg is
@@ -2770,7 +2950,7 @@ end pkg
       begin
          &lt;&lt;process_values&gt;&gt;
          for i in co_min_value..co_max_value
-         loop 
+         loop
             sys.dbms_output.put_line(i);
          end loop process_values;
       end output_values;
@@ -2797,7 +2977,7 @@ end pkg;
 			<h2>Bad</h2>
 <pre>declare
    cursor c_employees is
-      select employee_id, last_name
+      select employee_id,last_name
         from employees;
    r_employee c_employees%rowtype;
 begin
@@ -2816,7 +2996,7 @@ end;
 			<h2>Good</h2>
 <pre>declare
    cursor c_employees is
-      select employee_id, last_name
+      select employee_id,last_name
         from employees;
 begin
    &lt;&lt;read_employees&gt;&gt;
@@ -2844,14 +3024,14 @@ end;
 			<h2>Bad</h2>
 <pre>declare
    type t_employee_type is varray(10) of employees.employee_id%type;
-   t_employees t_employee_type;
-   co_himuro     constant integer := 118;
-   co_livingston constant integer := 177;
+   t_employees   t_employee_type;
+   co_himuro     constant integer        := 118;
+   co_livingston constant integer        := 177;
    co_min_value  constant simple_integer := 1;
    co_increment  constant simple_integer := 1;
-   i pls_integer;
+   i             pls_integer;
 begin
-   t_employees := t_employee_type(co_himuro, co_livingston);
+   t_employees := t_employee_type(co_himuro,co_livingston);
    i           := co_min_value;
 
    &lt;&lt;process_employees&gt;&gt;
@@ -2865,16 +3045,16 @@ end;
 			<h2>Good</h2>
 <pre>declare
    type t_employee_type is varray(10) of employees.employee_id%type;
-   t_employees t_employee_type;
+   t_employees   t_employee_type;
    co_himuro     constant integer := 118;
    co_livingston constant integer := 177;
 begin
-   t_employees := t_employee_type(co_himuro, co_livingston);
+   t_employees := t_employee_type(co_himuro,co_livingston);
 
    &lt;&lt;process_employees&gt;&gt;
    for i in 1..t_employees.count()
    loop
-     sys.dbms_output.put_line(t_employees(i));
+      sys.dbms_output.put_line(t_employees(i));
    end loop process_employees;
 end;
 /</pre>
@@ -2922,18 +3102,18 @@ end;
 <pre>-- Raises neither an error nor checking whether the array is empty. t_employees.count() always
 -- returns a number (unless the array is not initialized). If the array is empty count() returns 0 and
 -- therefore the loop will not be entered.
-DECLARE
-   TYPE t_employee_type IS TABLE OF employees.employee_id%TYPE;
+declare
+   type t_employee_type is table of employees.employee_id%type;
    t_employees t_employee_type := t_employee_type();
-BEGIN
-   IF t_employees IS NOT NULL THEN
+begin
+   if t_employees is not null then
       &lt;&lt;process_employees&gt;&gt;
-      FOR i IN 1..t_employees.COUNT()
-      LOOP
+      for i in 1..t_employees.count()
+      loop
          sys.dbms_output.put_line(t_employees(i)); -- some processing
-      END LOOP process_employees;
-   END IF;
-END;
+      end loop process_employees;
+   end if;
+end;
 /</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
@@ -2955,13 +3135,13 @@ END;
 			<h2>Bad</h2>
 <pre>declare -- raises no_data_found when processing 2nd record
    type t_employee_type is table of employees.employee_id%type;
-   t_employees t_employee_type;
+   t_employees    t_employee_type;
    co_rogers      constant integer := 134;
    co_matos       constant integer := 143;
    co_mcewen      constant integer := 158;
    co_index_matos constant integer := 2;
 begin
-   t_employees := t_employee_type(co_rogers, co_matos, co_mcewen);
+   t_employees := t_employee_type(co_rogers,co_matos,co_mcewen);
    t_employees.delete(co_index_matos);
 
    if t_employees is not null then
@@ -2976,17 +3156,17 @@ end;
 			<h2>Good</h2>
 <pre>declare
    type t_employee_type is table of employees.employee_id%type;
-   t_employees t_employee_type;
+   t_employees    t_employee_type;
    co_rogers      constant integer := 134;
    co_matos       constant integer := 143;
    co_mcewen      constant integer := 158;
    co_index_matos constant integer := 2;
    l_index        pls_integer;
 begin
-   t_employees := t_employee_type(co_rogers, co_matos, co_mcewen);
+   t_employees := t_employee_type(co_rogers,co_matos,co_mcewen);
    t_employees.delete(co_index_matos);
 
-   l_index := t_employees.first();
+   l_index     := t_employees.first();
 
    &lt;&lt;process_employees&gt;&gt;
    while l_index is not null
@@ -2998,6 +3178,43 @@ end;
 /</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
+	</rule>
+	<rule>
+		<key>G-4365</key>
+		<name><![CDATA[G-4365: Never use unconditional CONTINUE or EXIT in a loop.]]></name>
+		<internalKey>G-4365</internalKey>
+		<severity>MAJOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>An unconditional continue is either redundant (a continue as the last statement before the end of the
+			loop) or causes dead code. An unconditional exit causes no looping and may cause dead code as well. If
+			continue or exit is needed, it should always have a condition.</p>
+			<h2>Bad</h2>
+<pre>begin
+   &lt;&lt;process_employees&gt;&gt;
+   loop
+      my_package.some_processing();
+      continue process_employees;
+      my_package.some_further_processing(); -- Dead code
+   end loop process_employees;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   co_first_year constant pls_integer := 1900;
+begin
+   &lt;&lt;process_employees&gt;&gt;
+   loop
+      my_package.some_processing();
+      continue process_employees when extract(year from sysdate) &gt; co_first_year;
+      my_package.some_further_processing();
+   end loop process_employees;
+end;
+/</pre>
+			<p></p>]]></description>
+		<tag>never</tag>
 	</rule>
 	<rule>
 		<key>G-4370</key>
@@ -3013,34 +3230,36 @@ end;
 			to choose.</p>
 			<h2>Bad</h2>
 <pre>declare
-   i integer;
+   i            integer;
    co_min_value constant simple_integer := 1;
    co_max_value constant simple_integer := 10;
    co_increment constant simple_integer := 1;
 begin
    i := co_min_value;
    &lt;&lt;while_loop&gt;&gt;
-   while (i &lt;= co_max_value) 
-   loop 
-      i := i + co_increment; 
+   while (i &lt;= co_max_value)
+   loop
+      i := i + co_increment;
       exit while_loop when i &gt; co_max_value;
    end loop while_loop;
 
    &lt;&lt;basic_loop&gt;&gt;
-   loop 
+   loop
       exit basic_loop;
    end loop basic_loop;
 
    &lt;&lt;for_loop&gt;&gt;
    for i in co_min_value..co_max_value
-   loop 
+   loop
       null;
       exit for_loop when i = co_max_value;
    end loop for_loop;
 
    &lt;&lt;process_employees&gt;&gt;
-   for r_employee in (select last_name
-                        from employees)
+   for r_employee in (
+      select last_name
+        from employees
+   )
    loop
       sys.dbms_output.put_line(r_employee.last_name);
       null; -- some processing
@@ -3050,32 +3269,34 @@ end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
-   i integer;
+   i            integer;
    co_min_value constant simple_integer := 1;
    co_max_value constant simple_integer := 10;
    co_increment constant simple_integer := 1;
 begin
    i := co_min_value;
    &lt;&lt;while_loop&gt;&gt;
-   while (i &lt;= co_max_value) 
-   loop 
-      i := i + co_increment; 
+   while (i &lt;= co_max_value)
+   loop
+      i := i + co_increment;
    end loop while_loop;
 
    &lt;&lt;basic_loop&gt;&gt;
-   loop 
+   loop
       exit basic_loop;
    end loop basic_loop;
 
    &lt;&lt;for_loop&gt;&gt;
    for i in co_min_value..co_max_value
-   loop 
+   loop
       sys.dbms_output.put_line(i);
    end loop for_loop;
 
    &lt;&lt;process_employees&gt;&gt;
-   for r_employee in (select last_name
-                        from employees)
+   for r_employee in (
+      select last_name
+        from employees
+   )
    loop
       sys.dbms_output.put_line(r_employee.last_name); -- some processing
    end loop process_employees;
@@ -3145,8 +3366,8 @@ end;
    co_exit_value constant simple_integer           := 3;
    co_outer_text constant types_up.short_text_type := 'Outer Loop counter is ';
    co_inner_text constant types_up.short_text_type := ' Inner Loop counter is ';
-   l_outerlp pls_integer;
-   l_innerlp pls_integer;
+   l_outerlp     pls_integer;
+   l_innerlp     pls_integer;
 begin
    l_outerlp := co_init_loop;
    &lt;&lt;outerloop&gt;&gt;
@@ -3155,9 +3376,11 @@ begin
       l_outerlp := nvl(l_outerlp,co_init_loop) + co_increment;
       &lt;&lt;innerloop&gt;&gt;
       loop
-         l_innerlp := nvl(l_innerlp, co_init_loop) + co_increment;
-         sys.dbms_output.put_line(co_outer_text || l_outerlp ||
-                                  co_inner_text || l_innerlp);
+         l_innerlp := nvl(l_innerlp,co_init_loop) + co_increment;
+         sys.dbms_output.put_line(co_outer_text
+            || l_outerlp
+            || co_inner_text
+            || l_innerlp);
 
          exit when l_innerlp = co_exit_value;
       end loop innerloop;
@@ -3173,8 +3396,8 @@ end;
    co_exit_value constant simple_integer           := 3;
    co_outer_text constant types_up.short_text_type := 'Outer Loop counter is ';
    co_inner_text constant types_up.short_text_type := ' Inner Loop counter is ';
-   l_outerlp pls_integer;
-   l_innerlp pls_integer;
+   l_outerlp     pls_integer;
+   l_innerlp     pls_integer;
 begin
    l_outerlp := co_init_loop;
    &lt;&lt;outerloop&gt;&gt;
@@ -3183,9 +3406,11 @@ begin
       l_outerlp := nvl(l_outerlp,co_init_loop) + co_increment;
       &lt;&lt;innerloop&gt;&gt;
       loop
-         l_innerlp := nvl(l_innerlp, co_init_loop) + co_increment;
-         sys.dbms_output.put_line(co_outer_text || l_outerlp ||
-                                  co_inner_text || l_innerlp);
+         l_innerlp := nvl(l_innerlp,co_init_loop) + co_increment;
+         sys.dbms_output.put_line(co_outer_text
+            || l_outerlp
+            || co_inner_text
+            || l_innerlp);
 
          exit outerloop when l_innerlp = co_exit_value;
       end loop innerloop;
@@ -3209,7 +3434,7 @@ end;
 <pre>declare
    l_employee_found boolean := false;
    cursor c_employees is
-      select employee_id, last_name
+      select employee_id,last_name
         from employees;
 begin
    &lt;&lt;check_employees&gt;&gt;
@@ -3223,9 +3448,9 @@ end;
 <pre>declare
    l_employee_found boolean := false;
    cursor c_employees is
-      select employee_id, last_name
+      select employee_id,last_name
         from employees;
-   r_employee c_employees%rowtype;
+   r_employee       c_employees%rowtype;
 begin
    open c_employees;
    fetch c_employees into r_employee;
@@ -3251,8 +3476,8 @@ end;
 			you do not need the loop at all.</p>
 			<h2>Bad</h2>
 <pre>declare
-   l_row   pls_integer;
-   l_value pls_integer;
+   l_row          pls_integer;
+   l_value        pls_integer;
    co_lower_bound constant simple_integer           := 1;
    co_upper_bound constant simple_integer           := 5;
    co_row_incr    constant simple_integer           := 1;
@@ -3260,12 +3485,14 @@ end;
    co_delimiter   constant types_up.short_text_type := ' ';
    co_first_value constant simple_integer           := 100;
 begin
-   l_row := co_lower_bound;
+   l_row   := co_lower_bound;
    l_value := co_first_value;
    &lt;&lt;for_loop&gt;&gt;
-   for i in co_lower_bound .. co_upper_bound
+   for i in co_lower_bound..co_upper_bound
    loop
-      sys.dbms_output.put_line(l_row || co_delimiter || l_value);
+      sys.dbms_output.put_line(l_row
+         || co_delimiter
+         || l_value);
       l_row   := l_row + co_row_incr;
       l_value := l_value + co_value_incr;
    end loop for_loop;
@@ -3280,10 +3507,11 @@ end;
    co_first_value constant simple_integer           := 100;
 begin
    &lt;&lt;for_loop&gt;&gt;
-   for i in co_lower_bound .. co_upper_bound
+   for i in co_lower_bound..co_upper_bound
    loop
-      sys.dbms_output.put_line(i || co_delimiter ||
-                               to_char(co_first_value + i * co_value_incr));
+      sys.dbms_output.put_line(i
+         || co_delimiter
+         || to_char(co_first_value + i * co_value_incr));
    end loop for_loop;
 end;
 /</pre>
@@ -3343,7 +3571,7 @@ end;
 			   <li>Logging (different channels like table, mail, file, etc. if needed)</li>
 			   <li>Error Raising</li>
 			   <li>Multilanguage support if needed</li>
-			   <li>Translate ORACLE error messages to a user friendly error text</li>
+			   <li>Translate Oracle error messages to a user friendly error text</li>
 			   <li>Error repository</li>
 			</ul>
 			<h2>Bad</h2>
@@ -3355,12 +3583,12 @@ end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare 
-  -- see https://github.com/OraOpenSource/Logger
-  l_scope logger_logs.scope%type := 'DEMO';
+   -- see https://github.com/OraOpenSource/Logger
+   l_scope logger_logs.scope%type := 'DEMO';
 begin
-  logger.log('START', l_scope);
-  -- some processing
-  logger.log('END', l_scope);
+   logger.log('START',l_scope);
+   -- some processing
+   logger.log('END',l_scope);
 end;
 /</pre>
 			<p></p>]]></description>
@@ -3425,7 +3653,7 @@ end;
 -- handler doesn't have an exception number assigned, which should be raised when the select
 -- statement does not find any rows.
 declare
-   l_dummy dual.dummy%type;
+   l_dummy          dual.dummy%type;
    no_data_found    exception;
    co_rownum        constant simple_integer           := 0;
    co_no_data_found constant types_up.short_text_type := 'no_data_found';
@@ -3435,7 +3663,7 @@ begin
      from dual
     where rownum = co_rownum;
 
-   if l_dummy is null then 
+   if l_dummy is null then
       raise no_data_found;
    end if;
 exception
@@ -3454,7 +3682,7 @@ ORA-06512: at line 5
 */</pre>
 			<h2>Good</h2>
 <pre>declare
-   l_dummy dual.dummy%type;
+   l_dummy          dual.dummy%type;
    empty_value      exception;
    co_rownum        constant simple_integer           := 0;
    co_empty_value   constant types_up.short_text_type := 'empty_value';
@@ -3514,6 +3742,16 @@ exception
    when dup_val_on_index then
       my_package.some_further_processing();
 end;
+/
+
+-- An exception to the rule where when others can be good to log the error and then re-raise it:
+begin
+   my_package.some_processing();
+exception
+   when others then
+      logger.log_error('Unhandled Exception');
+      raise;
+end;
 /</pre>
 			<p></p>]]></description>
 		<tag>avoid</tag>
@@ -3571,7 +3809,7 @@ end;
 			value such as <code>null</code>, rather than allow an exception to propagate out of the function.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body department_api is
-   function name_by_id (in_id in departments.department_id%type) 
+   function name_by_id(in_id in departments.department_id%type)
       return departments.department_name%type is
       l_department_name departments.department_name%type;
    begin
@@ -3580,13 +3818,13 @@ end;
         from departments
        where department_id = in_id;
 
-      return l_department_name;   
+      return l_department_name;
    end name_by_id;
 end department_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body department_api is
-   function name_by_id (in_id in departments.department_id%type) 
+   function name_by_id(in_id in departments.department_id%type)
       return departments.department_name%type is
       l_department_name departments.department_name%type;
    begin
@@ -3595,10 +3833,12 @@ end department_api;
         from departments
        where department_id = in_id;
 
-      return l_department_name;  
+      return l_department_name;
    exception
-      when no_data_found then return null;
-      when too_many_rows then raise;
+      when no_data_found then
+         return null;
+      when too_many_rows then
+         raise;
    end name_by_id;
 end department_api;
 /</pre>
@@ -3655,11 +3895,11 @@ end;
 			<h2>Bad</h2>
 <pre>create or replace package body order_api as
    procedure discount_and_recalculate(
-      in_customer_id    customer.id%type
-    , in_discount       customer.discount_percentage%type
+      in_customer_id customer.id%type
+     ,in_discount    customer.discount_percentage%type
    ) is
    begin
-      customer_api.apply_discount(in_customer_id, in_discount);
+      customer_api.apply_discount(in_customer_id,in_discount);
       customer_api.in_customer_id(10293847);
    exception
       when zero_divide then
@@ -3673,18 +3913,21 @@ end order_api;
 			<h2>Good</h2>
 <pre>create or replace package body order_api as
    procedure discount_and_recalculate(
-      in_customer_id    customer.id%type
-    , in_discount       customer.discount_percentage%type
+      in_customer_id customer.id%type
+     ,in_discount    customer.discount_percentage%type
    ) is
    begin
-      customer_api.apply_discount(in_customer_id, in_discount);
+      customer_api.apply_discount(in_customer_id,in_discount);
       customer_api.in_customer_id(10293847);
    exception
       when zero_divide then
          null; -- ignore
       when others then
          logging_package.log_error(
-            'Error: ' || sqlerrm || ' - Backtrace: ' || dbms_utility.format_error_backtrace
+            'Error: '
+            || sqlerrm
+            || ' - Backtrace: '
+            || dbms_utility.format_error_backtrace
          );
          raise;
    end discount_and_recalculate;
@@ -3714,8 +3957,8 @@ end;
 			<h2>Good</h2>
 <pre>declare
    l_next_val employees.employee_id%type;
-   co_sql constant types_up.big_string_type := 
-       'select employees_seq.nextval from dual';
+   co_sql     constant types_up.big_string_type :=
+      'select employees_seq.nextval from dual';
 begin
    execute immediate co_sql into l_next_val;
 end;
@@ -3739,34 +3982,34 @@ end;
 			variables.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body employee_api is
-   procedure upd_salary (in_employee_id  in     employees.employee_id%type
-                        ,in_increase_pct in     types_up.percentage
-                        ,out_new_salary     out employees.salary%type)
+   procedure upd_salary(in_employee_id  in  employees.employee_id%type
+                       ,in_increase_pct in  types_up.percentage
+                       ,out_new_salary  out employees.salary%type)
    is
       co_sql_stmt constant types_up.big_string_type := '
            update employees set salary = salary + (salary / 100 * :1) 
             where employee_id = :2
         returning salary into :3';
    begin
-     execute immediate co_sql_stmt
-           using in_increase_pct, in_employee_id, out out_new_salary;
+      execute immediate co_sql_stmt
+         using in_increase_pct,in_employee_id,out out_new_salary;
    end upd_salary;
 end employee_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body employee_api is
-   procedure upd_salary (in_employee_id  in     employees.employee_id%type
-                        ,in_increase_pct in     types_up.percentage
-                        ,out_new_salary     out employees.salary%type)
+   procedure upd_salary(in_employee_id  in  employees.employee_id%type
+                       ,in_increase_pct in  types_up.percentage
+                       ,out_new_salary  out employees.salary%type)
    is
-      co_sql_stmt constant types_up.big_string_type := 
-          'update employees set salary = salary + (salary / 100 * :1) 
+      co_sql_stmt constant types_up.big_string_type :=
+         'update employees set salary = salary + (salary / 100 * :1) 
             where employee_id = :2
         returning salary into :3';
    begin
-     execute immediate co_sql_stmt
-           using in_increase_pct, in_employee_id
-           returning into out_new_salary;
+      execute immediate co_sql_stmt
+         using in_increase_pct,in_employee_id
+         returning into out_new_salary;
    end upd_salary;
 end employee_api;
 /</pre>
@@ -3789,17 +4032,17 @@ end employee_api;
 			<h2>Bad</h2>
 <pre>declare
    r_employee employees%rowtype;
-   co_id constant employees.employee_id%type := 107;
+   co_id      constant employees.employee_id%type := 107;
 begin
-   employee_api.employee_by_id(r_employee, co_id);
+   employee_api.employee_by_id(r_employee,co_id);
 end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
    r_employee employees%rowtype;
-   co_id constant employees.employee_id%type := 107;
+   co_id      constant employees.employee_id%type := 107;
 begin
-   employee_api.employee_by_id(out_row =&gt; r_employee, in_employee_id =&gt; co_id);
+   employee_api.employee_by_id(out_row =&gt; r_employee,in_employee_id =&gt; co_id);
 end;
 /</pre>
 			<p></p>]]></description>
@@ -3820,7 +4063,7 @@ end;
 			<p></p>
 			<h2>Bad</h2>
 <pre>create or replace package body employee_api is
-   function employee_by_id (in_employee_id in employees.employee_id%type)
+   function employee_by_id(in_employee_id in employees.employee_id%type)
       return employees%rowtype is
       r_employee employees%rowtype;
    begin
@@ -3840,7 +4083,7 @@ end;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body employee_api is
-   function employee_by_id (in_employee_id in employees.employee_id%type)
+   function employee_by_id(in_employee_id in employees.employee_id%type)
       return employees%rowtype is
       r_employee employees%rowtype;
    begin
@@ -3876,7 +4119,7 @@ end employee_api;
 			<p></p>
 			<h2>Bad</h2>
 <pre>create package body employee_api is
-   function employee_by_id (in_employee_id in employees.employee_id%type)
+   function employee_by_id(in_employee_id in employees.employee_id%type)
       return employees%rowtype is
       r_employee employees%rowtype;
    begin
@@ -3896,7 +4139,7 @@ end employee_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body employee_api is
-   function employee_by_id (in_employee_id in employees.employee_id%type)
+   function employee_by_id(in_employee_id in employees.employee_id%type)
       return employees%rowtype is
       r_employee employees%rowtype;
    begin
@@ -3937,14 +4180,13 @@ end employee_api;
 			maintenance a lot easier and cheaper.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body employee_api is
-   procedure calc_salary (in_employee_id in employees.employee_id%type) is
+   procedure calc_salary(in_employee_id in employees.employee_id%type) is
       r_emp employees%rowtype;
 
       function commission return number is
          l_commission employees.salary%type := 0;
       begin
-         if r_emp.commission_pct is not null
-         then
+         if r_emp.commission_pct is not null then
             l_commission := r_emp.salary * r_emp.commission_pct;
          end if;
 
@@ -3967,11 +4209,11 @@ end employee_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body employee_api is
-   procedure calc_salary (in_employee_id in employees.employee_id%type) is
+   procedure calc_salary(in_employee_id in employees.employee_id%type) is
       r_emp employees%rowtype;
 
-      function commission (in_salary   in employees.salary%type
-                          ,in_comm_pct in employees.commission_pct%type)
+      function commission(in_salary   in employees.salary%type
+                         ,in_comm_pct in employees.commission_pct%type)
          return number is
          l_commission employees.salary%type := 0;
       begin
@@ -4031,7 +4273,7 @@ end employee_api;
          return co_true;
       end my_func;
    begin
-       null;
+      null;
    end my_procedure;
 end my_package;
 /</pre>
@@ -4044,7 +4286,7 @@ end my_package;
          return co_true;
       end my_func;
    begin
-       sys.dbms_output.put_line(my_func());
+      sys.dbms_output.put_line(my_func());
    end my_procedure;
 end my_package;
 /</pre>
@@ -4063,8 +4305,8 @@ end my_package;
 			<p>You should go through your programs and remove any parameter that is no longer used.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body department_api is
-   function name_by_id (in_department_id in departments.department_id%type
-                       ,in_manager_id    in departments.manager_id%type)
+   function name_by_id(in_department_id in departments.department_id%type
+                      ,in_manager_id    in departments.manager_id%type)
       return departments.department_name%type is
       l_department_name departments.department_name%type;
    begin
@@ -4075,7 +4317,7 @@ end my_package;
            from departments
           where department_id = in_department_id;
       exception
-         when no_data_found or too_many_rows then 
+         when no_data_found or too_many_rows then
             l_department_name := null;
       end find_department;
 
@@ -4085,7 +4327,7 @@ end department_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body department_api is
-   function name_by_id (in_department_id in departments.department_id%type)
+   function name_by_id(in_department_id in departments.department_id%type)
       return departments.department_name%type is
       l_department_name departments.department_name%type;
    begin
@@ -4096,7 +4338,7 @@ end department_api;
            from departments
           where department_id = in_department_id;
       exception
-         when no_data_found or too_many_rows then 
+         when no_data_found or too_many_rows then
             l_department_name := null;
       end find_department;
 
@@ -4122,22 +4364,22 @@ end department_api;
 			more confident that you intended the parameter mode to be <code>in</code>, <code>out</code> or <code>in out</code>.</p>
 			<h2>Bad</h2>
 <pre>create or replace package employee_api is
-   procedure store (io_id             in out employees.id%type
-                   ,in_first_name            employees.first_name%type
-                   ,in_last_name             employees.last_name%type 
-                   ,in_email                 employees.email%type 
-                   ,in_department_id         employees.department_id%type
-                   ,out_success       out    pls_integer);
+   procedure store(io_id       in out employees.id%type
+                  ,in_first_name      employees.first_name%type
+                  ,in_last_name       employees.last_name%type
+                  ,in_email           employees.email%type
+                  ,in_department_id   employees.department_id%type
+                  ,out_success out    pls_integer);
 end employee_up;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package employee_api is
-   procedure store (io_id             in out employees.id%type
-                   ,in_first_name     in     employees.first_name%type
-                   ,in_last_name      in     employees.last_name%type 
-                   ,in_email          in     employees.email%type 
-                   ,in_department_id  in     employees.department_id%type
-                   ,out_success       out    pls_integer);
+   procedure store(io_id            in out employees.id%type
+                  ,in_first_name    in     employees.first_name%type
+                  ,in_last_name     in     employees.last_name%type
+                  ,in_email         in     employees.email%type
+                  ,in_department_id in     employees.department_id%type
+                  ,out_success      out    pls_integer);
 end employee_up;
 /</pre>
 			<p></p>]]></description>
@@ -4159,70 +4401,70 @@ end employee_up;
 			parameter actually is only <code>in</code> or <code>out</code>, you should change the parameter mode accordingly.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body employee_up is
-   procedure rcv_emp (io_first_name     in out employees.first_name%type
-                     ,io_last_name      in out employees.last_name%type 
-                     ,io_email          in out employees.email%type 
-                     ,io_phone_number   in out employees.phone_number%type
-                     ,io_hire_date      in out employees.hire_date%type 
-                     ,io_job_id         in out employees.job_id%type
-                     ,io_salary         in out employees.salary%type
-                     ,io_commission_pct in out employees.commission_pct%type 
-                     ,io_manager_id     in out employees.manager_id%type
-                     ,io_department_id  in out employees.department_id%type
-                     ,in_wait           in     integer) is
-      l_status pls_integer;
+   procedure rcv_emp(io_first_name     in out employees.first_name%type
+                    ,io_last_name      in out employees.last_name%type
+                    ,io_email          in out employees.email%type
+                    ,io_phone_number   in out employees.phone_number%type
+                    ,io_hire_date      in out employees.hire_date%type
+                    ,io_job_id         in out employees.job_id%type
+                    ,io_salary         in out employees.salary%type
+                    ,io_commission_pct in out employees.commission_pct%type
+                    ,io_manager_id     in out employees.manager_id%type
+                    ,io_department_id  in out employees.department_id%type
+                    ,in_wait           in     integer) is
+      l_status          pls_integer;
       co_dflt_pipe_name constant string(30 char) := 'MyPipe';
-      co_ok constant pls_integer := 1;
+      co_ok             constant pls_integer     := 1;
    begin
       -- Receive next message and unpack for each column. 
       l_status := sys.dbms_pipe.receive_message(pipename =&gt; co_dflt_pipe_name
                                                ,timeout  =&gt; in_wait);
       if l_status = co_ok then
-         sys.dbms_pipe.unpack_message (io_first_name);
-         sys.dbms_pipe.unpack_message (io_last_name);
-         sys.dbms_pipe.unpack_message (io_email);
-         sys.dbms_pipe.unpack_message (io_phone_number);
-         sys.dbms_pipe.unpack_message (io_hire_date);
-         sys.dbms_pipe.unpack_message (io_job_id);
-         sys.dbms_pipe.unpack_message (io_salary);
-         sys.dbms_pipe.unpack_message (io_commission_pct);
-         sys.dbms_pipe.unpack_message (io_manager_id);
-         sys.dbms_pipe.unpack_message (io_department_id);
+         sys.dbms_pipe.unpack_message(io_first_name);
+         sys.dbms_pipe.unpack_message(io_last_name);
+         sys.dbms_pipe.unpack_message(io_email);
+         sys.dbms_pipe.unpack_message(io_phone_number);
+         sys.dbms_pipe.unpack_message(io_hire_date);
+         sys.dbms_pipe.unpack_message(io_job_id);
+         sys.dbms_pipe.unpack_message(io_salary);
+         sys.dbms_pipe.unpack_message(io_commission_pct);
+         sys.dbms_pipe.unpack_message(io_manager_id);
+         sys.dbms_pipe.unpack_message(io_department_id);
       end if;
    end rcv_emp;
 end employee_up;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body employee_up is
-   procedure rcv_emp (out_first_name     out employees.first_name%type
-                     ,out_last_name      out employees.last_name%type 
-                     ,out_email          out employees.email%type 
-                     ,out_phone_number   out employees.phone_number%type
-                     ,out_hire_date      out employees.hire_date%type 
-                     ,out_job_id         out employees.job_id%type
-                     ,out_salary         out employees.salary%type
-                     ,out_commission_pct out employees.commission_pct%type 
-                     ,out_manager_id     out employees.manager_id%type
-                     ,out_department_id  out employees.department_id%type
-                     ,in_wait            in  integer) is
-      l_status pls_integer;
+   procedure rcv_emp(out_first_name     out employees.first_name%type
+                    ,out_last_name      out employees.last_name%type
+                    ,out_email          out employees.email%type
+                    ,out_phone_number   out employees.phone_number%type
+                    ,out_hire_date      out employees.hire_date%type
+                    ,out_job_id         out employees.job_id%type
+                    ,out_salary         out employees.salary%type
+                    ,out_commission_pct out employees.commission_pct%type
+                    ,out_manager_id     out employees.manager_id%type
+                    ,out_department_id  out employees.department_id%type
+                    ,in_wait            in  integer) is
+      l_status          pls_integer;
       co_dflt_pipe_name constant string(30 char) := 'MyPipe';
-      co_ok constant pls_integer := 1;
+      co_ok             constant pls_integer     := 1;
    begin
       -- Receive next message and unpack for each column. 
       l_status := sys.dbms_pipe.receive_message(pipename =&gt; co_dflt_pipe_name
                                                ,timeout  =&gt; in_wait);
       if l_status = co_ok then
-         sys.dbms_pipe.unpack_message (out_first_name);
-         sys.dbms_pipe.unpack_message (out_last_name);
-         sys.dbms_pipe.unpack_message (out_email);
-         sys.dbms_pipe.unpack_message (out_phone_number);
-         sys.dbms_pipe.unpack_message (out_hire_date);
-         sys.dbms_pipe.unpack_message (out_job_id);
-         sys.dbms_pipe.unpack_message (out_salary);
-         sys.dbms_pipe.unpack_message (out_commission_pct);
-         sys.dbms_pipe.unpack_message (out_manager_id);
-         sys.dbms_pipe.unpack_message (out_department_id);
+         sys.dbms_pipe.unpack_message(out_first_name);
+         sys.dbms_pipe.unpack_message(out_last_name);
+         sys.dbms_pipe.unpack_message(out_email);
+         sys.dbms_pipe.unpack_message(out_phone_number);
+         sys.dbms_pipe.unpack_message(out_hire_date);
+         sys.dbms_pipe.unpack_message(out_job_id);
+         sys.dbms_pipe.unpack_message(out_salary);
+         sys.dbms_pipe.unpack_message(out_commission_pct);
+         sys.dbms_pipe.unpack_message(out_manager_id);
+         sys.dbms_pipe.unpack_message(out_department_id);
       end if;
    end rcv_emp;
 end employee_up;
@@ -4258,65 +4500,65 @@ end employee_up;
 			a reasonable way.</p>
 			<h2>Bad</h2>
 <pre>create or replace package department_api is
-   procedure del (in_department_id in departments.department_id%type);
+   procedure del(in_department_id in departments.department_id%type);
 end department_api;
 /
 
 create or replace package body department_api is
-   function does_exist (in_department_id in departments.department_id%type)
+   function does_exist(in_department_id in departments.department_id%type)
       return boolean is
       l_return pls_integer;
    begin
       &lt;&lt;check_row_exists&gt;&gt;
-      begin 
+      begin
          select 1
            into l_return
            from departments
           where department_id = in_department_id;
       exception
-         when no_data_found or too_many_rows then 
+         when no_data_found or too_many_rows then
             l_return := 0;
       end check_row_exists;
 
       return l_return = 1;
    end does_exist;
 
-   procedure del (in_department_id in departments.department_id%type) is
+   procedure del(in_department_id in departments.department_id%type) is
    begin
       if does_exist(in_department_id) then
-        null;
+         null;
       end if;
    end del;
 end department_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package department_api is
-   procedure del (in_department_id in departments.department_id%type);
+   procedure del(in_department_id in departments.department_id%type);
 end department_api;
 /
 
 create or replace package body department_api is
-   function does_exist (in_department_id in departments.department_id%type)
+   function does_exist(in_department_id in departments.department_id%type)
       return boolean;
 
-   procedure del (in_department_id in departments.department_id%type) is
+   procedure del(in_department_id in departments.department_id%type) is
    begin
       if does_exist(in_department_id) then
-        null;
+         null;
       end if;
    end del;
 
-   function does_exist (in_department_id in departments.department_id%type)
+   function does_exist(in_department_id in departments.department_id%type)
       return boolean is
       l_return pls_integer;
    begin
       &lt;&lt;check_row_exists&gt;&gt;
-      begin 
+      begin
          select 1
            into l_return
            from departments
           where department_id = in_department_id;
-      exception 
+      exception
          when no_data_found or too_many_rows then
             l_return := 0;
       end check_row_exists;
@@ -4359,13 +4601,13 @@ end department_api;
    co_max_increase constant types_up.sal_increase_type := 0.5;
    g_salary_increase types_up.sal_increase_type := co_min_increase;
 
-   procedure set_salary_increase (in_increase in types_up.sal_increase_type);
+   procedure set_salary_increase(in_increase in types_up.sal_increase_type);
    function salary_increase return types_up.sal_increase_type;
 end employee_api;
 /
 
 create or replace package body employee_api as
-   procedure set_salary_increase (in_increase in types_up.sal_increase_type) is
+   procedure set_salary_increase(in_increase in types_up.sal_increase_type) is
    begin
       g_salary_increase := greatest(least(in_increase,co_max_increase)
                                    ,co_min_increase);
@@ -4385,7 +4627,7 @@ end constants_up;
 /
 
 create or replace package employee_api as
-   procedure set_salary_increase (in_increase in types_up.sal_increase_type);
+   procedure set_salary_increase(in_increase in types_up.sal_increase_type);
    function salary_increase return types_up.sal_increase_type;
 end employee_api;
 /
@@ -4395,10 +4637,9 @@ create or replace package body employee_api as
 
    procedure init;
 
-   procedure set_salary_increase (in_increase in types_up.sal_increase_type) is
+   procedure set_salary_increase(in_increase in types_up.sal_increase_type) is
    begin
-      g_salary_increase := greatest(least(in_increase
-                                         ,constants_up.co_max_increase)
+      g_salary_increase := greatest(least(in_increase,constants_up.co_max_increase)
                                    ,constants_up.co_min_increase);
    end set_salary_increase;
 
@@ -4436,10 +4677,9 @@ end employee_api;
 <pre>create or replace package body employee_api as
    g_salary_increase types_up.sal_increase_type(4,2);
 
-   procedure set_salary_increase (in_increase in types_up.sal_increase_type) is
+   procedure set_salary_increase(in_increase in types_up.sal_increase_type) is
    begin
-      g_salary_increase := greatest(least(in_increase
-                                         ,constants_up.max_salary_increase())
+      g_salary_increase := greatest(least(in_increase,constants_up.max_salary_increase())
                                    ,constants_up.min_salary_increase());
    end set_salary_increase;
 
@@ -4460,10 +4700,9 @@ end employee_api;
 <pre>create or replace package body employee_api as
    g_salary_increase types_up.sal_increase_type(4,2);
 
-   procedure set_salary_increase (in_increase in types_up.sal_increase_type) is
+   procedure set_salary_increase(in_increase in types_up.sal_increase_type) is
    begin
-      g_salary_increase := greatest(least(in_increase
-                                         ,constants_up.max_salary_increase())
+      g_salary_increase := greatest(least(in_increase,constants_up.max_salary_increase())
                                    ,constants_up.min_salary_increase());
    end set_salary_increase;
 
@@ -4531,16 +4770,16 @@ end my_package;
 			<h2>Bad</h2>
 <pre>create or replace package body my_package is
    procedure my_procedure is
-      l_idx simple_integer := 1;
+      l_idx     simple_integer          := 1;
       co_modulo constant simple_integer := 7;
    begin
       &lt;&lt;mod7_loop&gt;&gt;
       loop
-        if mod(l_idx,co_modulo) = 0 then
-           return;
-        end if;
+         if mod(l_idx,co_modulo) = 0 then
+            return;
+         end if;
 
-        l_idx := l_idx + 1;
+         l_idx := l_idx + 1;
       end loop mod7_loop;
    end my_procedure;
 end my_package;
@@ -4548,14 +4787,14 @@ end my_package;
 			<h2>Good</h2>
 <pre>create or replace package body my_package is
    procedure my_procedure is
-      l_idx simple_integer := 1;
+      l_idx     simple_integer          := 1;
       co_modulo constant simple_integer := 7;
    begin
       &lt;&lt;mod7_loop&gt;&gt;
       loop
-        exit mod7_loop when mod(l_idx,co_modulo) = 0;
+         exit mod7_loop when mod(l_idx,co_modulo) = 0;
 
-        l_idx := l_idx + 1;
+         l_idx := l_idx + 1;
       end loop mod7_loop;
    end my_procedure;
 end my_package;
@@ -4579,7 +4818,7 @@ end my_package;
 <pre>create or replace package body my_package is
    procedure greet(
       in_name      in  varchar2
-    , out_greeting out varchar2
+     ,out_greeting out varchar2
    ) is
       l_message varchar2(100 char);
    begin
@@ -4591,7 +4830,7 @@ end my_package;
 <pre>create or replace package body my_package is
    procedure greet(
       in_name      in  varchar2
-    , out_greeting out varchar2
+     ,out_greeting out varchar2
    ) is
    begin
       out_greeting := 'Hello, ' || in_name;
@@ -4642,13 +4881,13 @@ end my_package;
 			<p>The reader expects the <code>return</code> statement to be the last statement of a function.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body my_package is
-   function my_function (in_from in pls_integer
-                       , in_to   in pls_integer) return pls_integer is
+   function my_function(in_from in pls_integer
+                       ,in_to   in pls_integer) return pls_integer is
       l_ret pls_integer;
    begin
       l_ret := in_from;
       &lt;&lt;for_loop&gt;&gt;
-      for i in in_from .. in_to 
+      for i in in_from..in_to
       loop
          l_ret := l_ret + i;
          if i = in_to then
@@ -4660,13 +4899,13 @@ end my_package;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body my_package is
-   function my_function (in_from in pls_integer
-                       , in_to   in pls_integer) return pls_integer is
+   function my_function(in_from in pls_integer
+                       ,in_to   in pls_integer) return pls_integer is
       l_ret pls_integer;
    begin
       l_ret := in_from;
       &lt;&lt;for_loop&gt;&gt;
-      for i in in_from .. in_to 
+      for i in in_from..in_to
       loop
          l_ret := l_ret + i;
       end loop for_loop;
@@ -4689,7 +4928,7 @@ end my_package;
 			<p>A function should have a single point of entry as well as a single exit-point.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body my_package is
-   function my_function (in_value in pls_integer) return boolean is
+   function my_function(in_value in pls_integer) return boolean is
       co_yes constant pls_integer := 1;
    begin
       if in_value = co_yes then
@@ -4702,9 +4941,9 @@ end my_package;
 /</pre>
 			<h2>Better</h2>
 <pre>create or replace package body my_package is
-   function my_function (in_value in pls_integer) return boolean is
+   function my_function(in_value in pls_integer) return boolean is
       co_yes constant pls_integer := 1;
-      l_ret boolean;
+      l_ret  boolean;
    begin
       if in_value = co_yes then
          l_ret := true;
@@ -4718,7 +4957,7 @@ end my_package;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body my_package is
-   function my_function (in_value in pls_integer) return boolean is
+   function my_function(in_value in pls_integer) return boolean is
       co_yes constant pls_integer := 1;
    begin
       return in_value = co_yes;
@@ -4741,7 +4980,7 @@ end my_package;
 			prohibits usage of a function within SQL statements.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body my_package is
-   function my_function (out_date out date) return boolean is
+   function my_function(out_date out date) return boolean is
    begin
       out_date := sysdate;
       return true;
@@ -4803,14 +5042,15 @@ end my_package;
 			the function is not defined to be deterministic it is executed once per result row.</p>
 			<h2>Bad</h2>
 <pre>create or replace package department_api is
-   function name_by_id (in_department_id in departments.department_id%type)
+   function name_by_id(in_department_id in departments.department_id%type)
       return departments.department_name%type;
 end department_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package department_api is
-   function name_by_id (in_department_id in departments.department_id%type)
-      return departments.department_name%type deterministic;
+   function name_by_id(in_department_id in departments.department_id%type)
+      return departments.department_name%type
+      deterministic;
 end department_api;
 /</pre>
 			<p></p>]]></description>
@@ -4818,15 +5058,15 @@ end department_api;
 	</rule>
 	<rule>
 		<key>G-7510</key>
-		<name><![CDATA[G-7510: Always prefix ORACLE supplied packages with owner schema name.]]></name>
+		<name><![CDATA[G-7510: Always prefix Oracle supplied packages with owner schema name.]]></name>
 		<internalKey>G-7510</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>The signature of oracle-supplied packages is well known and therefore it is quite easy to provide
-			packages with the same name as those from oracle doing something completely different
+			<p>The signature of Oracle-supplied packages is well known and therefore it is quite easy to provide
+			packages with the same name as those from Oracle doing something completely different
 			without you noticing it.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -4860,50 +5100,58 @@ end;
 <pre>create or replace trigger dept_br_u
 before update on departments for each row
 begin
-   insert into departments_hist (department_id
-                                ,department_name
-                                ,manager_id
-                                ,location_id
-                                ,modification_date) 
-        values (:old.department_id
-               ,:old.department_name
-               ,:old.manager_id
-               ,:old.location_id
-               ,sysdate);
+   insert into departments_hist (
+      department_id
+     ,department_name
+     ,manager_id
+     ,location_id
+     ,modification_date)
+   values (
+      :old.department_id
+     ,:old.department_name
+     ,:old.manager_id
+     ,:old.location_id
+     ,sysdate);
 end;
-/ 
+/
 create or replace trigger dept_hist_br_i
 before insert on departments_hist for each row
 begin
-   insert into departments_log (department_id
-                               ,department_name
-                               ,modification_date) 
-                        values (:new.department_id
-                               ,:new.department_name
-                               ,sysdate);
+   insert into departments_log (
+      department_id
+     ,department_name
+     ,modification_date)
+   values (
+      :new.department_id
+     ,:new.department_name
+     ,sysdate);
 end;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace trigger dept_br_u
 before update on departments for each row
 begin
-   insert into departments_hist (department_id
-                                ,department_name
-                                ,manager_id
-                                ,location_id
-                                ,modification_date) 
-        values (:old.department_id
-               ,:old.department_name
-               ,:old.manager_id
-               ,:old.location_id
-               ,sysdate);
+   insert into departments_hist (
+      department_id
+     ,department_name
+     ,manager_id
+     ,location_id
+     ,modification_date)
+   values (
+      :old.department_id
+     ,:old.department_name
+     ,:old.manager_id
+     ,:old.location_id
+     ,sysdate);
 
-   insert into departments_log (department_id
-                               ,department_name
-                               ,modification_date) 
-                        values (:old.department_id
-                               ,:old.department_name
-                               ,sysdate);
+   insert into departments_log (
+      department_id
+     ,department_name
+     ,modification_date)
+   values (
+      :old.department_id
+     ,:old.department_name
+     ,sysdate);
 
 end;
 /</pre>
@@ -4930,25 +5178,29 @@ before update of department_id or update of department_name
 on departments for each row
 begin
    -- will only fire on updates of department_name
-   insert into departments_log (department_id
-                               ,department_name
-                               ,modification_date) 
-                        values (:old.department_id
-                               ,:old.department_name
-                               ,sysdate);
+   insert into departments_log (
+      department_id
+     ,department_name
+     ,modification_date)
+   values (
+      :old.department_id
+     ,:old.department_name
+     ,sysdate);
 end;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace trigger dept_br_u
-before update of department_id, department_name
+before update of department_id,department_name
 on departments for each row
 begin
-   insert into departments_log (department_id
-                               ,department_name
-                               ,modification_date) 
-                        values (:old.department_id
-                               ,:old.department_name
-                               ,sysdate);
+   insert into departments_log (
+      department_id
+     ,department_name
+     ,modification_date)
+   values (
+      :old.department_id
+     ,:old.department_name
+     ,sysdate);
 end;
 /</pre>
 			<p></p>]]></description>
@@ -4956,20 +5208,74 @@ end;
 	</rule>
 	<rule>
 		<key>G-7730</key>
-		<name><![CDATA[G-7730: Avoid multiple DML events per trigger if primary key is assigned in trigger.]]></name>
+		<name><![CDATA[G-7730: Avoid multiple DML events per trigger.]]></name>
 		<internalKey>G-7730</internalKey>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>Rather than a single trigger handling multiple DML events with separated blocks of "if inserting",
+			"if updating" and "if deleting", modularity by individual triggers per DML event helps maintaining
+			and testing the code. If most of the code is common for either DML event (only small pieces of code are
+			individual) consider an exception to the rule and allow "if inserting", "if updating" and "if deleting" 
+			blocks, or alternatively gather the common code in a procedure and let individual triggers handle the
+			individual pieces of code plus call the procedure with the common code.</p>
+			<p>
+			If the trigger makes assignment to a primary key and there are child tables with a foreign key referring
+			to this primary key, the database can make undesirable table locks. If such is the case, you should
+			always use individual triggers. See G-7740 for details.</p>
+			<h2>Bad</h2>
+<pre>create or replace trigger dept_br_iu
+before insert or update
+on departments for each row
+begin
+   if inserting then
+      :new.created_date := sysdate;
+   end if;
+   if updating then
+      :new.changed_date := sysdate;
+   end if;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace trigger dept_br_i
+before insert
+on departments for each row
+begin
+   :new.created_date := sysdate;
+end;
+/
+
+create or replace trigger dept_br_u
+before update
+on departments for each row
+begin
+   :new.changed_date := sysdate;
+end;
+/</pre>
+			<p></p>]]></description>
+		<tag>avoid</tag>
+	</rule>
+	<rule>
+		<key>G-7740</key>
+		<name><![CDATA[G-7740: Never handle multiple DML events per trigger if primary key is assigned in trigger. (not implemented)]]></name>
+		<internalKey>G-7740</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
 			<p>If a trigger makes assignment to the primary key anywhere in the trigger code, that causes the
-			session firing the trigger to take a lock on any child tables with a foreign key to this primary key.
-			Even if the assignment is in for example an <code>if inserting</code> block and the trigger is fired by an
-			<code>update</code> statement, such locks still happen unnecessarily. The issue is avoided by having one
-			trigger for the insert containing the primary key assignment, and another trigger for the update.
-			Or even better by handling the insert assignment as ´default on null´ clauses, so that only an <code>on
-			update</code> trigger is needed.</p>
+			 session firing the trigger to take a lock on any child tables with a foreign key to this primary key.
+			 Even if the assignment is in for example an "if inserting" block and the trigger is fired by an
+			 update statement, such locks still happen unnecessarily. The issue is avoided by having one
+			 trigger for the insert containing the primary key assignment, and another trigger for the update.
+			 Or even better by handling the insert assignment as ´default on null´ clauses, so that only an 
+			 "on update" trigger is needed.</p>
+			<p>This locking of child tables behaviour goes for simple DML triggers as well as compound DML
+			triggers where assignments to primary keys take place. It is not relevant for instead-of triggers on
+			views, as it is not possible to assign :new values and therefore no locks on child tables are needed.</p>
 			<h2>Bad</h2>
 <pre>create or replace trigger dept_br_iu
 before insert or update
@@ -4980,11 +5286,11 @@ begin
       :new.created_date  := sysdate;
    end if;
    if updating then
-      :new.changed_date  := sysdate;
+      :new.changed_date := sysdate;
    end if;
 end;
 /</pre>
-			<h2>Better</h2>
+			<h2>Good</h2>
 <pre>create or replace trigger dept_br_i
 before insert
 on departments for each row
@@ -4998,10 +5304,10 @@ create or replace trigger dept_br_u
 before update
 on departments for each row
 begin
-   :new.changed_date  := sysdate;
+   :new.changed_date := sysdate;
 end;
 /</pre>
-			<h2>Good</h2>
+			<h2>Best</h2>
 <pre>alter table department modify department_id default on null department_seq.nextval;
 alter table department modify created_date  default on null sysdate;
 
@@ -5009,11 +5315,11 @@ create or replace trigger dept_br_u
 before update
 on departments for each row
 begin
-   :new.changed_date  := sysdate;
+   :new.changed_date := sysdate;
 end;
 /</pre>
 			<p></p>]]></description>
-		<tag>avoid</tag>
+		<tag>never</tag>
 	</rule>
 	<rule>
 		<key>G-7810</key>
@@ -5024,7 +5330,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>Since ORACLE 11g it is no longer needed to use a <code>select</code> statement to read a sequence (which
+			<p>Since Oracle Database 11g it is no longer needed to use a <code>select</code> statement to read a sequence (which
 			would imply a context switch).</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -5046,6 +5352,50 @@ end;
 		<tag>never</tag>
 	</rule>
 	<rule>
+		<key>G-7910</key>
+		<name><![CDATA[G-7910: Never use DML within a SQL macro.]]></name>
+		<internalKey>G-7910</internalKey>
+		<severity>CRITICAL</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Restriction</h2>
+			<p>Oracle Database 21c (19c from version 19.7 for table macros alone)</p>
+			<h2>Reason</h2>
+			<p>Doing DML (except for select) within a SQL macro can lead to disastrous side effects from
+			calling the macro in a SQL query.</p>
+			<p>Logging macro calls via a call to a procedure that does DML in an autonomous transaction can
+			be an exception to the rule.</p>
+			<h2>Bad</h2>
+<pre>create or replace function row_generator(
+   in_num_rows in number
+)
+   return varchar2 sql_macro as
+begin
+   insert into function_calls(name,called_at,parameter_value)
+   values ($$plsql_unit,current_timestamp,in_num_rows);
+   commit;
+
+   return 'select level as row_sequence
+             from dual 
+          connect by level &lt;= in_num_rows';
+end row_generator;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace function row_generator(
+   in_num_rows in number
+)
+   return varchar2 sql_macro as
+begin
+   return 'select level as row_sequence
+             from dual 
+          connect by level &lt;= in_num_rows';
+end row_generator;
+/</pre>
+			<p></p>]]></description>
+		<tag>never</tag>
+	</rule>
+	<rule>
 		<key>G-8110</key>
 		<name><![CDATA[G-8110: Never use SELECT COUNT(*) if you are only interested in the existence of a row.]]></name>
 		<internalKey>G-8110</internalKey>
@@ -5060,39 +5410,45 @@ end;
 			between the PL/SQL and the SQL engine. See the following example for a better solution.</p>
 			<h2>Bad</h2>
 <pre>declare
-   l_count pls_integer;
-   co_zero   constant simple_integer := 0;
+   l_count   pls_integer;
+   co_zero   constant simple_integer        := 0;
    co_salary constant employees.salary%type := 5000;
 begin
    select count(*)
      into l_count
      from employees
     where salary &lt; co_salary;
-    if l_count &gt; co_zero then
-       &lt;&lt;emp_loop&gt;&gt;
-       for r_emp in (select employee_id
-                       from employees)
-       loop
-          if r_emp.salary &lt; co_salary then
-             my_package.my_proc(in_employee_id =&gt; r_emp.employee_id); 
-          end if;
-       end loop emp_loop;
-    end if;
+   if l_count &gt; co_zero then
+      &lt;&lt;emp_loop&gt;&gt;
+      for r_emp in (
+         select employee_id
+           from employees
+      )
+      loop
+         if r_emp.salary &lt; co_salary then
+            my_package.my_proc(in_employee_id =&gt; r_emp.employee_id);
+         end if;
+      end loop emp_loop;
+   end if;
 end;
 /</pre>
 			<h2>Good</h2>
 <pre>declare
    co_salary constant employees.salary%type := 5000;
 begin
-    &lt;&lt;emp_loop&gt;&gt;
-    for r_emp in (select e1.employee_id
-                    from employees e1
-                   where exists(select e2.salary
-                                  from employees e2
-                                 where e2.salary &lt; co_salary))
-    loop
-       my_package.my_proc(in_employee_id =&gt; r_emp.employee_id); 
-    end loop emp_loop;
+   &lt;&lt;emp_loop&gt;&gt;
+   for r_emp in (
+      select e1.employee_id
+        from employees e1
+       where exists(
+                select e2.salary
+                  from employees e2
+                 where e2.salary &lt; co_salary
+             )
+   )
+   loop
+      my_package.my_proc(in_employee_id =&gt; r_emp.employee_id);
+   end loop emp_loop;
 end;
 /</pre>
 			<p></p>]]></description>
@@ -5113,7 +5469,7 @@ end;
 			prevention of duplicate records.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body department_api is
-   procedure ins (in_r_department in departments%rowtype) is
+   procedure ins(in_r_department in departments%rowtype) is
       l_count pls_integer;
    begin
       select count(*)
@@ -5121,21 +5477,22 @@ end;
         from departments
        where department_id = in_r_department.department_id;
 
-       if l_count = 0 then
-          insert into departments
-               values in_r_department;
-       end if;
+      if l_count = 0 then
+         insert into departments
+         values in_r_department;
+      end if;
    end ins;
 end department_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body department_api is
-   procedure ins (in_r_department in departments%rowtype) is
+   procedure ins(in_r_department in departments%rowtype) is
    begin
       insert into departments
-           values in_r_department;
+      values in_r_department;
    exception
-      when dup_val_on_index then null; -- handle exception
+      when dup_val_on_index then
+         null; -- handle exception
    end ins;
 end department_api;
 /</pre>
@@ -5161,7 +5518,7 @@ end department_api;
 			<h2>Bad</h2>
 <pre>declare
    l_product_name oe.products.product_name%type;
-   co_price constant oe.products@list_price%type := 1000;
+   co_price       constant oe.products@list_price%type := 1000;
 begin
    select p.product_name
      into l_product_name
@@ -5179,7 +5536,7 @@ end;
 
 declare
    l_product_name oe_products.product_name%type;
-   co_price constant oe_products.list_price%type := 1000;
+   co_price       constant oe_products.list_price%type := 1000;
 begin
    select p.product_name
      into l_product_name
@@ -5209,39 +5566,50 @@ end;
 			caller should handle the error.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body department_api is
-   function dept_by_name (in_dept_name in departments.department_name%type)
+   function dept_by_name(in_dept_name in departments.department_name%type)
       return departments%rowtype is
-      l_return departments%rowtype;
+      r_return departments%rowtype;
    begin
-       if    in_dept_name is null 
-          or length(in_dept_name) &gt; 20
-       then
-          raise err.e_param_to_large;
-       end if;
-       -- get the department by name
-       select *
-         from departments
-        where department_name = in_dept_name;
+      if in_dept_name is null or length(in_dept_name) &gt; 20 then
+         raise err.e_param_to_large;
+      end if;
+      -- get the department by name
+      select *
+        into r_return
+        from departments
+       where department_name = in_dept_name;
 
-       return l_return;
+      return r_return;
    end dept_by_name;
 end department_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create or replace package body department_api is
-   function dept_by_name (in_dept_name in departments.department_name%type)
+   function dept_by_name(in_dept_name in departments.department_name%type)
       return departments%rowtype is
       l_dept_name departments.department_name%type not null := in_dept_name;
-      l_return departments%rowtype;
+      r_return    departments%rowtype;
    begin
-       -- get the department by name
-       select *
-         from departments
-        where department_name = l_dept_name;
+      -- get the department by name
+      select *
+        into r_return
+        from departments
+       where department_name = l_dept_name;
 
-       return l_return;
+      return r_return;
    end dept_by_name;
 end department_api;
+/
+
+-- The exception should be handled where the function is called, like this:
+begin
+   pre_processing;
+   r_department := department_api.dept_by_name('Far to long name of a department');
+   post_processing;
+exception
+   when value_error then
+      handle_error;
+end;
 /</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
@@ -5267,7 +5635,7 @@ create or replace package body lock_up is
    --      lock_name VARCHAR2(128 CHAR) NOT NULL primary key
    --   );
 
-   procedure request_lock (in_lock_name in varchar2) is
+   procedure request_lock(in_lock_name in varchar2) is
    begin
       -- raises dup_val_on_index
       insert into app_locks (lock_name) values (in_lock_name);
@@ -5298,22 +5666,22 @@ end;
 <pre>/* Example */
 create or replace package body lock_up is
    function request_lock(
-      in_lock_name         in varchar2,
-      in_release_on_commit in boolean := false) 
-   return varchar2 is
+      in_lock_name         in varchar2
+     ,in_release_on_commit in boolean := false)
+      return varchar2 is
       l_lock_handle varchar2(128 char);
    begin
       sys.dbms_lock.allocate_unique(
-         lockname        =&gt; in_lock_name,
-         lockhandle      =&gt; l_lock_handle,
-         expiration_secs =&gt; constants_up.co_one_week
+         lockname        =&gt; in_lock_name
+        ,lockhandle      =&gt; l_lock_handle
+        ,expiration_secs =&gt; constants_up.co_one_week
       );
       if sys.dbms_lock.request(
-            lockhandle        =&gt; l_lock_handle,
-            lockmode          =&gt; sys.dbms_lock.x_mode,
-            timeout           =&gt; sys.dbms_lock.maxwait,
-            release_on_commit =&gt; coalesce(in_release_on_commit, false)
-         ) &gt; 0 
+            lockhandle        =&gt; l_lock_handle
+           ,lockmode          =&gt; sys.dbms_lock.x_mode
+           ,timeout           =&gt; sys.dbms_lock.maxwait
+           ,release_on_commit =&gt; coalesce(in_release_on_commit,false)
+         ) &gt; 0
       then
          raise err.e_lock_request_failed;
       end if;
@@ -5331,7 +5699,7 @@ end lock_up;
 
 /* Call good example */
 declare
-   l_handle varchar2(128 char);
+   l_handle     varchar2(128 char);
    co_lock_name constant varchar2(30 char) := 'APPLICATION_LOCK';
 begin
    l_handle := lock_up.request_lock(in_lock_name =&gt; co_lock_name);
@@ -5363,9 +5731,11 @@ end;
    procedure process_emps is
    begin
       &lt;&lt;employees&gt;&gt;
-      for emp_rec in (select employee_id
-                        from employees
-                       order by employee_id)
+      for emp_rec in (
+         select employee_id
+           from employees
+          order by employee_id
+      )
       loop
          null; -- some processing
       end loop employees;
@@ -5379,9 +5749,11 @@ end employee_api;
       sys.dbms_application_info.set_module(module_name =&gt; $$plsql_unit
                                           ,action_name =&gt; 'Init');
       &lt;&lt;employees&gt;&gt;
-      for emp_rec in (select employee_id 
-                        from employees
-                       order by employee_id)
+      for emp_rec in (
+         select employee_id
+           from employees
+          order by employee_id
+      )
       loop
          sys.dbms_application_info.set_action('Processing ' || emp_rec.employee_id);
       end loop employees;
@@ -5411,21 +5783,23 @@ end employee_api;
 			inappropriate dependability on configurable NLS parameters.</p>
 			<h2>Bad</h2>
 <pre>create package body employee_api is
-   procedure set_dob (in_employee_id in employees.employee_id%type, in_dob_str in varchar2) is
+   procedure set_dob(in_employee_id in employees.employee_id%type
+                    ,in_dob_str     in varchar2) is
    begin
       update employees
-      set date_of_birth = to_date(in_dob_str)
-      where employee_id = in_employee_id;
+         set date_of_birth = to_date(in_dob_str)
+       where employee_id = in_employee_id;
    end set_dob;
 end employee_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create package body employee_api is
-   procedure set_dob (in_employee_id in employees.employee_id%type, in_dob_str in varchar2) is
+   procedure set_dob(in_employee_id in employees.employee_id%type
+                    ,in_dob_str     in varchar2) is
    begin
       update employees
-      set date_of_birth = to_date(in_dob_str, 'YYYY-MM-DD')
-      where employee_id = in_employee_id;
+         set date_of_birth = to_date(in_dob_str,'YYYY-MM-DD')
+       where employee_id = in_employee_id;
    end set_dob;
 end employee_api;
 /</pre>
@@ -5454,21 +5828,23 @@ end employee_api;
 			parameter.</p>
 			<h2>Bad</h2>
 <pre>create package body employee_api is
-   procedure set_salary (in_employee_id in employees.employee_id%type, in_salary in varchar2) is
+   procedure set_salary(in_employee_id in employees.employee_id%type
+                       ,in_salary      in varchar2) is
    begin
       update employees
-      set salary = to_number(in_salary)
-      where employee_id = in_employee_id;
+         set salary = to_number(in_salary)
+       where employee_id = in_employee_id;
    end set_dob;
 end employee_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create package body employee_api is
-   procedure set_salary (in_employee_id in employees.employee_id%type, in_salary in varchar2) is
+   procedure set_salary(in_employee_id in employees.employee_id%type
+                       ,in_salary      in varchar2) is
    begin
       update employees
-      set salary = to_number(in_salary, '99999999999999999999.99999', q'[nls_numeric_characters='.,']')
-      where employee_id = in_employee_id;
+         set salary = to_number(in_salary,'99999999999999999999.99999',q'[nls_numeric_characters='.,']')
+       where employee_id = in_employee_id;
    end set_dob;
 end employee_api;
 /</pre>
@@ -5483,6 +5859,8 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Restriction</h2>
+			<p>Oracle Database 12c Release 2</p>
 			<h2>Reason</h2>
 			<p>When converting from strings to other datatypes using a conversion function that supports the
 			<code>default ... on conversion error</code> clause, it is a good idea to use this clause to avoid getting
@@ -5490,21 +5868,66 @@ end employee_api;
 			to catch and process it in a later exception handler.</p>
 			<h2>Bad</h2>
 <pre>create package body employee_api is
-   procedure set_salary (in_employee_id in employees.employee_id%type, in_salary in varchar2) is
+   procedure set_salary(in_employee_id in employees.employee_id%type
+                       ,in_salary      in varchar2) is
    begin
       update employees
-      set salary = to_number(in_salary)
-      where employee_id = in_employee_id;
+         set salary = to_number(in_salary)
+       where employee_id = in_employee_id;
    end set_dob;
 end employee_api;
 /</pre>
 			<h2>Good</h2>
 <pre>create package body employee_api is
-   procedure set_salary (in_employee_id in employees.employee_id%type, in_salary in varchar2) is
+   procedure set_salary(in_employee_id in employees.employee_id%type
+                       ,in_salary      in varchar2) is
    begin
       update employees
-      set salary = to_number(in_salary, '99999999999999999999.99999', q'[nls_numeric_characters='.,']')
-      where employee_id = in_employee_id;
+         set salary = to_number(in_salary,'99999999999999999999.99999',q'[nls_numeric_characters='.,']')
+       where employee_id = in_employee_id;
+   end set_dob;
+end employee_api;
+/</pre>
+			<p></p>]]></description>
+		<tag>try</tag>
+	</rule>
+	<rule>
+		<key>G-9040</key>
+		<name><![CDATA[G-9040: Try using FX in string to date/time conversion format model to avoid fuzzy conversion.]]></name>
+		<internalKey>G-9040</internalKey>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>The default string-to-date conversion rules allow fuzzy conversion when converting from strings
+			to date or timestamp datatypes (using to_date, to_timestamp, to_timestamp_tz or cast to
+			any of those datatypes). For example you can omit punctuation characters, use any non-alphanumeric
+			character for punctuation, use month name instead of number, or various other rules.</p>
+			<p>In practice you almost always expect a truly fixed format and want the database to enforce the
+			format model and raise an error if the data does not match the format model. This you can
+			achieve by adding the format modifier FX (format exact).</p>
+			<p>The exception to this rule can be if you are converting textual input typed by a user, in which case
+			the fuzzy conversion may be what you want.</p>
+			<h2>Bad</h2>
+<pre>create or replace package body employee_api is
+   procedure set_dob(in_employee_id in employees.employee_id%type
+                    ,in_dob_str     in varchar2) is
+   begin
+      update employees
+         set date_of_birth = to_date(in_dob_str,'YYYY-MM-DD')
+       where employee_id = in_employee_id;
+   end set_dob;
+end employee_api;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package body employee_api is
+   procedure set_dob(in_employee_id in employees.employee_id%type
+                    ,in_dob_str     in varchar2) is
+   begin
+      update employees
+         set date_of_birth = to_date(in_dob_str,'FXYYYY-MM-DD')
+       where employee_id = in_employee_id;
    end set_dob;
 end employee_api;
 /</pre>

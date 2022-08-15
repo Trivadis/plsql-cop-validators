@@ -232,6 +232,25 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
+			<!-- Avoid using SELECT * directly from a table or view. -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-3145</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>LINEAR_OFFSET</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>2.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>5.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
 			<!-- Never commit within a cursor loop. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
@@ -308,10 +327,29 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Avoid multiple DML events per trigger if primary key is assigned in trigger. -->
+			<!-- Avoid multiple DML events per trigger. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-7730</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>LINEAR_OFFSET</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>10.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>5.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
+			<!-- Never handle multiple DML events per trigger if primary key is assigned in trigger. (not implemented) -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-7740</rule-key>
 				<prop>
 					<key>remediationFunction</key>
 					<txt>LINEAR_OFFSET</txt>
@@ -2158,6 +2196,25 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
+			<!-- Try using FX in string to date/time conversion format model to avoid fuzzy conversion. -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-9040</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>LINEAR_OFFSET</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>5.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>2.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
 		</chc>
 		<chc>
 			<key>EXCEPTION_HANDLING</key>
@@ -2516,6 +2573,25 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
+			<!-- Always process saved exceptions from a FORALL statement. -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-3220</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>LINEAR_OFFSET</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>1.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>5.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
 			<!-- Avoid using %NOTFOUND directly after the FETCH when working with BULK OPERATIONS and LIMIT clause. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
@@ -2584,6 +2660,25 @@
 				<prop>
 					<key>remediationFactor</key>
 					<val>1.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>10.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
+			<!-- Never use DML within a SQL macro. -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-7910</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>LINEAR_OFFSET</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>5.0</val>
 					<txt>mn</txt>
 				</prop>
 				<prop>
@@ -2674,7 +2769,7 @@
 		<chc>
 			<key>SECURITY_FEATURES</key>
 			<name>Security features</name>
-			<!-- Always prefix ORACLE supplied packages with owner schema name. -->
+			<!-- Always prefix Oracle supplied packages with owner schema name. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-7510</rule-key>
@@ -2762,6 +2857,25 @@
 		<chc>
 			<key>UNIT_TESTABILITY</key>
 			<name>Unit testability</name>
+			<!-- Never use unconditional CONTINUE or EXIT in a loop. -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-4365</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>LINEAR_OFFSET</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>5.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>2.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
 			<!-- Avoid cascading triggers. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
