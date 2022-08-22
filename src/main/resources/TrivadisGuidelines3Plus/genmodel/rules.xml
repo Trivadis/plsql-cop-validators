@@ -572,7 +572,7 @@ end my_package;
 			definition.</p>
 			<p>Examples of possible subtype definitions:</p>
 			<ul>
-			   <li>ora_name_type - Object corresponding to the Oracle naming conventions (table,
+			   <li>ora_name_type - Object corresponding to the Oracle Database naming conventions (table,
 			   variable, column, package, etc.).</li>
 			   <li>max_vc2_type - String variable with maximal VARCHAR2 size.</li>
 			   <li>array_index_type - Best fitting data type for array navigation.</li>
@@ -931,7 +931,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>Be careful about your use of Oracle-specific data types like <code>rowid</code> and <code>urowid</code>. They might offer
+			<p>Be careful about your use of Oracle Database specific data types like <code>rowid</code> and <code>urowid</code>. They might offer
 			a slight improvement in performance over other means of identifying a single row (primary key or
 			unique index value), but that is by no means guaranteed.</p>
 			<p>Use of <code>rowid</code> or <code>urowid<c/ode> means that your SQL statement will not be portable to other SQL
@@ -1144,7 +1144,7 @@ end types_up;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>Today zero-length strings and <code>null</code> are currently handled identical by Oracle. There is no
+			<p>Today zero-length strings and <code>null</code> are currently handled identical by the Oracle Database. There is no
 			guarantee that this will still be the case in future releases, therefore if you mean <code>null</code> use <code>null</code>.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body constants_up is
@@ -1252,8 +1252,8 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p><code>long</code> and <code>long raw</code> data types have been deprecated by Oracle since version 8i - support
-			might be discontinued in future Oracle releases.</p>
+			<p><code>long</code> and <code>long raw</code> data types have been deprecated by the Oracle Database since version 8i - support
+			might be discontinued in future Oracle Database releases.</p>
 			<p>There are many constraints to <code>long</code> datatypes in comparison to the <code>lob</code> types.</p>
 			<h2>Bad</h2>
 <pre>create or replace package example_package is
@@ -1299,9 +1299,9 @@ end example_package;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p><code>long</code> and <code>long raw</code> data types have been deprecated by Oracle since version 8i - support
-			might be discontinued in future Oracle releases.</p>
-			<p>There are many constraints to <code>long</code> datatypes in comparison to the <code>lob</code> types.</p>
+			<p>There is no reason to define your own weak ref cursor types, as they are not different
+			from the built-in `sys_refcursor`. Introducing your own types just gives you unnecessary
+			maintenance to perform.</p>
 			<h2>Bad</h2>
 <pre>declare
    type local_weak_cursor_type is ref cursor;
@@ -2350,7 +2350,7 @@ end;
 			instance, potentially in both the shared and private SQL pools. Furthermore, failure to explicitly
 			close cursors may also cause the owning session to exceed its maximum limit of open cursors
 			(as specified by the <code>open_cursors</code> database initialization parameter), potentially resulting in the
-			Oracle error of “ORA-01000: maximum open cursors exceeded”.</p>
+			Oracle Database error of “ORA-01000: maximum open cursors exceeded”.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body employee_api as
    function department_salary(in_dept_id in departments.department_id%type)
@@ -2397,7 +2397,7 @@ end employee_api;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>Oracle provides a variety of cursor attributes (like <code>%found</code> and <code>%rowcount</code>) that can be used to
+			<p>The Oracle Database provides a variety of cursor attributes (like <code>%found</code> and <code>%rowcount</code>) that can be used to
 			obtain information about the status of a cursor, either implicit or explicit.</p>
 			<p>You should avoid inserting any statements between the cursor operation and the use of an
 			attribute against that cursor. Interposing such a statement can affect the value returned by the
@@ -2513,7 +2513,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p><code>decode</code> is an Oracle specific function hard to understand and restricted to SQL only. The 
+			<p><code>decode</code> is an Oracle Database specific function hard to understand and restricted to SQL only. The 
 			“newer” <code>case</code> function is much more common, has a better readability and may be used within
 			PL/SQL too. Be careful that <code>decode</code> can handle <code>null</code> values, which the simple <code>case</code> cannot - for
 			such cases you must use the searched <code>case</code> and <code>is null</code> instead.</p>
@@ -3571,7 +3571,7 @@ end;
 			   <li>Logging (different channels like table, mail, file, etc. if needed)</li>
 			   <li>Error Raising</li>
 			   <li>Multilanguage support if needed</li>
-			   <li>Translate Oracle error messages to a user friendly error text</li>
+			   <li>Translate Oracle Database error messages to a user friendly error text</li>
 			   <li>Error repository</li>
 			</ul>
 			<h2>Bad</h2>
@@ -3646,7 +3646,7 @@ end;
 			<p>This is error-prone because your local declaration overrides the global declaration. While it is
 			technically possible to use the same names, it causes confusion for others needing to read and
 			maintain this code. Additionally, you will need to be very careful to use the prefix <code>standard</code> in
-			front of any reference that needs to use Oracle’s default exception behavior.</p>
+			front of any reference that needs to use the default exception behavior of the Oracle Database.</p>
 			<h2>Bad</h2>
 <pre>-- Using the code below, we are not able to handle the no_data_found exception raised by the
 -- select statement as we have overwritten that exception handler. In addition, our exception
@@ -3766,7 +3766,7 @@ end;
 		<description><![CDATA[
 			<h2>Reason</h2>
 			<p>If you are not very organized in the way you allocate, define and use the error numbers between
-			20999 and 20000 (those reserved by Oracle for its user community), it is very easy to end up with
+			20999 and 20000 (those reserved by by the Oracle Database for its user community), it is very easy to end up with
 			conflicting usages. You should assign these error numbers to named constants and consolidate
 			all definitions within a single package. When you call raise_application_error, you should
 			reference these named elements and error message text stored in a table. Use your own raise
@@ -5065,7 +5065,7 @@ end department_api;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>The signature of Oracle-supplied packages is well known and therefore it is quite easy to provide
+			<p>The signature of Oracle supplied packages is well known and therefore it is quite easy to provide
 			packages with the same name as those from Oracle doing something completely different
 			without you noticing it.</p>
 			<h2>Bad</h2>
