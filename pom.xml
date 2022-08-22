@@ -348,8 +348,8 @@
 
 	<!-- More Project Information -->
 	<name>db* CODECOP for SonarQube (Child)</name>
-	<description>db* CODECOP custom validators.</description>
-	<url>https://www.trivadis.com/en/plsql-cop</url>
+	<description>Custom validators to analyze PL/SQL and SQL code. Extends db* CODECOP for SonarQube (Standalone/Secondary), db* CODECOP CLI and db* CODECOP for SQL Developer.</description>
+	<url>https://www.trivadis.com/en/offers/dbstar</url>
 	<inceptionYear>2017</inceptionYear>
 	<licenses>
 		<license>
@@ -359,12 +359,12 @@
 		</license>
 	</licenses>
 	<organization>
-		<name>trivadis</name>
+		<name>Trivadis AG</name>
 		<url>https://www.trivadis.com/</url>
 	</organization>
 	<developers>
 		<developer>
-			<email>philipp.salvisberg@trivadis.com</email>
+			<email>philipp.salvisberg@accenture.com</email>
 			<name>Philipp Salvisberg</name>
 			<url>https://github.com/PhilippSalvisberg/</url>
 			<id>PhilippSalvisberg</id>
@@ -374,4 +374,13 @@
 			</roles>
 		</developer>
 	</developers>
+	<scm>
+		<connection>scm:git:https://github.com/Trivadis/plsql-cop-validators.git</connection>
+		<url>https://github.com/Trivadis/plsql-cop-validators</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/Trivadis/plsql-cop-validators/issues</url>
+	</issueManagement>
+
 </project>
