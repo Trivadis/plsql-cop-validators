@@ -80,6 +80,7 @@ class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValidator {
 	static var PREFIX_EXCEPTION_NAME = "e_"
 	static var PREFIX_CONSTANT_NAME = "co_"
 	static var SUFFIX_SUBTYPE_NAME = "_type"
+	static var VALID_LOCAL_VARIABLE_NAMES = "^(i|j)$"
 
 	new() {
 		super()
@@ -287,7 +288,12 @@ class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValidator {
 						warning(ISSUE_GLOBAL_VARIABLE_NAME, v.variable, v)
 					}
 				} else {
-					if (!name.startsWith(PREFIX_LOCAL_VARIABLE_NAME)) {
+					// reduce false positives, allow cursor/object/array names and common indices i, j
+					if (!name.startsWith(PREFIX_LOCAL_VARIABLE_NAME)
+						&& !name.startsWith(PREFIX_CURSOR_NAME)
+						&& !name.startsWith(PREFIX_OBJECT_NAME)
+						&& !name.startsWith(PREFIX_ARRAY_NAME)
+						&& !name.matches(VALID_LOCAL_VARIABLE_NAMES)) {
 						warning(ISSUE_LOCAL_VARIABLE_NAME, v.variable, v)
 					}
 				}
