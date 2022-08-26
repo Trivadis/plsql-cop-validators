@@ -454,5 +454,43 @@ class HintTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.size)
 	}
+	
+	// -- issue 46 https://github.com/Trivadis/plsql-cop-validators/issues/46
+	
+	@Test
+	def void usingTableNameInTableStatsOk() {
+		// set and scale works, commas not required
+		val stmt = '''
+			select /*+ table_stats(plscope.emp set rows=14 blocks=1 row_length=10) */ *
+			  from plscope.emp e;
+			select * from dbms_xplan.display_cursor(format => 'basic +hint_report');
+		'''
+		val issues = stmt.issues.filter[it.code == "G-9602"]
+		Assert.assertEquals(0, issues.size)
+	}
+
+	@Test
+	def void usingTableNameInIndexStatsOk() {
+		// set and scale works, commas not required
+		val stmt = '''
+			select /*+ index_stats(plscope.emp pk_emp scale blocks=1 rows=14)  */ *
+			  from plscope.emp e where empno = 7788;
+			select * from dbms_xplan.display_cursor(format => 'basic +hint_report');
+		'''
+		val issues = stmt.issues.filter[it.code == "G-9602"]
+		Assert.assertEquals(0, issues.size)
+	}
+
+	@Test
+	def void usingTableNameInColumnStatsOk() {
+		// set and scale works, commas not required
+		val stmt = '''
+			select /*+ column_stats(plscope.emp ename set length=6 distinct=14 nulls=0) */ *
+			  from plscope.emp where ename like 'S%';
+			select * from dbms_xplan.display_cursor(format => 'basic +hint_report');
+		'''
+		val issues = stmt.issues.filter[it.code == "G-9602"]
+		Assert.assertEquals(0, issues.size)
+	}
 
 }
