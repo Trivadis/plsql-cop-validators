@@ -80,6 +80,105 @@ class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
 		val issues = stmt.issues
 		Assert.assertEquals(0, issues.filter[it.code == "G-9102"].size)
 	}
+	
+	@Test
+	def void localVariableForStrongCursorOk() {
+		val stmt = '''
+			declare
+			   type c_emp_type is ref cursor return employees%rowtype;
+			   c_emp c_emp_type;
+			   r_emp employees%rowtype;
+			begin
+			   open c_emp for select * from employees where employee_id = 100;
+			   fetch c_emp into r_emp;
+			   close c_emp;
+			   sys.dbms_output.put_line('first_name: ' || r_emp.first_name);
+			end;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.filter[it.code == "G-9102"].size)
+	}
+
+	@Test
+	def void localVariableForObjectOk() {
+		val stmt = '''
+			declare
+			   o_game game_ot;
+			begin
+			   o_game := game_ot();
+			   pkg.proc(o_game);
+			end;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.filter[it.code == "G-9102"].size)
+	}
+
+	@Test
+	def void localVariableForArrayOk() {
+		val stmt = '''
+			declare
+			   t_words word_ct;
+			begin
+			   t_words := word_ct();
+			   pkg.proc(t_words);
+			end;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.filter[it.code == "G-9102"].size)
+	}
+
+	@Test
+	def void localVariableSingleLetterIOk() {
+		// use as common index "i" is accepted
+		val stmt = '''
+			declare
+			   i pls_integer := 0;
+			begin
+			   while i < 10
+			   loop
+			      dbms_output.put_line(i);
+			      i := i + 1;
+			   end loop;
+			end;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.filter[it.code == "G-9102"].size)
+	}
+
+	@Test
+	def void localVariableSingleLetterJOk() {
+		// use as common index "j" is accepted
+		val stmt = '''
+			declare
+			   j pls_integer := 0;
+			begin
+			   while j < 10
+			   loop
+			      dbms_output.put_line(j);
+			      j := j + 1;
+			   end loop;
+			end;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.filter[it.code == "G-9102"].size)
+	}
+
+	@Test
+	def void localVariableSingleLetterZNok() {
+		val stmt = '''
+			declare
+			   z pls_integer := 0;
+			begin
+			   while z < 10
+			   loop
+			      dbms_output.put_line(z);
+			      z := z + 1;
+			   end loop;
+			end;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(1, issues.filter[it.code == "G-9102"].size)
+	}
 
 	@Test
 	def void cursorNameNok() {
