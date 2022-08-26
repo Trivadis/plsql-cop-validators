@@ -538,6 +538,7 @@ end my_package;
       l_note big_string_type;
    begin
       l_note := some_function();
+      do_something(l_note);
    end my_proc;
 end my_package;
 /</pre>
@@ -552,6 +553,7 @@ create or replace package body my_package is
       l_note types_up.big_string_type;
    begin
       l_note := some_function();
+      do_something(l_note);
    end my_proc;
 end my_package;
 /</pre>
@@ -584,6 +586,7 @@ end my_package;
       l_note varchar2(1000 char);
    begin
       l_note := some_function();
+      do_something(l_note);
    end my_proc;
 end my_package;
 /</pre>
@@ -598,6 +601,7 @@ create or replace package body my_package is
       l_note types_up.big_string_type;
    begin
       l_note := some_function();
+      do_something(l_note);
    end my_proc;
 end my_package;
 /</pre>
@@ -707,6 +711,7 @@ end;
 begin
    l_function_result := maintenance.get_config('parallel_degree');
    l_parallel_degree := l_parallel_degree;
+   do_something(l_parallel_degree);
 end;
 /</pre>
 			<h2>Good</h2>
@@ -716,6 +721,7 @@ end;
 begin
    l_function_result := maintenance.get_config('parallel_degree');
    l_parallel_degree := l_function_result;
+   do_something(l_parallel_degree);
 end;
 /</pre>
 			<p></p>]]></description>
@@ -2067,6 +2073,7 @@ end;
    l_counter  integer := 0;
    l_discount discount.percentage%type;
 begin
+   &lt;&lt;new_orders&gt;&gt;
    for r_order in (
       select o.order_id,o.customer_id
         from orders o
@@ -2084,7 +2091,7 @@ begin
          commit;
          l_counter := 0;
       end if;
-   end loop;
+   end loop new_orders;
    if l_counter &gt; 0 then
       commit;
    end if;
@@ -2094,6 +2101,7 @@ end;
 <pre>declare
    l_discount discount.percentage%type;
 begin
+   &lt;&lt;new_orders&gt;&gt;
    for r_order in (
       select o.order_id,o.customer_id
         from orders o
@@ -2105,7 +2113,7 @@ begin
       update order_lines ol
          set ol.discount = l_discount
        where ol.order_id = r_order.order_id;
-   end loop;
+   end loop new_orders;
 
    commit;
 end;
@@ -2143,6 +2151,7 @@ end;
 			good modularity, enabling reuse and testing of a single call.</p>
 			<h2>Bad</h2>
 <pre>begin
+   &lt;&lt;create_headers&gt;&gt;
    for l_counter in 1..5
    loop
       insert into headers (id,text) values (l_counter,'Number ' || l_counter);
@@ -2153,7 +2162,7 @@ end;
      connect by level &lt;= 3;
 
       commit;
-   end loop;
+   end loop create_headers;
 end;
 /</pre>
 			<h2>Good</h2>
@@ -2172,10 +2181,11 @@ end;
       commit;
    end;
 begin
+   &lt;&lt;create_headers&gt;&gt;
    for l_counter in 1..5
    loop
       create_rows(l_counter);
-   end loop;
+   end loop create_headers;
 end;
 /</pre>
 			<p></p>]]></description>
@@ -2922,40 +2932,30 @@ end;
 			chance of understanding the code, and could lead to bugs (for example if using exit <code>my_label</code>
 			exits at a different nesting level than expected.)</p>
 			<h2>Bad</h2>
-<pre>create package body pkg is
-   procedure p is
-   begin
-      &lt;&lt;my_label&gt;&gt;
-      declare
-         co_min_value constant simple_integer := 1;
-         co_max_value constant simple_integer := 8;
-      begin
-         &lt;&lt;my_label&gt;&gt;
-         for i in co_min_value..co_max_value
-         loop
-            sys.dbms_output.put_line(i);
-         end loop my_label;
-      end my_label;
-   end p;
-end pkg;
+<pre>&lt;&lt;my_label&gt;&gt;
+declare
+   co_min_value constant simple_integer := 1;
+   co_max_value constant simple_integer := 8;
+begin
+   &lt;&lt;my_label&gt;&gt;
+   for i in co_min_value..co_max_value
+   loop
+      sys.dbms_output.put_line(i);
+   end loop my_label;
+end my_label;
 /</pre>
 			<h2>Good</h2>
-<pre>create package body pkg is
-   procedure p is
-   begin
-      &lt;&lt;output_values&gt;&gt;
-      declare
-         co_min_value constant simple_integer := 1;
-         co_max_value constant simple_integer := 8;
-      begin
-         &lt;&lt;process_values&gt;&gt;
-         for i in co_min_value..co_max_value
-         loop
-            sys.dbms_output.put_line(i);
-         end loop process_values;
-      end output_values;
-   end p;
-end pkg;
+<pre>&lt;&lt;output_values&gt;&gt;
+declare
+   co_min_value constant simple_integer := 1;
+   co_max_value constant simple_integer := 8;
+begin
+   &lt;&lt;process_values&gt;&gt;
+   for i in co_min_value..co_max_value
+   loop
+      sys.dbms_output.put_line(i);
+   end loop process_values;
+end output_values;
 /</pre>
 			<p></p>]]></description>
 		<tag>never</tag>
@@ -3895,8 +3895,8 @@ end;
 			<h2>Bad</h2>
 <pre>create or replace package body order_api as
    procedure discount_and_recalculate(
-      in_customer_id customer.id%type
-     ,in_discount    customer.discount_percentage%type
+      in_customer_id in customer.id%type
+     ,in_discount    in customer.discount_percentage%type
    ) is
    begin
       customer_api.apply_discount(in_customer_id,in_discount);
@@ -3913,8 +3913,8 @@ end order_api;
 			<h2>Good</h2>
 <pre>create or replace package body order_api as
    procedure discount_and_recalculate(
-      in_customer_id customer.id%type
-     ,in_discount    customer.discount_percentage%type
+      in_customer_id in customer.id%type
+     ,in_discount    in customer.discount_percentage%type
    ) is
    begin
       customer_api.apply_discount(in_customer_id,in_discount);
@@ -3927,7 +3927,7 @@ end order_api;
             'Error: '
             || sqlerrm
             || ' - Backtrace: '
-            || dbms_utility.format_error_backtrace
+            || sys.dbms_utility.format_error_backtrace
          );
          raise;
    end discount_and_recalculate;
@@ -5782,7 +5782,7 @@ end employee_api;
 			<p>Using an explicit format model for string to <code>date</code> or <code>timestamp</code> conversion avoids this
 			inappropriate dependability on configurable NLS parameters.</p>
 			<h2>Bad</h2>
-<pre>create package body employee_api is
+<pre>create or replace package body employee_api is
    procedure set_dob(in_employee_id in employees.employee_id%type
                     ,in_dob_str     in varchar2) is
    begin
@@ -5793,7 +5793,7 @@ end employee_api;
 end employee_api;
 /</pre>
 			<h2>Good</h2>
-<pre>create package body employee_api is
+<pre>create or replace package body employee_api is
    procedure set_dob(in_employee_id in employees.employee_id%type
                     ,in_dob_str     in varchar2) is
    begin
@@ -5827,7 +5827,7 @@ end employee_api;
 			the maximum number of digits and have control over the session <code>nls_numeric_characters</code>
 			parameter.</p>
 			<h2>Bad</h2>
-<pre>create package body employee_api is
+<pre>create or replace package body employee_api is
    procedure set_salary(in_employee_id in employees.employee_id%type
                        ,in_salary      in varchar2) is
    begin
@@ -5838,7 +5838,7 @@ end employee_api;
 end employee_api;
 /</pre>
 			<h2>Good</h2>
-<pre>create package body employee_api is
+<pre>create or replace package body employee_api is
    procedure set_salary(in_employee_id in employees.employee_id%type
                        ,in_salary      in varchar2) is
    begin
@@ -5867,23 +5867,23 @@ end employee_api;
 			an error raised on bad input. The exception can be when you explicitly want an error to be raised
 			to catch and process it in a later exception handler.</p>
 			<h2>Bad</h2>
-<pre>create package body employee_api is
-   procedure set_salary(in_employee_id in employees.employee_id%type
-                       ,in_salary      in varchar2) is
+<pre>create or replace package body employee_api is
+   procedure set_dob(in_employee_id in employees.employee_id%type
+                    ,in_dob_str     in varchar2) is
    begin
       update employees
-         set salary = to_number(in_salary)
+         set date_of_birth = to_date(in_dob_str,'YYYY-MM-DD')
        where employee_id = in_employee_id;
    end set_dob;
 end employee_api;
 /</pre>
 			<h2>Good</h2>
-<pre>create package body employee_api is
-   procedure set_salary(in_employee_id in employees.employee_id%type
-                       ,in_salary      in varchar2) is
+<pre>create or replace package body employee_api is
+   procedure set_dob(in_employee_id in employees.employee_id%type
+                    ,in_dob_str     in varchar2) is
    begin
       update employees
-         set salary = to_number(in_salary,'99999999999999999999.99999',q'[nls_numeric_characters='.,']')
+         set date_of_birth = to_date(in_dob_str default null on conversion error,'YYYY-MM-DD')
        where employee_id = in_employee_id;
    end set_dob;
 end employee_api;
