@@ -41,7 +41,7 @@ import org.eclipse.xtext.validation.EValidatorRegistrar
 class Hint extends PLSQLValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
 
-	// based on the query (19.7) SELECT name FROM v$sql_hint ORDER BY name;
+	// based on the query (19.16) SELECT name FROM v$sql_hint ORDER BY name;
 	val ALL_HINTS = new HashSet<String>(Arrays.asList(
 		"ADAPTIVE_PLAN",
 		"ALL_ROWS",
@@ -258,6 +258,7 @@ class Hint extends PLSQLValidator implements PLSQLCopValidator {
 		"NO_REWRITE",
 		"NO_SEMIJOIN",
 		"NO_SEMI_TO_INNER",
+		"NO_SET_GBY_PUSHDOWN",
 		"NO_SET_TO_JOIN",
 		"NO_SQL_TUNE",
 		"NO_STAR_TRANSFORMATION",
@@ -301,6 +302,7 @@ class Hint extends PLSQLValidator implements PLSQLCopValidator {
 		"OPT_PARAM",
 		"ORDERED",
 		"ORDERED_PREDICATES",
+		"ORDER_KEY_VECTOR_USE",
 		"ORDER_SUBQ",
 		"OR_EXPAND",
 		"OUTER_JOIN_TO_ANTI",
@@ -355,6 +357,7 @@ class Hint extends PLSQLValidator implements PLSQLCopValidator {
 		"SEMIJOIN",
 		"SEMIJOIN_DRIVER",
 		"SEMI_TO_INNER",
+		"SET_GBY_PUSHDOWN",
 		"SET_TO_JOIN",
 		"SHARED",
 		"SKIP_EXT_OPTIMIZER",
