@@ -459,7 +459,14 @@ class HintTest extends AbstractValidatorTest {
 	
 	@Test
 	def void usingTableNameInTableStatsOk() {
-		// set and scale works, commas not required
+		/* 
+		 * Syntax according http://orasql.org/2019/04/16/correct-syntax-for-the-table_stats-hint/
+		 * 
+		 * table_stats(
+		 *   [<schema>.]<table>
+		 *   [,] {default | set | scale | sample}
+		 *   [,] <keyword>=<value> [[,] <keyword>=<value>]...
+)		 */
 		val stmt = '''
 			select /*+ table_stats(plscope.emp set rows=14 blocks=1 row_length=10) */ *
 			  from plscope.emp e;
@@ -471,7 +478,15 @@ class HintTest extends AbstractValidatorTest {
 
 	@Test
 	def void usingTableNameInIndexStatsOk() {
-		// set and scale works, commas not required
+		/* 
+		 * Assumed syntax:
+		 * 
+		 * index_stats(
+		 *   [<schema>.]<table> 
+		 *   [,] <index_name>
+		 *   [,] {default | set | scale | sample}
+		 *   [,] <keyword>=<value> [[,] <keyword>=<value>]...
+)		 */
 		val stmt = '''
 			select /*+ index_stats(plscope.emp pk_emp scale blocks=1 rows=14)  */ *
 			  from plscope.emp e where empno = 7788;
@@ -483,7 +498,15 @@ class HintTest extends AbstractValidatorTest {
 
 	@Test
 	def void usingTableNameInColumnStatsOk() {
-		// set and scale works, commas not required
+		/* 
+		 * Assumed syntax:
+		 * 
+		 * column_stats(
+		 *   [<schema>.]<table> 
+		 *   [,] <column_name>
+		 *   [,] {default | set | scale | sample}
+		 *   [,] <keyword>=<value> [[,] <keyword>=<value>]...
+)		 */
 		val stmt = '''
 			select /*+ column_stats(plscope.emp ename set length=6 distinct=14 nulls=0) */ *
 			  from plscope.emp where ename like 'S%';
