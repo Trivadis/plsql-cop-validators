@@ -453,6 +453,12 @@ class Hint extends PLSQLValidator implements PLSQLCopValidator {
 			guidelines.put(9603,
 				new PLSQLCopGuideline(9603, '''Never reference an unknown table/alias.''', CRITICAL,
 					INSTRUCTION_RELIABILITY, Remediation.createConstantPerIssue(5)))
+			guidelines.put(9604,
+				new PLSQLCopGuideline(9604, '''Never use an invalid stats method.''', CRITICAL,
+					INSTRUCTION_RELIABILITY, Remediation.createConstantPerIssue(5)))
+			guidelines.put(9605,
+				new PLSQLCopGuideline(9605, '''Never use an invalid stats keyword.''', CRITICAL,
+					INSTRUCTION_RELIABILITY, Remediation.createConstantPerIssue(5)))
 		}
 		return guidelines
 	}
@@ -751,6 +757,31 @@ class Hint extends PLSQLValidator implements PLSQLCopValidator {
 		}
 	}
 
+	// syntax: see https://github.com/Trivadis/plsql-cop-validators/issues/47
+	def private void checkTableStatsStyle(HintOrComment h) {
+		val pattern = Pattern.
+			compile('''(?i)(\s|\+)(table_stats)\s*(\s*\(("?[^\s\.\"]+"?(\s*\.\"?[^\s\.\"]+\"?)?)[\s,]+([^\s,]+)([^\)]*)\))''')
+		val pattern2 = Pattern.compile('''(?i)(([^\s]+)\s*=)''')
+		val matcher = pattern.matcher(h.hintText)
+		while (matcher.find) {
+			val hint = matcher.group(2);
+			val method = matcher.group(6);
+			if (!("DEFAULT".equalsIgnoreCase(method) || "SET".equalsIgnoreCase(method) ||
+				"SCALE".equalsIgnoreCase(method) || "SAMPLE".equalsIgnoreCase(method))) {
+				warning(9604, '''(«method» in «hint» hint).''', h, matcher.start(6), method.length)
+			}
+			val settings = matcher.group(7);
+			val matcher2 = pattern2.matcher(settings)
+			while (matcher2.find) {
+				val keyword = matcher2.group(2);
+				if (!("BLOCKS".equalsIgnoreCase(keyword) || "ROWS".equalsIgnoreCase(keyword) ||
+					"ROW_LENGTH".equalsIgnoreCase(keyword))) {
+					warning(9605, '''(«keyword» in «hint» hint).''', h, matcher.start(7) + matcher2.start(2), keyword.length)
+				}
+			}
+		}
+	}
+
 	@Check
 	def checkHint(HintOrComment h) {
 		if (h.isHint) {
@@ -766,6 +797,7 @@ class Hint extends PLSQLValidator implements PLSQLCopValidator {
 			h.checkIndexSyntaxStyle
 			h.checkMergeSyntaxStyle
 			h.checkParallelSyntaxStyle
+			h.checkTableStatsStyle
 		}
 	}
 
