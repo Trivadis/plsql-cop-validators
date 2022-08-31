@@ -99,6 +99,8 @@ G-9600    | Never define more than one comment with hints.
 G-9601    | Never use unknown hints.
 G-9602    | Always use the alias name instead of the table name.
 G-9603    | Never reference an unknown table/alias.
+G-9604    | Never use an invalid stats method.
+G-9605    | Never use an invalid stats keyword.
 
 Only the first comment containing hints is considered by the optimizer, therefore all hints violating `G-9600` are treated as ordinary comments by the Oracle Database.
 
@@ -107,6 +109,8 @@ Using unknown hints might invalidate all subsequent hints. This happens when you
 There are various hints that reference a table. The validator checks if the reference is valid. If an alias is defined for a table, but the table name is used in the hint then a `G-9602` violation is reported. If the table reference in the hint is neither a table name nor an alias then a `G-9603` violation is thrown. These violations should not be ignored either. 
 
 However, the vadiator ignores the optional query block in the hint and assumes that all table references belong to the current query block. As a result some false positives are possible. Furthermore references to a table in a query block (e.g. `emp@qb1`) are not checked. This might lead to some false negatives.
+
+The guidelines `G-9604` and `G-9605` check the validity of the `method` and `keyword` in the `table_stats` hint. 
 
 ### OverrideTrivadisGuidelines
 
@@ -247,7 +251,7 @@ This way you can deal with an unbound number of validators without comproming th
 
 2. Install Maven
 
-   [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.6.3
+   [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.8.6
 
 3. Clone the cop-validators repository
 
