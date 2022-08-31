@@ -33,11 +33,13 @@ class HintTest extends AbstractValidatorTest {
 	@Test
 	def void registeredChecks() {
 		val guidelines = (getValidator() as Hint).guidelines
-		Assert.assertEquals(4, guidelines.values.size)
+		Assert.assertEquals(6, guidelines.values.size)
 		Assert.assertNotNull(guidelines.get(9600))
 		Assert.assertNotNull(guidelines.get(9601))
 		Assert.assertNotNull(guidelines.get(9602))
 		Assert.assertNotNull(guidelines.get(9603))
+		Assert.assertNotNull(guidelines.get(9604))
+		Assert.assertNotNull(guidelines.get(9605))
 	}
 
 	// --- G-9600 ---
@@ -398,6 +400,70 @@ class HintTest extends AbstractValidatorTest {
 		
 	}
 	
+	// --- G-9604, G-9605 for table_stats ---
+	
+	@Test
+	def void validMethodInTableStats() {
+		val stmt = '''
+			select /*+ table_stats(plscope.emp default rows=14) */ *
+			  from plscope.emp e;
+
+			select /*+ table_stats(plscope.emp set rows=14) */ *
+			  from plscope.emp e;
+
+			select /*+ table_stats(plscope.emp scale rows=14) */ *
+			  from plscope.emp e;
+
+			select /*+ table_stats(plscope.emp sample rows=14) */ *
+			  from plscope.emp e;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.size);
+	}
+
+	@Test
+	def void invalidMethodInTableStats() {
+		val stmt = '''
+			select /*+ table_stats(plscope.emp faster rows=14) */ *
+			  from plscope.emp e;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(1, issues.size);
+		Assert.assertEquals('''G-9604: Never use an invalid stats method. (faster in table_stats hint).'''.toString, issues.get(0).message)
+		Assert.assertEquals(1, issues.get(0).lineNumber)
+		Assert.assertEquals(36, issues.get(0).column)
+		Assert.assertEquals(42, issues.get(0).columnEnd)
+	}
+
+	@Test
+	def void validKeywordsInTableStats() {
+		val stmt = '''
+			select /*+ table_stats(plscope.emp default rows=14 blocks=1 row_length=10) */ *
+			  from plscope.emp e;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.size);
+	}
+
+	@Test
+	def void invalidKeywordInTableStats() {
+		val stmt = '''
+			select /*+ table_stats(plscope.emp default rec=14 blk=1 rowlen=10) */ *
+			  from plscope.emp e;
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(3, issues.size);
+		Assert.assertEquals('''G-9605: Never use an invalid stats keyword. (rec in table_stats hint).'''.toString, issues.get(0).message)
+		Assert.assertEquals('''G-9605: Never use an invalid stats keyword. (blk in table_stats hint).'''.toString, issues.get(1).message)
+		Assert.assertEquals('''G-9605: Never use an invalid stats keyword. (rowlen in table_stats hint).'''.toString, issues.get(2).message)
+		Assert.assertEquals(44, issues.get(0).column)
+		Assert.assertEquals(47, issues.get(0).columnEnd)
+		Assert.assertEquals(51, issues.get(1).column)
+		Assert.assertEquals(54, issues.get(1).columnEnd)
+		Assert.assertEquals(57, issues.get(2).column)
+		Assert.assertEquals(63, issues.get(2).columnEnd)
+	}
+	
 	// --- issue 33 https://github.com/Trivadis/plsql-cop-validators/issues/33
 	
 	@Test
@@ -459,7 +525,14 @@ class HintTest extends AbstractValidatorTest {
 	
 	@Test
 	def void usingTableNameInTableStatsOk() {
-		// set and scale works, commas not required
+		/* 
+		 * Syntax according http://orasql.org/2019/04/16/correct-syntax-for-the-table_stats-hint/
+		 * 
+		 * table_stats(
+		 *   [<schema>.]<table>
+		 *   [,] {default | set | scale | sample}
+		 *   [,] <keyword>=<value> [[,] <keyword>=<value>]...
+)		 */
 		val stmt = '''
 			select /*+ table_stats(plscope.emp set rows=14 blocks=1 row_length=10) */ *
 			  from plscope.emp e;
@@ -471,7 +544,15 @@ class HintTest extends AbstractValidatorTest {
 
 	@Test
 	def void usingTableNameInIndexStatsOk() {
-		// set and scale works, commas not required
+		/* 
+		 * Assumed syntax:
+		 * 
+		 * index_stats(
+		 *   [<schema>.]<table> 
+		 *   [,] <index_name>
+		 *   [,] {default | set | scale | sample}
+		 *   [,] <keyword>=<value> [[,] <keyword>=<value>]...
+)		 */
 		val stmt = '''
 			select /*+ index_stats(plscope.emp pk_emp scale blocks=1 rows=14)  */ *
 			  from plscope.emp e where empno = 7788;
@@ -483,7 +564,15 @@ class HintTest extends AbstractValidatorTest {
 
 	@Test
 	def void usingTableNameInColumnStatsOk() {
-		// set and scale works, commas not required
+		/* 
+		 * Assumed syntax:
+		 * 
+		 * column_stats(
+		 *   [<schema>.]<table> 
+		 *   [,] <column_name>
+		 *   [,] {default | set | scale | sample}
+		 *   [,] <keyword>=<value> [[,] <keyword>=<value>]...
+)		 */
 		val stmt = '''
 			select /*+ column_stats(plscope.emp ename set length=6 distinct=14 nulls=0) */ *
 			  from plscope.emp where ename like 'S%';

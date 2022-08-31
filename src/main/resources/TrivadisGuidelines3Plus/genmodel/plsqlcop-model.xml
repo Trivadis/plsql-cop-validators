@@ -2417,6 +2417,44 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
+			<!-- Never use an invalid stats method. -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-9604</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>CONSTANT_ISSUE</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>0.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>5.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
+			<!-- Never use an invalid stats keyword. -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-9605</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>CONSTANT_ISSUE</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>0.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>5.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
 		</chc>
 		<chc>
 			<key>LOGIC_RELIABILITY</key>

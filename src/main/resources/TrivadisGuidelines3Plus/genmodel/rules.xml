@@ -6197,6 +6197,133 @@ end pkg;
 		<tag>never</tag>
 	</rule>
 	<rule>
+		<key>G-9604</key>
+		<name><![CDATA[G-9604: Never use an invalid stats method.]]></name>
+		<internalKey>G-9604</internalKey>
+		<severity>CRITICAL</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>The syntax for the gather_stats hints is:</p>
+			<pre>table_stats([&lt;schema&gt;.]&lt;table&gt; &lt;method&gt; [,] &lt;keyword&gt;=&lt;value&gt; [[,] &lt;keyword&gt;=&lt;value&gt;]...)</pre>
+			<p>Valid methods are:</p>
+			<ul>
+			   <li>DEFAULT</li>
+			   <li>SET</li>
+			   <li>SCALE</li>
+			   <li>SAMPLE</li>
+			</ul>
+			<p>The Oracle Database treats other methods as a syntax error and will ignore the hint.</p>
+			<h2>Bad</h2>
+<pre>select /*+ table_stats(emp faster rows=14) */ empno, ename
+  from emp e
+ where deptno = 20;
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');  
+
+/*
+----------------------------------
+| Id  | Operation         | Name |
+----------------------------------
+|   0 | SELECT STATEMENT  |      |
+|   1 |  TABLE ACCESS FULL| EMP  |
+----------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1 (E - Syntax error (1))
+---------------------------------------------------------------------------
+ 
+   1 -  SEL$1
+         E -  table_stats
+*/</pre>
+			<h2>Good</h2>
+<pre>select /*+ table_stats(emp set rows=14) */ empno, ename
+  from emp e
+ where deptno = 20;
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');
+
+/*
+----------------------------------
+| Id  | Operation         | Name |
+----------------------------------
+|   0 | SELECT STATEMENT  |      |
+|   1 |  TABLE ACCESS FULL| EMP  |
+----------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1
+---------------------------------------------------------------------------
+ 
+   0 -  STATEMENT
+           -  table_stats(emp set rows=14)
+*/</pre>
+			<p></p>]]></description>
+		<tag>never</tag>
+	</rule>
+	<rule>
+		<key>G-9605</key>
+		<name><![CDATA[G-9605: Never use an invalid stats keyword.]]></name>
+		<internalKey>G-9605</internalKey>
+		<severity>CRITICAL</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>The syntax for the gather_stats hints is:</p>
+			<pre>table_stats([&lt;schema&gt;.]&lt;table&gt; &lt;method&gt; [,] &lt;keyword&gt;=&lt;value&gt; [[,] &lt;keyword&gt;=&lt;value&gt;]...)</pre>
+			<p>Valid keywords are:</p>
+			<ul>
+			   <li>ROWS</li>
+			   <li>BLOCKS</li>
+			   <li>ROW_LENGTH</li>
+			</ul>
+			<p>The Oracle Database treats other keywords as a syntax error and will ignore the hint.</p>
+			<h2>Bad</h2>
+<pre>select /*+ table_stats(emp default rec=14 blk=1 rowlen=10) */ empno, ename
+  from emp e
+ where deptno = 20;
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');  
+
+/*
+----------------------------------
+| Id  | Operation         | Name |
+----------------------------------
+|   0 | SELECT STATEMENT  |      |
+|   1 |  TABLE ACCESS FULL| EMP  |
+----------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1 (E - Syntax error (1))
+---------------------------------------------------------------------------
+ 
+   1 -  SEL$1
+         E -  table_stats
+*/</pre>
+			<h2>Good</h2>
+<pre>select /*+ table_stats(emp default rows=14 blocks=1 row_length=10) */ empno, ename
+  from emp e
+ where deptno = 20;
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');
+
+/*
+----------------------------------
+| Id  | Operation         | Name |
+----------------------------------
+|   0 | SELECT STATEMENT  |      |
+|   1 |  TABLE ACCESS FULL| EMP  |
+----------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1
+---------------------------------------------------------------------------
+ 
+   0 -  STATEMENT
+           -  table_stats(emp set rows=14)
+*/</pre>
+			<p></p>]]></description>
+		<tag>never</tag>
+	</rule>
+	<rule>
 		<key>E-0001</key>
 		<name>E-0001: Timeout occurred (after n seconds) during load/parse/validation of resource.</name>
 		<internalKey>E-0001</internalKey>
