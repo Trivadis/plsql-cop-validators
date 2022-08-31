@@ -5942,6 +5942,18 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace package body example as
+   some_name integer;
+end example;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package body example as
+   g_some_name integer;
+end example;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5953,6 +5965,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   some_name integer;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   l_some_name integer;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5964,6 +5992,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   l_dept sys_refcursor;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   c_dept sys_refcursor;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5975,6 +6019,34 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   emp  emp%rowtype;
+   type r_dept_type is record(
+         deptno number,
+         dname  varchar2(14 char),
+         loc    loc(13 char)
+      );
+   dept r_dept_type;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   r_emp  emp%rowtype;
+   type r_dept_type is record(
+         deptno number,
+         dname  varchar2(14 char),
+         loc    loc(13 char)
+      );
+   r_dept r_dept_type;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5986,6 +6058,32 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   type t_varray_type is varray(10) of string;
+   array1 t_varray_type;
+   type t_nested_table_type is table of string;
+   array2 t_nested_table_type;
+   type t_assoc_array_type is table of string index by pls_integer;
+   array3 t_assoc_array_type;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   type t_varray_type is varray(10) of string;
+   t_array1 t_varray_type;
+   type t_nested_table_type is table of string;
+   t_array2 t_nested_table_type;
+   type t_assoc_array_type is table of string index by pls_integer;
+   t_array3 t_assoc_array_type;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5997,6 +6095,36 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace type dept_type as object (
+   deptno integer,
+   dname  varchar2(14 char),
+   loc    varchar2(13 char)
+);
+/
+
+declare
+   dept dept_type;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace type dept_type as object (
+   deptno integer,
+   dname  varchar2(14 char),
+   loc    varchar2(13 char)
+);
+/
+
+declare
+   o_dept dept_type;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6008,6 +6136,28 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   cursor c_emp(in_ename in varchar2) is
+      select *
+        from emp
+       where ename like in_ename;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   cursor c_emp(p_ename in varchar2) is
+      select *
+        from emp
+       where ename like p_ename;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6019,6 +6169,18 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace package p is
+   procedure p2(param in integer);
+end p;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package p is
+   procedure p2(in_param in integer);
+end p;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6030,6 +6192,18 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace package p is
+   procedure p2(param out integer);
+end p;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package p is
+   procedure p2(out_param out integer);
+end p;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6041,6 +6215,18 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace package p is
+   procedure p2(param in out integer);
+end p;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package p is
+   procedure p2(io_param in out integer);
+end p;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6052,6 +6238,32 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   type dept_typ is
+      record(
+         deptno number,
+         dname  varchar2(14 char),
+         loc    loc(13 char)
+      );
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   type r_dept_type is
+      record(
+         deptno number,
+         dname  varchar2(14 char),
+         loc    loc(13 char)
+      );
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6063,6 +6275,26 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   type t_varray is varray(10) of string;
+   type nested_table_type is table of string;
+   type x_assoc_array_y is table of string index by pls_integer;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   type t_varray_type is varray(10) of string;
+   type t_nested_table_type is table of string;
+   type t_assoc_array_type is table of string index by pls_integer;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6074,6 +6306,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   some_name exception;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   e_some_name exception;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6085,6 +6333,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   maximum constant integer := 1000;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   co_maximum constant integer := 1000;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6096,6 +6360,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   subtype short_text is varchar2(100 char);
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   subtype short_text_type is varchar2(100 char);
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
