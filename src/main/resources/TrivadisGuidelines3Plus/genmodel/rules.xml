@@ -5942,6 +5942,18 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace package body example as
+   some_name integer;
+end example;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package body example as
+   g_some_name integer;
+end example;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5953,6 +5965,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   some_name integer;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   l_some_name integer;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5964,6 +5992,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   l_dept sys_refcursor;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   c_dept sys_refcursor;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5975,6 +6019,34 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   emp  emp%rowtype;
+   type r_dept_type is record(
+         deptno number,
+         dname  varchar2(14 char),
+         loc    loc(13 char)
+      );
+   dept r_dept_type;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   r_emp  emp%rowtype;
+   type r_dept_type is record(
+         deptno number,
+         dname  varchar2(14 char),
+         loc    loc(13 char)
+      );
+   r_dept r_dept_type;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5986,6 +6058,32 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   type t_varray_type is varray(10) of string;
+   array1 t_varray_type;
+   type t_nested_table_type is table of string;
+   array2 t_nested_table_type;
+   type t_assoc_array_type is table of string index by pls_integer;
+   array3 t_assoc_array_type;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   type t_varray_type is varray(10) of string;
+   t_array1 t_varray_type;
+   type t_nested_table_type is table of string;
+   t_array2 t_nested_table_type;
+   type t_assoc_array_type is table of string index by pls_integer;
+   t_array3 t_assoc_array_type;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -5997,6 +6095,36 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace type dept_type as object (
+   deptno integer,
+   dname  varchar2(14 char),
+   loc    varchar2(13 char)
+);
+/
+
+declare
+   dept dept_type;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace type dept_type as object (
+   deptno integer,
+   dname  varchar2(14 char),
+   loc    varchar2(13 char)
+);
+/
+
+declare
+   o_dept dept_type;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6008,6 +6136,28 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   cursor c_emp(in_ename in varchar2) is
+      select *
+        from emp
+       where ename like in_ename;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   cursor c_emp(p_ename in varchar2) is
+      select *
+        from emp
+       where ename like p_ename;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6019,6 +6169,18 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace package p is
+   procedure p2(param in integer);
+end p;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package p is
+   procedure p2(in_param in integer);
+end p;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6030,6 +6192,18 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace package p is
+   procedure p2(param out integer);
+end p;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package p is
+   procedure p2(out_param out integer);
+end p;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6041,6 +6215,18 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>create or replace package p is
+   procedure p2(param in out integer);
+end p;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package p is
+   procedure p2(io_param in out integer);
+end p;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6052,6 +6238,32 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   type dept_typ is
+      record(
+         deptno number,
+         dname  varchar2(14 char),
+         loc    loc(13 char)
+      );
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   type r_dept_type is
+      record(
+         deptno number,
+         dname  varchar2(14 char),
+         loc    loc(13 char)
+      );
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6063,6 +6275,26 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   type t_varray is varray(10) of string;
+   type nested_table_type is table of string;
+   type x_assoc_array_y is table of string index by pls_integer;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   type t_varray_type is varray(10) of string;
+   type t_nested_table_type is table of string;
+   type t_assoc_array_type is table of string index by pls_integer;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6074,6 +6306,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   some_name exception;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   e_some_name exception;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6085,6 +6333,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   maximum constant integer := 1000;
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   co_maximum constant integer := 1000;
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6096,6 +6360,22 @@ end employee_api;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<h2>Bad</h2>
+<pre>declare
+   subtype short_text is varchar2(100 char);
+begin
+   null;
+end;
+/</pre>
+			<h2>Good</h2>
+<pre>declare
+   subtype short_text_type is varchar2(100 char);
+begin
+   null;
+end;
+/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6160,6 +6440,113 @@ end pkg;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>Only the first comment containing hints is considered by the Oracle Database, 
+			therefore all hints violating this rule are treated as ordinary comments.</p>
+			<h2>Bad</h2>
+<pre>select -- a comment
+       /*+ full(e) */
+       /* another comment */
+       --+ full(d)
+       e.empno,
+       e.ename,
+       d.dname
+  from emp e
+  join dept d
+    on d.deptno = e.deptno
+ where empno &gt; 7900;
+ 
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');
+
+/*
+------------------------------------------------
+| Id  | Operation                    | Name    |
+------------------------------------------------
+|   0 | SELECT STATEMENT             |         |
+|   1 |  NESTED LOOPS                |         |
+|   2 |   NESTED LOOPS               |         |
+|   3 |    TABLE ACCESS FULL         | EMP     |
+|   4 |    INDEX UNIQUE SCAN         | PK_DEPT |
+|   5 |   TABLE ACCESS BY INDEX ROWID| DEPT    |
+------------------------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1
+---------------------------------------------------------------------------
+ 
+   3 -  SEL$58A6D7F6 / E@SEL$1
+           -  full(e)
+*/</pre>
+			<h2>Better</h2>
+<pre>select -- a comment
+       /*+ full(e) full(d) */
+       /* another comment */
+       e.empno,
+       e.ename,
+       d.dname
+  from emp e
+  join dept d
+    on d.deptno = e.deptno
+ where empno &gt; 7900;
+ 
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');
+
+/*
+-----------------------------------
+| Id  | Operation          | Name |
+-----------------------------------
+|   0 | SELECT STATEMENT   |      |
+|   1 |  HASH JOIN         |      |
+|   2 |   TABLE ACCESS FULL| EMP  |
+|   3 |   TABLE ACCESS FULL| DEPT |
+-----------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 2
+---------------------------------------------------------------------------
+ 
+   2 -  SEL$58A6D7F6 / E@SEL$1
+           -  full(e)
+ 
+   3 -  SEL$58A6D7F6 / D@SEL$1
+           -  full(d)
+*/</pre>
+			<h2>Good</h2>
+<pre>-- do not mix single-line and mult-line comments
+-- use hints first or hints last, do not hide them within other comments
+select --+ full(e) full(d)
+       -- a comment
+       -- another comment
+       e.empno,
+       e.ename,
+       d.dname
+  from emp e
+  join dept d
+    on d.deptno = e.deptno
+ where empno &gt; 7900;
+
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');
+
+/*
+-----------------------------------
+| Id  | Operation          | Name |
+-----------------------------------
+|   0 | SELECT STATEMENT   |      |
+|   1 |  HASH JOIN         |      |
+|   2 |   TABLE ACCESS FULL| EMP  |
+|   3 |   TABLE ACCESS FULL| DEPT |
+-----------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 2
+---------------------------------------------------------------------------
+ 
+   2 -  SEL$58A6D7F6 / E@SEL$1
+           -  full(e)
+ 
+   3 -  SEL$58A6D7F6 / D@SEL$1
+           -  full(d)
+*/</pre>
 			<p></p>]]></description>
 		<tag>never</tag>
 	</rule>
@@ -6171,6 +6558,52 @@ end pkg;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>Using unknown hints might invalidate all subsequent hints. 
+			This happens when you use for example NOLOGGING. That's expected
+			and not a bug. See MOS note 285285.1 or bug 8432870 for details.</p>
+			<h2>Bad</h2>
+<pre>-- "nologging" is not a hint. It does not exist in v$sql_hint.
+-- The "append" hint is ignored as a result "LOAD TABLE CONVENTIONAL" is applied.
+insert --+ nologging append
+  into sales_hist
+select * from sales;
+
+select * from dbms_xplan.display_cursor(format =&gt; 'basic');
+
+/*
+-----------------------------------------------
+| Id  | Operation                | Name       |
+-----------------------------------------------
+|   0 | INSERT STATEMENT         |            |
+|   1 |  LOAD TABLE CONVENTIONAL | SALES_HIST |
+|   2 |   PARTITION RANGE ALL    |            |
+|   3 |    TABLE ACCESS FULL     | SALES      |
+-----------------------------------------------
+*/</pre>
+			<h2>Good</h2>
+<pre>-- "nologging" is applied on the table, however this is in most 
+-- environments overridden by the force logging option on database level.
+-- The "append" hint is applied, as a result "LOAD AS SELECT" is applied.
+alter table sales_hist nologging;
+
+insert --+ append
+  into sales_hist
+select * from sales;
+
+select * from dbms_xplan.display_cursor(format =&gt; 'basic');
+
+/*
+-------------------------------------------------------
+| Id  | Operation                        | Name       |
+-------------------------------------------------------
+|   0 | INSERT STATEMENT                 |            |
+|   1 |  LOAD AS SELECT                  | SALES_HIST |
+|   2 |   OPTIMIZER STATISTICS GATHERING |            |
+|   3 |    PARTITION RANGE ALL           |            |
+|   4 |     TABLE ACCESS FULL            | SALES      |
+-------------------------------------------------------
+*/</pre>
 			<p></p>]]></description>
 		<tag>never</tag>
 	</rule>
@@ -6182,6 +6615,62 @@ end pkg;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p> There are various hints that reference a table or view. Typically, if an alias is defined
+			for a table/view, but the table/view name is used in the hint, then the hint is
+			ignored by the Oracle Database.</p>
+			<h2>Bad</h2>
+<pre>select --+ leading(emp dept)
+       *
+  from emp e
+  join dept d on d.deptno = e.deptno;
+
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');
+
+/*
+------------------------------------------------
+| Id  | Operation                    | Name    |
+------------------------------------------------
+|   0 | SELECT STATEMENT             |         |
+|   1 |  MERGE JOIN                  |         |
+|   2 |   TABLE ACCESS BY INDEX ROWID| DEPT    |
+|   3 |    INDEX FULL SCAN           | PK_DEPT |
+|   4 |   SORT JOIN                  |         |
+|   5 |    TABLE ACCESS FULL         | EMP     |
+------------------------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1 (U - Unused (1))
+---------------------------------------------------------------------------
+ 
+   1 -  SEL$58A6D7F6
+         U -  leading(emp dept)
+*/</pre>
+			<h2>Good</h2>
+<pre>select --+ leading(e d)
+       *
+  from emp e
+  join dept d on d.deptno = e.deptno;
+
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');
+
+/*
+-----------------------------------
+| Id  | Operation          | Name |
+-----------------------------------
+|   0 | SELECT STATEMENT   |      |
+|   1 |  HASH JOIN         |      |
+|   2 |   TABLE ACCESS FULL| EMP  |
+|   3 |   TABLE ACCESS FULL| DEPT |
+-----------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1
+---------------------------------------------------------------------------
+ 
+   1 -  SEL$58A6D7F6
+           -  leading(e d)
+*/</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
 	</rule>
@@ -6193,6 +6682,63 @@ end pkg;
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
+			<h2>Reason</h2>
+			<p> There are various hints that reference a table or view. If the table or
+			view reference in the hint is neither a table name nor an alias, then the hint
+			is ignored by the Oracle Database.</p>
+			<h2>Bad</h2>
+<pre>select --+ leading(emps depts)
+       *
+  from emp
+  join dept on emp.deptno = dept.deptno;
+
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');
+
+/*
+------------------------------------------------
+| Id  | Operation                    | Name    |
+------------------------------------------------
+|   0 | SELECT STATEMENT             |         |
+|   1 |  MERGE JOIN                  |         |
+|   2 |   TABLE ACCESS BY INDEX ROWID| DEPT    |
+|   3 |    INDEX FULL SCAN           | PK_DEPT |
+|   4 |   SORT JOIN                  |         |
+|   5 |    TABLE ACCESS FULL         | EMP     |
+------------------------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1 (U - Unused (1))
+---------------------------------------------------------------------------
+ 
+   1 -  SEL$58A6D7F6
+         U -  leading(emps depts)
+*/</pre>
+			<h2>Good</h2>
+<pre>select --+ leading(emp dept)
+       *
+  from emp
+  join dept on emp.deptno = dept.deptno;
+
+select * from dbms_xplan.display_cursor(format =&gt; 'basic +hint_report');
+
+/*
+-----------------------------------
+-----------------------------------
+| Id  | Operation          | Name |
+-----------------------------------
+|   0 | SELECT STATEMENT   |      |
+|   1 |  HASH JOIN         |      |
+|   2 |   TABLE ACCESS FULL| EMP  |
+|   3 |   TABLE ACCESS FULL| DEPT |
+-----------------------------------
+ 
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1
+---------------------------------------------------------------------------
+ 
+   1 -  SEL$58A6D7F6
+           -  leading(emp dept)
+*/</pre>
 			<p></p>]]></description>
 		<tag>never</tag>
 	</rule>
