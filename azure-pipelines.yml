@@ -58,13 +58,6 @@ steps:
     files: '*.jar'
     downloadPath: '$(Pipeline.Workspace)/lib'
 
-# for snapshot versions of plsql only
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: for f in $(Pipeline.Workspace)/lib/plsql-4.2.0*.jar; do echo $f; mv $f $(Pipeline.Workspace)/lib/plsql-4.2.0-SNAPSHOT.jar; done
-
-
 - task: Maven@3
   displayName: 'Maven com.trivadis.tvdcc'
   inputs:
