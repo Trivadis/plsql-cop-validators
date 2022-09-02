@@ -40,7 +40,7 @@ steps:
     packageType: 'maven'
     feed: '18837db9-b003-4158-aea6-2cbe5db0f9f0/2243676f-5a13-4f9a-842a-0d4b65c80104'
     definition: 'trivadis.tvdcc:tvdcc'
-    version: '4.3.0-snapshot'
+    version: '4.3.0'
     files: '*.jar'
     downloadPath: '$(Pipeline.Workspace)'
 
@@ -54,14 +54,15 @@ steps:
     packageType: 'maven'
     feed: '18837db9-b003-4158-aea6-2cbe5db0f9f0/2243676f-5a13-4f9a-842a-0d4b65c80104'
     definition: 'trivadis.oracle:plsql'
-    version: '4.2.0-snapshot'
+    version: '4.2.0'
     files: '*.jar'
     downloadPath: '$(Pipeline.Workspace)/lib'
 
+# for snapshot versions of plsql only
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: for f in $(Pipeline.Workspace)/lib/plsql-4.2.0-20*.jar; do echo $f; mv $f $(Pipeline.Workspace)/lib/plsql-4.2.0-SNAPSHOT.jar; done
+    script: for f in $(Pipeline.Workspace)/lib/plsql-4.2.0*.jar; do echo $f; mv $f $(Pipeline.Workspace)/lib/plsql-4.2.0-SNAPSHOT.jar; done
 
 
 - task: Maven@3
