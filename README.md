@@ -265,14 +265,6 @@ This way you can deal with an unbound number of validators without comproming th
 
 	Amend the parameter `tvdcc.basedir` to match your `TVDCC_HOME` directory. This folder is used to reference db* CODECOP jar files which are not available in public Maven repositories
 
-## Issues
-Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/).
-
-* [Questions](https://github.com/trivadis/plsql-cop-validators/issues?q=is%3Aissue+label%3Aquestion)
-* [Open enhancements](https://github.com/trivadis/plsql-cop-validators/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
-* [Open bugs](https://github.com/trivadis/plsql-cop-validators/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
-* [Submit new issue](https://github.com/trivadis/plsql-cop-validators/issues/new)
-
 ## License
 
 The db* CODECOP Validators are licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License. You may obtain a copy of the License at https://creativecommons.org/licenses/by-nc-nd/3.0/.
