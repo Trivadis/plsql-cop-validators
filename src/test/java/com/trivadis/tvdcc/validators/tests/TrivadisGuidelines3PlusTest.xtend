@@ -74,10 +74,11 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 		val stmt = '''
 			BEGIN
 			   dbms_output.put_line('Hello World');
+			   dbms_output.put_line('Hello World');
 			END;
 		'''
 		val issues = stmt.issues.filter[it.code == "G-1050"]
-		Assert.assertEquals(1, issues.size)
+		Assert.assertEquals(2, issues.size)
 	}
 	
 	// issue thrown by TrivadisGuidelines3
