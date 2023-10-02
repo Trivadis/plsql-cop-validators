@@ -4,6 +4,7 @@
 	<rule>
 		<key>G-0000</key>
 		<name><![CDATA[G-0000: Avoid using the NOSONAR marker.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-0000</internalKey>
 		<severity>INFO</severity>
 		<cardinality>SINGLE</cardinality>
@@ -40,6 +41,7 @@ end;
 	<rule>
 		<key>G-1010</key>
 		<name><![CDATA[G-1010: Try to label your sub blocks.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-1010</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -77,6 +79,7 @@ end good;
 	<rule>
 		<key>G-1020</key>
 		<name><![CDATA[G-1020: Always have a matching loop or block label.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-1020</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -167,6 +170,7 @@ end;
 	<rule>
 		<key>G-1030</key>
 		<name><![CDATA[G-1030: Avoid defining variables that are not used.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-1030</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -221,6 +225,7 @@ end my_package;
 	<rule>
 		<key>G-1040</key>
 		<name><![CDATA[G-1040: Avoid dead code.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-1040</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -233,7 +238,7 @@ end my_package;
 <pre>declare
    co_dept_purchasing constant departments.department_id%type := 30;
 begin
-   if 2 = 3 then -- G-1050 violated, dead code detection works with literals only
+   if 2 = 3 then -- dead code detection works with literals only
       null; -- some dead code here
    end if;
 
@@ -248,7 +253,7 @@ begin
    null; -- some other enabled code here
 
    case
-      when 1 = 1 and 'x' = 'y' then -- G-1050 violated, dead code detection works with literals only
+      when 1 = 1 and 'x' = 'y' then -- dead code detection works with literals only
          null; -- some dead code here
       else
          null; -- some further enabled code here
@@ -260,7 +265,7 @@ begin
         from employees
        where department_id = co_dept_purchasing
           or commission_pct is not null
-         and 5 = 6 -- G-1050 violated, dead code detection works with literals only
+         and 5 = 6 -- dead code detection works with literals only
    ) 
    -- "or commission_pct is not null" is dead code 
    loop
@@ -297,6 +302,7 @@ end;
 	<rule>
 		<key>G-1050</key>
 		<name><![CDATA[G-1050: Avoid using literals in your code.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-1050</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -336,6 +342,7 @@ end;
 	<rule>
 		<key>G-1060</key>
 		<name><![CDATA[G-1060: Avoid storing ROWIDs or UROWIDs in database tables.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-1060</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -382,6 +389,7 @@ end;
 	<rule>
 		<key>G-1070</key>
 		<name><![CDATA[G-1070: Avoid nesting comment blocks.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-1070</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -412,6 +420,7 @@ end;
 	<rule>
 		<key>G-1080</key>
 		<name><![CDATA[G-1080: Avoid using the same expression on both sides of a relational comparison operator or a logical operator.]]></name>
+		<type>BUG</type>
 		<internalKey>G-1080</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -457,6 +466,7 @@ end;
 	<rule>
 		<key>G-2110</key>
 		<name><![CDATA[G-2110: Try to use anchored declarations for variables, constants and types.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2110</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -509,6 +519,7 @@ end my_package;
 	<rule>
 		<key>G-2120</key>
 		<name><![CDATA[G-2120: Try to have a single location to define your types.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2120</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -552,6 +563,7 @@ end my_package;
 	<rule>
 		<key>G-2130</key>
 		<name><![CDATA[G-2130: Try to use subtypes for constructs used often in your code.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2130</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -613,6 +625,7 @@ end my_package;
 	<rule>
 		<key>G-2135</key>
 		<name><![CDATA[G-2135: Avoid assigning values to local variables that are not used by a subsequent statement.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2135</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -673,6 +686,7 @@ end my_package;
 	<rule>
 		<key>G-2140</key>
 		<name><![CDATA[G-2140: Never initialize variables with NULL.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2140</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -700,6 +714,7 @@ end;
 	<rule>
 		<key>G-2145</key>
 		<name><![CDATA[G-2145: Never self-assign a variable.]]></name>
+		<type>BUG</type>
 		<internalKey>G-2145</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -740,6 +755,7 @@ end;
 	<rule>
 		<key>G-2150</key>
 		<name><![CDATA[G-2150: Avoid comparisons with NULL value, consider using IS [NOT] NULL.]]></name>
+		<type>BUG</type>
 		<internalKey>G-2150</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -773,6 +789,7 @@ end;
 	<rule>
 		<key>G-2160</key>
 		<name><![CDATA[G-2160: Avoid initializing variables using functions in the declaration section.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2160</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -812,6 +829,7 @@ end;
 	<rule>
 		<key>G-2170</key>
 		<name><![CDATA[G-2170: Never overload variables.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2170</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -865,6 +883,7 @@ end;
 	<rule>
 		<key>G-2180</key>
 		<name><![CDATA[G-2180: Never use quoted identifiers.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2180</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -904,6 +923,7 @@ end;
 	<rule>
 		<key>G-2185</key>
 		<name><![CDATA[G-2185: Avoid using overly short names for explicitly or implicitly declared identifiers.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2185</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -945,6 +965,7 @@ end;
 	<rule>
 		<key>G-2190</key>
 		<name><![CDATA[G-2190: Avoid using ROWID or UROWID.]]></name>
+		<type>BUG</type>
 		<internalKey>G-2190</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -984,8 +1005,9 @@ end;
 	<rule>
 		<key>G-2210</key>
 		<name><![CDATA[G-2210: Avoid declaring NUMBER variables, constants or subtypes with no precision.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2210</internalKey>
-		<severity>MAJOR</severity>
+		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -1010,6 +1032,7 @@ end types_up;
 	<rule>
 		<key>G-2220</key>
 		<name><![CDATA[G-2220: Try to use PLS_INTEGER instead of NUMBER for arithmetic operations with integer values.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2220</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1060,6 +1083,7 @@ end;
 	<rule>
 		<key>G-2230</key>
 		<name><![CDATA[G-2230: Try to use SIMPLE_INTEGER datatype when appropriate.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2230</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1114,8 +1138,9 @@ end;
 	<rule>
 		<key>G-2310</key>
 		<name><![CDATA[G-2310: Avoid using CHAR data type.]]></name>
+		<type>BUG</type>
 		<internalKey>G-2310</internalKey>
-		<severity>MAJOR</severity>
+		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -1128,7 +1153,24 @@ end;
 is
    subtype description_type is char(200);
 end types_up;
-/</pre>
+/
+
+-- Unexpected trailing spaces can lead to wrong results.
+with
+   dept as (
+      select cast(department_name as varchar2(30 char)) as dname_vc2
+            ,cast(department_name as char(30 char)) as dname_char
+        from departments
+   )
+select count(*)
+  from dept
+ where dname_vc2 = dname_char;
+
+/*
+  COUNT(*)
+----------
+         0
+*/</pre>
 			<h2>Good</h2>
 <pre>create or replace package types_up
 is
@@ -1141,6 +1183,7 @@ end types_up;
 	<rule>
 		<key>G-2320</key>
 		<name><![CDATA[G-2320: Never use VARCHAR data type.]]></name>
+		<type>BUG</type>
 		<internalKey>G-2320</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1167,6 +1210,7 @@ end types_up;
 	<rule>
 		<key>G-2330</key>
 		<name><![CDATA[G-2330: Never use zero-length strings to substitute NULL.]]></name>
+		<type>BUG</type>
 		<internalKey>G-2330</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1204,6 +1248,7 @@ end constants_up;
 	<rule>
 		<key>G-2340</key>
 		<name><![CDATA[G-2340: Always define your VARCHAR2 variables using CHAR SEMANTIC (if not defined anchored).]]></name>
+		<type>BUG</type>
 		<internalKey>G-2340</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1232,6 +1277,7 @@ end types_up;
 	<rule>
 		<key>G-2410</key>
 		<name><![CDATA[G-2410: Try to use boolean data type for values with dual meaning.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2410</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1284,6 +1330,7 @@ end;
 	<rule>
 		<key>G-2510</key>
 		<name><![CDATA[G-2510: Avoid using the LONG and LONG RAW data types.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2510</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1319,6 +1366,7 @@ end;
 	<rule>
 		<key>G-2610</key>
 		<name><![CDATA[G-2610: Never use self-defined weak ref cursor types.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-2610</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1365,6 +1413,7 @@ end;
 	<rule>
 		<key>G-3110</key>
 		<name><![CDATA[G-3110: Always specify the target columns when coding an insert statement.]]></name>
+		<type>BUG</type>
 		<internalKey>G-3110</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1412,6 +1461,7 @@ end dept_api;
 	<rule>
 		<key>G-3115</key>
 		<name><![CDATA[G-3115: Avoid self-assigning a column.]]></name>
+		<type>BUG</type>
 		<internalKey>G-3115</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1435,8 +1485,9 @@ end dept_api;
 	<rule>
 		<key>G-3120</key>
 		<name><![CDATA[G-3120: Always use table aliases when your SQL statement involves more than one source.]]></name>
+		<type>BUG</type>
 		<internalKey>G-3120</internalKey>
-		<severity>MAJOR</severity>
+		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -1500,6 +1551,7 @@ select emp.last_name
 	<rule>
 		<key>G-3130</key>
 		<name><![CDATA[G-3130: Try to use ANSI SQL-92 join syntax.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-3130</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1532,6 +1584,7 @@ select emp.last_name
 	<rule>
 		<key>G-3140</key>
 		<name><![CDATA[G-3140: Try to use anchored records as targets for your cursors.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-3140</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1584,19 +1637,20 @@ end;
 	<rule>
 		<key>G-3145</key>
 		<name><![CDATA[G-3145: Avoid using SELECT * directly from a table or view.]]></name>
+		<type>BUG</type>
 		<internalKey>G-3145</internalKey>
-		<severity>CRITICAL</severity>
+		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>Use of SELECT \* when querying a table or view makes it impossible for the optimizer to take into
+			<p>Use of SELECT * when querying a table or view makes it impossible for the optimizer to take into
 			account which columns will actually be used by the application, potentially leading to sub-optimal
 			execution plans (for example full scanning the table where a full scan of an index might have
-			sufficed.) Also SELECT \* possibly can break your code in the future in case of changes to the table
+			sufficed.) Also SELECT * possibly can break your code in the future in case of changes to the table
 			structure (for example new or invisible columns.)</p>
 			
-			<p>Exceptions to the rule can be when querying an inline view (where the SELECT \* is just to avoid
+			<p>Exceptions to the rule can be when querying an inline view (where the SELECT * is just to avoid
 			repeating same columns as inside the inline view), or when fetching into records defined as
 			MYTABLE%ROWTYPE for the purpose of processing all columns of the record.</p>
 			<h2>Bad</h2>
@@ -1637,6 +1691,7 @@ end;
 	<rule>
 		<key>G-3150</key>
 		<name><![CDATA[G-3150: Try to use identity columns for surrogate keys.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-3150</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1690,8 +1745,9 @@ end;
 	<rule>
 		<key>G-3160</key>
 		<name><![CDATA[G-3160: Avoid visible virtual columns. (not implemented)]]></name>
+		<type>BUG</type>
 		<internalKey>G-3160</internalKey>
-		<severity>MAJOR</severity>
+		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -1748,8 +1804,9 @@ end;
 	<rule>
 		<key>G-3170</key>
 		<name><![CDATA[G-3170: Always use DEFAULT ON NULL declarations to assign default values to table columns if you refuse to store NULL values. (not implemented)]]></name>
+		<type>BUG</type>
 		<internalKey>G-3170</internalKey>
-		<severity>MAJOR</severity>
+		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -1802,6 +1859,7 @@ select test_case,column_defaulted from null_test;
 	<rule>
 		<key>G-3180</key>
 		<name><![CDATA[G-3180: Always specify column names instead of positional references in ORDER BY clauses.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-3180</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1818,7 +1876,7 @@ select test_case,column_defaulted from null_test;
       ,salary
       ,hire_date
   from employees
- order by 4,1,3; -- violates also G-1050</pre>
+ order by 4,1,3;</pre>
 			<h2>Good</h2>
 <pre>select upper(first_name) as first_name
       ,last_name
@@ -1834,6 +1892,7 @@ select test_case,column_defaulted from null_test;
 	<rule>
 		<key>G-3182</key>
 		<name><![CDATA[G-3182: Always specify column names instead of positional references in GROUP BY clauses.]]></name>
+		<type>BUG</type>
 		<internalKey>G-3182</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1857,7 +1916,7 @@ select test_case,column_defaulted from null_test;
 <pre>select job_id
       ,sum(salary) as sum_salary
   from employees
- group by job_id,2 -- violates also G-1050
+ group by job_id,2
  order by job_id;</pre>
 			<h2>Good</h2>
 <pre>select job_id
@@ -1871,6 +1930,7 @@ select test_case,column_defaulted from null_test;
 	<rule>
 		<key>G-3183</key>
 		<name><![CDATA[G-3183: Always specify column aliases instead of expressions in GROUP BY clauses.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-3183</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1902,6 +1962,7 @@ select test_case,column_defaulted from null_test;
 	<rule>
 		<key>G-3185</key>
 		<name><![CDATA[G-3185: Never use ROWNUM at the same query level as ORDER BY.]]></name>
+		<type>BUG</type>
 		<internalKey>G-3185</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -1936,12 +1997,23 @@ select test_case,column_defaulted from null_test;
            order by salary desc
        )
  where rownum &lt;= 5; -- NOSONAR: G-1050 literal is ok for a standalone query</pre>
+			<h2>Best</h2>
+<pre>-- (Assuming you are using Oracle Database 12c or later.)
+select first_name
+      ,last_name
+      ,salary
+      ,hire_date
+      ,rank() over (order by salary desc) as salary_rank
+  from employees
+ order by salary desc
+fetch first 5 rows only; -- NOSONAR: G-1050 literal is ok for a standalone query</pre>
 			<p></p>]]></description>
 		<tag>never</tag>
 	</rule>
 	<rule>
 		<key>G-3190</key>
 		<name><![CDATA[G-3190: Avoid using NATURAL JOIN.]]></name>
+		<type>BUG</type>
 		<internalKey>G-3190</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2004,6 +2076,7 @@ Executive                      De Haan                   Lex
 	<rule>
 		<key>G-3195</key>
 		<name><![CDATA[G-3195: Always use wildcards in a LIKE clause.]]></name>
+		<type>BUG</type>
 		<internalKey>G-3195</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2026,7 +2099,7 @@ Executive                      De Haan                   Lex
 select e.employee_id
       ,e.last_name
   from employees e
- where e.last_name like 'Smith%'; -- NOSONAR: G-1050 literal is ok for a standalone query
+ where e.last_name like 'Smith%';
 
 -- Change to equality operator instead:
 select e.employee_id
@@ -2039,6 +2112,7 @@ select e.employee_id
 	<rule>
 		<key>G-3210</key>
 		<name><![CDATA[G-3210: Always use BULK OPERATIONS (BULK COLLECT, FORALL) whenever you have to execute a DML statement for more than 4 times.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-3210</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2091,6 +2165,7 @@ end;
 	<rule>
 		<key>G-3220</key>
 		<name><![CDATA[G-3220: Always process saved exceptions from a FORALL statement.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-3220</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2153,6 +2228,7 @@ end;
 	<rule>
 		<key>G-3310</key>
 		<name><![CDATA[G-3310: Never commit within a cursor loop.]]></name>
+		<type>BUG</type>
 		<internalKey>G-3310</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2244,6 +2320,7 @@ end;
 	<rule>
 		<key>G-3320</key>
 		<name><![CDATA[G-3320: Try to move transactions within a non-cursor loop into procedures.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-3320</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2330,6 +2407,7 @@ end;
 	<rule>
 		<key>G-4110</key>
 		<name><![CDATA[G-4110: Always use %NOTFOUND instead of NOT %FOUND to check whether a cursor returned data.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4110</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2401,6 +2479,7 @@ end;
 	<rule>
 		<key>G-4120</key>
 		<name><![CDATA[G-4120: Avoid using %NOTFOUND directly after the FETCH when working with BULK OPERATIONS and LIMIT clause.]]></name>
+		<type>BUG</type>
 		<internalKey>G-4120</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2502,6 +2581,7 @@ end;
 	<rule>
 		<key>G-4130</key>
 		<name><![CDATA[G-4130: Always close locally opened cursors.]]></name>
+		<type>BUG</type>
 		<internalKey>G-4130</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2555,6 +2635,7 @@ end employee_api;
 	<rule>
 		<key>G-4140</key>
 		<name><![CDATA[G-4140: Avoid executing any statements between a SQL operation and the usage of an implicit cursor attribute.]]></name>
+		<type>BUG</type>
 		<internalKey>G-4140</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2638,6 +2719,7 @@ end employee_api;
 	<rule>
 		<key>G-4210</key>
 		<name><![CDATA[G-4210: Try to use CASE rather than an IF statement with multiple ELSIF paths.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4210</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2680,6 +2762,7 @@ end;
 	<rule>
 		<key>G-4220</key>
 		<name><![CDATA[G-4220: Try to use CASE rather than DECODE.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4220</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2737,6 +2820,7 @@ select case
 	<rule>
 		<key>G-4230</key>
 		<name><![CDATA[G-4230: Always use a COALESCE instead of a NVL command, if parameter 2 of the NVL function is a function call or a SELECT statement.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4230</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2760,6 +2844,7 @@ select case
 	<rule>
 		<key>G-4240</key>
 		<name><![CDATA[G-4240: Always use a CASE instead of a NVL2 command if parameter 2 or 3 of NVL2 is either a function call or a SELECT statement.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4240</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2787,6 +2872,7 @@ select case
 	<rule>
 		<key>G-4250</key>
 		<name><![CDATA[G-4250: Avoid using identical conditions in different branches of the same IF or CASE statement.]]></name>
+		<type>BUG</type>
 		<internalKey>G-4250</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2835,6 +2921,7 @@ end;
 	<rule>
 		<key>G-4260</key>
 		<name><![CDATA[G-4260: Avoid inverting boolean conditions with NOT.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4260</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2867,6 +2954,7 @@ end;
 	<rule>
 		<key>G-4270</key>
 		<name><![CDATA[G-4270: Avoid comparing boolean values to boolean literals.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4270</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -2904,6 +2992,7 @@ end;
 	<rule>
 		<key>G-4310</key>
 		<name><![CDATA[G-4310: Never use GOTO statements in your code.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4310</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3016,6 +3105,7 @@ end my_package;
 	<rule>
 		<key>G-4320</key>
 		<name><![CDATA[G-4320: Always label your loops.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4320</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3092,6 +3182,7 @@ end;
 	<rule>
 		<key>G-4325</key>
 		<name><![CDATA[G-4325: Never reuse labels in inner scopes.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4325</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3133,6 +3224,7 @@ end output_values;
 	<rule>
 		<key>G-4330</key>
 		<name><![CDATA[G-4330: Always use a CURSOR FOR loop to process the complete cursor results unless you are using bulk operations.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4330</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3184,6 +3276,7 @@ end;
 	<rule>
 		<key>G-4340</key>
 		<name><![CDATA[G-4340: Always use a NUMERIC FOR loop to process a dense array.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4340</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3246,6 +3339,7 @@ end;
 	<rule>
 		<key>G-4350</key>
 		<name><![CDATA[G-4350: Always use 1 as lower and COUNT() as upper bound when looping through a dense array.]]></name>
+		<type>BUG</type>
 		<internalKey>G-4350</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3311,6 +3405,7 @@ end;
 	<rule>
 		<key>G-4360</key>
 		<name><![CDATA[G-4360: Always use a WHILE loop to process a loose array.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4360</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3380,6 +3475,7 @@ end;
 	<rule>
 		<key>G-4365</key>
 		<name><![CDATA[G-4365: Never use unconditional CONTINUE or EXIT in a loop.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4365</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3422,6 +3518,7 @@ end;
 	<rule>
 		<key>G-4370</key>
 		<name><![CDATA[G-4370: Avoid using EXIT to stop loop processing unless you are in a basic loop.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4370</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3511,6 +3608,7 @@ end;
 	<rule>
 		<key>G-4375</key>
 		<name><![CDATA[G-4375: Always use EXIT WHEN instead of an IF statement to exit from a loop.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4375</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3555,6 +3653,7 @@ end;
 	<rule>
 		<key>G-4380</key>
 		<name><![CDATA[G-4380: Try to label your EXIT WHEN statements.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4380</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3626,6 +3725,7 @@ end;
 	<rule>
 		<key>G-4385</key>
 		<name><![CDATA[G-4385: Never use a cursor for loop to check whether a cursor returns data.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4385</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3673,6 +3773,7 @@ end;
 	<rule>
 		<key>G-4390</key>
 		<name><![CDATA[G-4390: Avoid use of unreferenced FOR loop indexes.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4390</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3730,6 +3831,7 @@ end;
 	<rule>
 		<key>G-4395</key>
 		<name><![CDATA[G-4395: Avoid hard-coded upper or lower bound values with FOR loops.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-4395</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3767,6 +3869,7 @@ end;
 	<rule>
 		<key>G-5010</key>
 		<name><![CDATA[G-5010: Try to use a error/logging framework for your application. (not implemented)]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-5010</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3813,6 +3916,7 @@ end;
 	<rule>
 		<key>G-5020</key>
 		<name><![CDATA[G-5020: Never handle unnamed exceptions using the error number.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-5020</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3854,6 +3958,7 @@ end;
 	<rule>
 		<key>G-5030</key>
 		<name><![CDATA[G-5030: Never assign predefined exception names to user defined exceptions.]]></name>
+		<type>BUG</type>
 		<internalKey>G-5030</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3927,6 +4032,7 @@ end;
 	<rule>
 		<key>G-5040</key>
 		<name><![CDATA[G-5040: Avoid use of WHEN OTHERS clause in an exception section without any other specific handlers.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-5040</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -3978,6 +4084,7 @@ end;
 	<rule>
 		<key>G-5050</key>
 		<name><![CDATA[G-5050: Avoid use of the RAISE_APPLICATION_ERROR built-in procedure with a hard-coded 20nnn error number or hard-coded message.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-5050</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4014,6 +4121,7 @@ end;
 	<rule>
 		<key>G-5060</key>
 		<name><![CDATA[G-5060: Avoid unhandled exceptions]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-5060</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4074,6 +4182,7 @@ end department_api;
 	<rule>
 		<key>G-5070</key>
 		<name><![CDATA[G-5070: Avoid using Oracle predefined exceptions]]></name>
+		<type>BUG</type>
 		<internalKey>G-5070</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4108,6 +4217,7 @@ end;
 	<rule>
 		<key>G-5080</key>
 		<name><![CDATA[G-5080: Always use FORMAT_ERROR_BACKTRACE when using FORMAT_ERROR_STACK or SQLERRM.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-5080</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4182,6 +4292,7 @@ end order_api;
 	<rule>
 		<key>G-6010</key>
 		<name><![CDATA[G-6010: Always use a character variable to execute dynamic SQL.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-6010</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4194,7 +4305,7 @@ end order_api;
 <pre>declare
    l_next_val employees.employee_id%type;
 begin
-   execute immediate 'select employees_seq.nextval from dual' -- violates also G-1050
+   execute immediate 'select employees_seq.nextval from dual'
       into l_next_val;
 end;
 /</pre>
@@ -4213,6 +4324,7 @@ end;
 	<rule>
 		<key>G-6020</key>
 		<name><![CDATA[G-6020: Try to use output bind arguments in the RETURNING INTO clause of dynamic DML statements rather than the USING clause.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-6020</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4273,6 +4385,7 @@ end employee_api;
 	<rule>
 		<key>G-7110</key>
 		<name><![CDATA[G-7110: Try to use named notation when calling program units.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7110</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4310,6 +4423,7 @@ end;
 	<rule>
 		<key>G-7120</key>
 		<name><![CDATA[G-7120: Always add the name of the program unit to its end keyword.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7120</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4367,6 +4481,7 @@ end employee_api;
 	<rule>
 		<key>G-7125</key>
 		<name><![CDATA[G-7125: Always use CREATE OR REPLACE instead of CREATE alone.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7125</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4424,6 +4539,7 @@ end employee_api;
 	<rule>
 		<key>G-7130</key>
 		<name><![CDATA[G-7130: Always use parameters or pull in definitions rather than referencing external variables in a local program unit.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7130</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4517,6 +4633,7 @@ end employee_api;
 	<rule>
 		<key>G-7140</key>
 		<name><![CDATA[G-7140: Always ensure that locally defined procedures or functions are referenced.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7140</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4572,6 +4689,7 @@ end my_package;
 	<rule>
 		<key>G-7150</key>
 		<name><![CDATA[G-7150: Try to remove unused parameters.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7150</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4634,6 +4752,7 @@ end department_api;
 	<rule>
 		<key>G-7160</key>
 		<name><![CDATA[G-7160: Always explicitly state parameter mode.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7160</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4671,6 +4790,7 @@ end employee_up;
 	<rule>
 		<key>G-7170</key>
 		<name><![CDATA[G-7170: Avoid using an IN OUT parameter as IN or OUT only. (not implemented)]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7170</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4769,6 +4889,7 @@ end employee_up;
 	<rule>
 		<key>G-7210</key>
 		<name><![CDATA[G-7210: Try to keep your packages small. Include only few procedures and functions that are used in the same context.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7210</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4784,6 +4905,7 @@ end employee_up;
 	<rule>
 		<key>G-7220</key>
 		<name><![CDATA[G-7220: Always use forward declaration for private functions and procedures.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7220</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4871,6 +4993,7 @@ end department_api;
 	<rule>
 		<key>G-7230</key>
 		<name><![CDATA[G-7230: Avoid declaring global variables public.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7230</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -4965,6 +5088,7 @@ end employee_api;
 	<rule>
 		<key>G-7250</key>
 		<name><![CDATA[G-7250: Never use RETURN in package initialization block.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7250</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5026,6 +5150,7 @@ end employee_api;
 	<rule>
 		<key>G-7310</key>
 		<name><![CDATA[G-7310: Avoid standalone procedures – put your procedures in packages.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7310</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5061,6 +5186,7 @@ end my_package;
 	<rule>
 		<key>G-7320</key>
 		<name><![CDATA[G-7320: Avoid using RETURN statements in a PROCEDURE.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7320</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5113,6 +5239,7 @@ end my_package;
 	<rule>
 		<key>G-7330</key>
 		<name><![CDATA[G-7330: Always assign values to OUT parameters.]]></name>
+		<type>BUG</type>
 		<internalKey>G-7330</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5155,6 +5282,7 @@ end my_package;
 	<rule>
 		<key>G-7410</key>
 		<name><![CDATA[G-7410: Avoid standalone functions – put your functions in packages.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7410</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5189,6 +5317,7 @@ end my_package;
 	<rule>
 		<key>G-7420</key>
 		<name><![CDATA[G-7420: Always make the RETURN statement the last statement of your function.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7420</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5244,6 +5373,7 @@ end my_package;
 	<rule>
 		<key>G-7430</key>
 		<name><![CDATA[G-7430: Try to use no more than one RETURN statement within a function.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7430</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5301,6 +5431,7 @@ end my_package;
 	<rule>
 		<key>G-7440</key>
 		<name><![CDATA[G-7440: Never use OUT parameters to return values from a function.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7440</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5336,6 +5467,7 @@ end my_package;
 	<rule>
 		<key>G-7450</key>
 		<name><![CDATA[G-7450: Never return a NULL value from a BOOLEAN function.]]></name>
+		<type>BUG</type>
 		<internalKey>G-7450</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5370,6 +5502,7 @@ end my_package;
 	<rule>
 		<key>G-7460</key>
 		<name><![CDATA[G-7460: Try to define your packaged/standalone function deterministic if appropriate.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7460</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5398,6 +5531,7 @@ end department_api;
 	<rule>
 		<key>G-7510</key>
 		<name><![CDATA[G-7510: Always prefix Oracle supplied packages with owner schema name.]]></name>
+		<type>VULNERABILITY</type>
 		<internalKey>G-7510</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5427,6 +5561,7 @@ end;
 	<rule>
 		<key>G-7710</key>
 		<name><![CDATA[G-7710: Avoid cascading triggers.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7710</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5500,6 +5635,7 @@ end;
 	<rule>
 		<key>G-7720</key>
 		<name><![CDATA[G-7720: Never use multiple UPDATE OF in trigger event clause.]]></name>
+		<type>BUG</type>
 		<internalKey>G-7720</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5549,6 +5685,7 @@ end;
 	<rule>
 		<key>G-7730</key>
 		<name><![CDATA[G-7730: Avoid multiple DML events per trigger.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7730</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5602,6 +5739,7 @@ end;
 	<rule>
 		<key>G-7740</key>
 		<name><![CDATA[G-7740: Never handle multiple DML events per trigger if primary key is assigned in trigger. (not implemented)]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7740</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5668,6 +5806,7 @@ end;
 	<rule>
 		<key>G-7810</key>
 		<name><![CDATA[G-7810: Never use SQL inside PL/SQL to read sequence numbers (or SYSDATE).]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-7810</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5700,6 +5839,7 @@ end;
 	<rule>
 		<key>G-7910</key>
 		<name><![CDATA[G-7910: Never use DML within a SQL macro.]]></name>
+		<type>BUG</type>
 		<internalKey>G-7910</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5745,6 +5885,7 @@ end my_package;
 	<rule>
 		<key>G-8110</key>
 		<name><![CDATA[G-8110: Never use SELECT COUNT(*) if you are only interested in the existence of a row.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-8110</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5805,6 +5946,7 @@ end;
 	<rule>
 		<key>G-8120</key>
 		<name><![CDATA[G-8120: Never check existence of a row to decide whether to create it or not.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-8120</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5850,6 +5992,7 @@ end department_api;
 	<rule>
 		<key>G-8210</key>
 		<name><![CDATA[G-8210: Always use synonyms when accessing objects of another application schema.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-8210</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5902,6 +6045,7 @@ end;
 	<rule>
 		<key>G-8310</key>
 		<name><![CDATA[G-8310: Always validate input parameter size by assigning the parameter to a size limited variable in the declaration section of program unit.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-8310</internalKey>
 		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -5916,14 +6060,16 @@ end;
 			considered:</p>
 			
 			<ul>
+			   <li><code>char</code></li>
+			   <li><code>dec</code></li>
+			   <li><code>decimal</code></li>
+			   <li><code>interval day to second</code></li>
+			   <li><code>interval year to month</code></li>
 			   <li><code>nchar</code></li>
 			   <li><code>number</code></li>
-			   <li><code>nvarchar2</code></li>
-			   <li><code>interval year to month</code></li>
-			   <li><code>interval day to second</code></li>
 			   <li><code>numeric</code></li>
-			   <li><code>decimal</code></li>
-			   <li><code>dec</code></li>
+			   <li><code>nvarchar2</code></li>
+			   <li><code>varchar2</code></li>
 			   <li><code>%type</code></li>
 			</ul>
 			<h2>Bad</h2>
@@ -6000,6 +6146,7 @@ end;
 	<rule>
 		<key>G-8410</key>
 		<name><![CDATA[G-8410: Always use application locks to ensure a program unit is only running once at a given time. (not implemented)]]></name>
+		<type>BUG</type>
 		<internalKey>G-8410</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6116,6 +6263,7 @@ end;
 	<rule>
 		<key>G-8510</key>
 		<name><![CDATA[G-8510: Always use dbms_application_info to track program process transiently. (not implemented)]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-8510</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6170,6 +6318,7 @@ end employee_api;
 	<rule>
 		<key>G-9010</key>
 		<name><![CDATA[G-9010: Always use a format model in string to date/time conversion functions.]]></name>
+		<type>VULNERABILITY</type>
 		<internalKey>G-9010</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6214,7 +6363,7 @@ end employee_api;
       update employees
          set date_of_birth = to_date(
                 co_dob_str default null on conversion error
-               ,'FXYYYY-MM-DD' -- NOSONAR: G-1050 must be a literal
+               ,'FXYYYY-MM-DD'
              )
        where employee_id = co_employee_id;
    end set_dob;
@@ -6226,8 +6375,9 @@ end employee_api;
 	<rule>
 		<key>G-9020</key>
 		<name><![CDATA[G-9020: Try to use a format model and NLS_NUMERIC_CHARACTERS in string to number conversion functions.]]></name>
+		<type>VULNERABILITY</type>
 		<internalKey>G-9020</internalKey>
-		<severity>MAJOR</severity>
+		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6243,8 +6393,8 @@ end employee_api;
 			<p>To avoid an inappropriate dependability on configurable NLS parameters, try to use both format model
 			and <code>nls_numeric_characters</code> in the conversion function call. The exceptions can be if
 			the input is known to always be integer with no decimal- or group-separator, or if you do not know
-			the maximum number of digits **and** have control over the session
-			<code>nls_numeric_characters</code> parameter.</p>
+			the maximum number of digits and have control over the session <code>nls_numeric_characters</code>
+			parameter.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body employee_api is
    procedure set_salary(
@@ -6272,8 +6422,8 @@ end employee_api;
       update employees
          set salary = to_number(
                 co_salary default null on conversion error
-               ,'99999999999999999999.99999'       -- NOSONAR: G-1050 must be a literal
-               ,q'[nls_numeric_characters='.,']'   -- NOSONAR: G-1050 must be a literal
+               ,'99999999999999999999.99999'
+               ,q'[nls_numeric_characters='.,']'
              )
        where employee_id = co_employee_id;
    end set_dob;
@@ -6284,6 +6434,7 @@ end employee_api;</pre>
 	<rule>
 		<key>G-9030</key>
 		<name><![CDATA[G-9030: Try to define a default value on conversion errors.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9030</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6335,8 +6486,9 @@ end employee_api;
 	<rule>
 		<key>G-9040</key>
 		<name><![CDATA[G-9040: Try using FX in string to date/time conversion format model to avoid fuzzy conversion.]]></name>
+		<type>BUG</type>
 		<internalKey>G-9040</internalKey>
-		<severity>MAJOR</severity>
+		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6367,7 +6519,7 @@ end employee_api;
       update employees
          set date_of_birth = to_date(
                 co_dob_str default null on conversion error
-               ,'YYYY-MM-DD' -- violates also G-1050, must be a literal
+               ,'YYYY-MM-DD'
              )
        where employee_id = co_employee_id;
    end set_dob;
@@ -6385,7 +6537,7 @@ end employee_api;
       update employees
          set date_of_birth = to_date(
                 co_dob_str default null on conversion error
-               ,'FXYYYY-MM-DD' -- NOSONAR: G-1050 must be a literal
+               ,'FXYYYY-MM-DD'
              )
        where employee_id = co_employee_id;
    end set_dob;
@@ -6397,6 +6549,7 @@ end employee_api;
 	<rule>
 		<key>G-9101</key>
 		<name><![CDATA[G-9101: Always prefix global variables with 'g_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9101</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6420,6 +6573,7 @@ end example;
 	<rule>
 		<key>G-9102</key>
 		<name><![CDATA[G-9102: Always prefix local variables with 'l_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9102</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6447,6 +6601,7 @@ end;
 	<rule>
 		<key>G-9103</key>
 		<name><![CDATA[G-9103: Always prefix cursors with 'c_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9103</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6474,6 +6629,7 @@ end;
 	<rule>
 		<key>G-9104</key>
 		<name><![CDATA[G-9104: Always prefix records with 'r_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9104</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6513,6 +6669,7 @@ end;
 	<rule>
 		<key>G-9105</key>
 		<name><![CDATA[G-9105: Always prefix collection types (arrays/tables) with 't_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9105</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6550,6 +6707,7 @@ end;
 	<rule>
 		<key>G-9106</key>
 		<name><![CDATA[G-9106: Always prefix objects with 'o_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9106</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6591,6 +6749,7 @@ end;
 	<rule>
 		<key>G-9107</key>
 		<name><![CDATA[G-9107: Always prefix cursor parameters with 'p_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9107</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6624,6 +6783,7 @@ end;
 	<rule>
 		<key>G-9108</key>
 		<name><![CDATA[G-9108: Always prefix in parameters with 'in_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9108</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6647,6 +6807,7 @@ end p;
 	<rule>
 		<key>G-9109</key>
 		<name><![CDATA[G-9109: Always prefix out parameters with 'out_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9109</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6670,6 +6831,7 @@ end p;
 	<rule>
 		<key>G-9110</key>
 		<name><![CDATA[G-9110: Always prefix in/out parameters with 'io_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9110</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6693,6 +6855,7 @@ end p;
 	<rule>
 		<key>G-9111</key>
 		<name><![CDATA[G-9111: Always prefix record type definitions with 'r_' and add the suffix '_type'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9111</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6730,6 +6893,7 @@ end;
 	<rule>
 		<key>G-9112</key>
 		<name><![CDATA[G-9112: Always prefix collection type definitions (arrays/tables) with 't_' and add the suffix '_type'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9112</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6761,6 +6925,7 @@ end;
 	<rule>
 		<key>G-9113</key>
 		<name><![CDATA[G-9113: Always prefix exceptions with 'e_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9113</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6788,6 +6953,7 @@ end;
 	<rule>
 		<key>G-9114</key>
 		<name><![CDATA[G-9114: Always prefix constants with 'co_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9114</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6815,6 +6981,7 @@ end;
 	<rule>
 		<key>G-9115</key>
 		<name><![CDATA[G-9115: Always prefix subtypes with '_type'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9115</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6842,6 +7009,7 @@ end;
 	<rule>
 		<key>G-9501</key>
 		<name><![CDATA[G-9501: Never use parameter in string expression of dynamic SQL. Use asserted local variable instead.]]></name>
+		<type>VULNERABILITY</type>
 		<internalKey>G-9501</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -6895,6 +7063,7 @@ end pkg;
 	<rule>
 		<key>G-9600</key>
 		<name><![CDATA[G-9600: Never define more than one comment with hints.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9600</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -7013,6 +7182,7 @@ Total hints for statement: 2
 	<rule>
 		<key>G-9601</key>
 		<name><![CDATA[G-9601: Never use unknown hints.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9601</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -7070,6 +7240,7 @@ select * from dbms_xplan.display_cursor(format =&gt; 'basic');
 	<rule>
 		<key>G-9602</key>
 		<name><![CDATA[G-9602: Always use the alias name instead of the table name.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9602</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -7137,6 +7308,7 @@ Total hints for statement: 1
 	<rule>
 		<key>G-9603</key>
 		<name><![CDATA[G-9603: Never reference an unknown table/alias.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9603</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -7205,6 +7377,7 @@ Total hints for statement: 1
 	<rule>
 		<key>G-9604</key>
 		<name><![CDATA[G-9604: Never use an invalid stats method.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9604</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -7269,6 +7442,7 @@ Total hints for statement: 1
 	<rule>
 		<key>G-9605</key>
 		<name><![CDATA[G-9605: Never use an invalid stats keyword.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9605</internalKey>
 		<severity>CRITICAL</severity>
 		<cardinality>SINGLE</cardinality>
@@ -7332,6 +7506,7 @@ Total hints for statement: 1
 	<rule>
 		<key>E-0001</key>
 		<name>E-0001: Timeout occurred (after n seconds) during load/parse/validation of resource.</name>
+		<type>BUG</type>
 		<internalKey>E-0001</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -7345,6 +7520,7 @@ Total hints for statement: 1
 	<rule>
 		<key>E-0002</key>
 		<name>E-0002: Syntax error. Please contact the author if the code compiles successfully in your environment.</name>
+		<type>BUG</type>
 		<internalKey>E-0002</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -7359,6 +7535,7 @@ Total hints for statement: 1
 	<rule>
 		<key>E-0003</key>
 		<name>E-0003: License limit reached.</name>
+		<type>BUG</type>
 		<internalKey>E-0003</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>

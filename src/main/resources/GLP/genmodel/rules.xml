@@ -4,6 +4,7 @@
 	<rule>
 		<key>G-0000</key>
 		<name><![CDATA[G-0000: Avoid using the NOSONAR marker.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-0000</internalKey>
 		<severity>INFO</severity>
 		<cardinality>SINGLE</cardinality>
@@ -15,6 +16,7 @@
 	<rule>
 		<key>G-9001</key>
 		<name><![CDATA[G-9001: Always prefix global variables with 'g_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9001</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -39,6 +41,7 @@ end pkg;
 	<rule>
 		<key>G-9002</key>
 		<name><![CDATA[G-9002: Always prefix local variables with 'l_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9002</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -67,6 +70,7 @@ end p;
 	<rule>
 		<key>G-9003</key>
 		<name><![CDATA[G-9003: Always prefix parameters with 'p_'.]]></name>
+		<type>CODE_SMELL</type>
 		<internalKey>G-9003</internalKey>
 		<severity>MAJOR</severity>
 		<cardinality>SINGLE</cardinality>
@@ -93,6 +97,7 @@ end p;
 	<rule>
 		<key>E-0001</key>
 		<name>E-0001: Timeout occurred (after n seconds) during load/parse/validation of resource.</name>
+		<type>BUG</type>
 		<internalKey>E-0001</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -106,6 +111,7 @@ end p;
 	<rule>
 		<key>E-0002</key>
 		<name>E-0002: Syntax error. Please contact the author if the code compiles successfully in your environment.</name>
+		<type>BUG</type>
 		<internalKey>E-0002</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
@@ -120,6 +126,7 @@ end p;
 	<rule>
 		<key>E-0003</key>
 		<name>E-0003: License limit reached.</name>
+		<type>BUG</type>
 		<internalKey>E-0003</internalKey>
 		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
