@@ -46,6 +46,7 @@ import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
+import com.trivadis.oracle.plsql.plsql.ConstantDeclaration
 
 class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
@@ -315,12 +316,21 @@ class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
 		}
 		val declareSection = body.declareSection
 		if (declareSection !== null) {
-			val variable = EcoreUtil2.getAllContentsOfType(declareSection, VariableDeclaration).findFirst [
+			var EObject varOrConst = EcoreUtil2.getAllContentsOfType(declareSection, VariableDeclaration).findFirst [
 				it.variable.value.equalsIgnoreCase(n.value) && it.getDefault() !== null
 			]
-			if (variable !== null) {
-				for (name : getRelevantSimplExpressionNameValues(variable.getDefault())) {
+			if (varOrConst !== null) {
+				for (name : getRelevantSimplExpressionNameValues((varOrConst as VariableDeclaration).getDefault())) {
 					expressions.put(name.value.toLowerCase, name)
+				}
+			} else {
+				varOrConst = EcoreUtil2.getAllContentsOfType(declareSection, ConstantDeclaration).findFirst [
+					it.constant.value.equalsIgnoreCase(n.value) && it.getDefault() !== null
+				]
+				if (varOrConst !== null) {
+					for (name : getRelevantSimplExpressionNameValues((varOrConst as ConstantDeclaration).getDefault())) {
+						expressions.put(name.value.toLowerCase, name)
+					}
 				}
 			}
 		}
