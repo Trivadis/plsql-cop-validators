@@ -32,7 +32,7 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 	def void guidelines() {
 		val guidelines = (getValidator() as TrivadisGuidelines3Plus).guidelines
 		Assert.assertEquals(22, guidelines.values.filter[it.id >= 9100].size)  // last guideline in v4.2 is G-9040
-		Assert.assertEquals(121, guidelines.values.filter[it.id < 9100].size)
+		Assert.assertEquals(123, guidelines.values.filter[it.id < 9100].size)  // added G-3182, G-3183 in v4.3
 		Assert.assertEquals(79, guidelines.values.filter[it.id < 1000].size)
 	}
 	
@@ -74,10 +74,11 @@ class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 		val stmt = '''
 			BEGIN
 			   dbms_output.put_line('Hello World');
+			   dbms_output.put_line('Hello World');
 			END;
 		'''
 		val issues = stmt.issues.filter[it.code == "G-1050"]
-		Assert.assertEquals(1, issues.size)
+		Assert.assertEquals(2, issues.size)
 	}
 	
 	// issue thrown by TrivadisGuidelines3

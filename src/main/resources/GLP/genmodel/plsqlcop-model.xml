@@ -178,7 +178,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Syntax error. Please contact the author if the code compiles successfully in your environment. -->
+			<!-- Syntax error. Please check the limitations and contact the author if the code can be compiled successfully in your environment. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>E-0002</rule-key>

@@ -55,6 +55,7 @@ class OverrideTrivadisGuidelinesTest extends AbstractValidatorTest {
 		val stmt = '''
 			BEGIN
 			   logger.log(upper('Hello World'));
+			   logger.log(upper('Hello World'));
 			END;
 		'''
 		val issues = stmt.issues.filter[it.code == "G-1050"]
@@ -65,6 +66,7 @@ class OverrideTrivadisGuidelinesTest extends AbstractValidatorTest {
 	def void literalInPackageFunctionOfLoggerCallIsOkay() {
 		val stmt = '''
 			BEGIN
+			   logger.log(x.y('Hello World'));
 			   logger.log(x.y('Hello World'));
 			END;
 		'''
@@ -78,9 +80,10 @@ class OverrideTrivadisGuidelinesTest extends AbstractValidatorTest {
 		val stmt = '''
 			BEGIN
 			   dbms_output.put_line('Hello World');
+			   dbms_output.put_line('Hello World');
 			END;
 		'''
 		val issues = stmt.issues.filter[it.code == "G-1050"]
-		Assert.assertEquals(1, issues.size)
+		Assert.assertEquals(2, issues.size)
 	}
 }
