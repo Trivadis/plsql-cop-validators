@@ -349,7 +349,7 @@
 	<!-- More Project Information -->
 	<name>db* CODECOP for SonarQube (Child)</name>
 	<description>Custom validators to analyze PL/SQL and SQL code. Extends db* CODECOP for SonarQube (Standalone/Secondary), db* CODECOP CLI and db* CODECOP for SQL Developer.</description>
-	<url>https://www.trivadis.com/en/offers/dbstar</url>
+	<url>https://github.com/Trivadis/plsql-cop-validators</url>
 	<inceptionYear>2017</inceptionYear>
 	<licenses>
 		<license>
