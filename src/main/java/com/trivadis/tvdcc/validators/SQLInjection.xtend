@@ -47,6 +47,7 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.EValidatorRegistrar
 import com.trivadis.oracle.plsql.plsql.ConstantDeclaration
+import java.util.ArrayList
 
 class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
 	HashMap<Integer, PLSQLCopGuideline> guidelines
@@ -215,6 +216,56 @@ class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
 		return ""
 	}
 	
+	def contains(EObject obj, String name) {
+		val names = EcoreUtil2.getAllContentsOfType(obj, SimpleExpressionNameValue)
+		for (n : names) {
+			if (n.value.equalsIgnoreCase(name)) {
+				return true
+			}
+		}
+		return false
+	}
+	
+	def getItemsWithDefaults(SimpleExpressionNameValue n) {
+		var Body body = n.body
+		var DeclareSection decl
+		if (body === null) {
+			decl = EcoreUtil2.getContainerOfType(n, DeclareSection)
+		} else {
+			decl = body.declareSection
+		}
+		val items = new ArrayList<SimpleExpressionNameValue>
+		val variables = EcoreUtil2.getAllContentsOfType(decl, VariableDeclaration)
+		for (v : variables) {
+			if (v.getDefault() !== null) {
+				if (v.getDefault().contains(n.value)) {
+					items.add(v.variable)
+				}
+			}
+		}
+		val constants = EcoreUtil2.getAllContentsOfType(decl, ConstantDeclaration)
+		for (c: constants) {
+			if (c.getDefault() !== null) {
+				if (c.getDefault().contains(n.value)) {
+					items.add(c.constant)
+				}
+			}
+		}
+		if (body !== null) {
+			val bodyItems = new ArrayList<SimpleExpressionNameValue>
+			val names = EcoreUtil2.getAllContentsOfType(body, SimpleExpressionNameValue)
+			for (name : names) {
+				for (item : items) {
+					if (name.value.equalsIgnoreCase(item.value)) {
+						bodyItems.add(name)
+					}
+						
+				}
+			}
+			items.addAll(bodyItems)
+		}
+		return items;
+	}
 	
 	def isAsserted(SimpleExpressionNameValue n) {
 		var EObject obj = EcoreUtil2.getContainerOfType(n, Body)
@@ -228,6 +279,20 @@ class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
 				if (name.toLowerCase.contains('''«assertPackage».''')) {
 					return true
 				}
+			}
+		}
+		return false
+	}
+	
+	def isAssertedInParameterOrConstantsOrVariables(SimpleExpressionNameValue n) {
+		// check parameter fist
+		if (n.isAsserted) {
+			return true
+		}
+		// check constants and variables with an assignment of the parameter
+		for (item : getItemsWithDefaults(n)) {
+			if (isAsserted(item)) {
+				return true
 			}
 		}
 		return false
@@ -252,7 +317,7 @@ class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
 	def void check(SimpleExpressionNameValue n, HashMap<String, SimpleExpressionNameValue> expressions) {
 		if (!n.parameterName) {
 			if (n.isParameter) {
-				if (!n.isAsserted) {
+				if (!n.isAssertedInParameterOrConstantsOrVariables) {
 					warning(9501, n, n)
 					return
 				}
@@ -293,6 +358,33 @@ class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
 			declareSection = null;
 		}
 		return declareSection;		
+	}
+	
+	def Body getBody(EObject obj) {
+		val parent = obj.eContainer
+		var Body body
+		if (parent instanceof CreateFunction) {
+			body = parent.body 
+		} else if (parent instanceof CreateProcedure) {
+			body = parent.body
+		} else if (parent instanceof FuncDeclInType) {
+			body = parent.body
+		} else if (parent instanceof ProcDeclInType) {
+			body = parent.body
+		} else if (parent instanceof ConstructorDeclaration) {
+			body = parent.body
+		} else if (parent instanceof PlsqlBlock) {
+			body = parent.body
+		} else if (parent instanceof FunctionDefinition) {
+			body = parent.body
+		} else if (parent instanceof ProcedureDefinition) {
+			body = parent.body
+		} else if (parent === null) {
+			body = null;
+		} else {
+			body = getBody(parent);
+		}
+		return body;
 	}
 
 	def HashMap<String, SimpleExpressionNameValue> getSimpleExpressinNamesFromAssignments(SimpleExpressionNameValue n) {
