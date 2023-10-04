@@ -12,7 +12,7 @@ This project provides the following four custom validators in the package `com.t
 
 Class | Description 
 ----- | -----------
-TrivadisPlsqlNaming | Checks [Naming Conventions](https://trivadis.github.io/plsql-and-sql-coding-guidelines/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql) of the Trivadis PL/SQL & SQL Coding Guidelines
+TrivadisPlsqlNaming | Checks [Naming Conventions](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql) of the Trivadis PL/SQL & SQL Coding Guidelines
 GLP | Checks naming of global and local variables and parameters 
 SQLInjection | Looks for SQL injection vulnerabilities, e.g. unasserted parameters in dynamic SQL
 Hint | Looks for unknown hints and invalid table references
