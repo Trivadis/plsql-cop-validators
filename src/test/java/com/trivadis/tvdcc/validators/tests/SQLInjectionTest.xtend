@@ -514,4 +514,36 @@ class SQLInjectionTest extends AbstractValidatorTest {
 		Assert.assertEquals(0, issues.size)
 	}
 
+	@Test
+	def void issue56_using_asserted_variable_with_default_in_execute_immediate() {
+		val stmt = '''
+			create or replace procedure exec_sql(in_sql in varchar2) is
+			   l_sql          varchar2(1000 char) := in_sql;
+			   l_sql_asserted varchar2(1000 char);
+			begin
+			   l_sql_asserted := sys.dbms_assert.noop(l_sql);
+			   execute immediate l_sql_asserted;
+			end exec_sql;
+			/
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.size)
+	}
+
+	@Test
+	def void issue56_using_asserted_constant_with_default_in_execute_immediate() {
+		val stmt = '''
+			create or replace procedure exec_sql(in_sql in varchar2) is
+			   co_sql         constant varchar2(1000 char) := in_sql;
+			   l_sql_asserted varchar2(1000 char);
+			begin
+			   l_sql_asserted := sys.dbms_assert.noop(co_sql);
+			   execute immediate l_sql_asserted;
+			end exec_sql;
+			/
+		'''
+		val issues = stmt.issues
+		Assert.assertEquals(0, issues.size)
+	}
+
 }
