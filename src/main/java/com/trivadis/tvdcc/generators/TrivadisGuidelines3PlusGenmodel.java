@@ -36,52 +36,52 @@ import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus;
 
 public class TrivadisGuidelines3PlusGenmodel {
 
-	public static void genPlsqlcopModelXml() {
-		GenSqaleXml gen = new GenSqaleXml();
-		gen.generate("./src/main/resources/TrivadisGuidelines3Plus");
-	}
+    public static void genPlsqlcopModelXml() {
+        GenSqaleXml gen = new GenSqaleXml();
+        gen.generate("./src/main/resources/TrivadisGuidelines3Plus");
+    }
 
-	public static void copy(String sourceDir, String targetDir) throws IOException {
-		Files.walk(Paths.get(sourceDir)).forEach(sourceFile -> {
-			Path targetFile = Paths.get(targetDir, sourceFile.toString().substring(sourceDir.length()));
-			try {
-				if (sourceFile.toFile().isFile()) {
-					Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
-				}
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		});
-	}
+    public static void copy(String sourceDir, String targetDir) throws IOException {
+        Files.walk(Paths.get(sourceDir)).forEach(sourceFile -> {
+            Path targetFile = Paths.get(targetDir, sourceFile.toString().substring(sourceDir.length()));
+            try {
+                if (sourceFile.toFile().isFile()) {
+                    Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 
-	public static void copyGuidelinesFromJar(String targetDir) throws IOException, URISyntaxException {
-		File tvdccJarFile = new File(
-				TrivadisGuidelines3.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-		JarFile jarFile = new JarFile(tvdccJarFile);
-		Enumeration<JarEntry> entries = jarFile.entries();
-		while (entries.hasMoreElements()) {
-			JarEntry entry = entries.nextElement();
-			if (!entry.isDirectory() && entry.getName().startsWith("guidelines/")) {
-				InputStream entryInputStream = jarFile.getInputStream(entry);
-				Path targetFile = Paths.get(targetDir, entry.getName().substring(10));
-				Files.copy(entryInputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
-			}
-		}
-		jarFile.close();
-	}
+    public static void copyGuidelinesFromJar(String targetDir) throws IOException, URISyntaxException {
+        File tvdccJarFile = new File(
+                TrivadisGuidelines3.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        JarFile jarFile = new JarFile(tvdccJarFile);
+        Enumeration<JarEntry> entries = jarFile.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry entry = entries.nextElement();
+            if (!entry.isDirectory() && entry.getName().startsWith("guidelines/")) {
+                InputStream entryInputStream = jarFile.getInputStream(entry);
+                Path targetFile = Paths.get(targetDir, entry.getName().substring(10));
+                Files.copy(entryInputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+        jarFile.close();
+    }
 
-	public static void genRulesXml() throws URISyntaxException, IOException {
-		GenRulesXml gen = new GenRulesXml();
-		String tempDir = Files.createTempDirectory("genmodel_").toString();
-		copyGuidelinesFromJar(tempDir);
-		copy("./src/main/resources/TrivadisGuidelines3Plus/sample", tempDir);
-		gen.generate("./src/main/resources/TrivadisGuidelines3Plus", tempDir.toString());
-	}
+    public static void genRulesXml() throws URISyntaxException, IOException {
+        GenRulesXml gen = new GenRulesXml();
+        String tempDir = Files.createTempDirectory("genmodel_").toString();
+        copyGuidelinesFromJar(tempDir);
+        copy("./src/main/resources/TrivadisGuidelines3Plus/sample", tempDir);
+        gen.generate("./src/main/resources/TrivadisGuidelines3Plus", tempDir.toString());
+    }
 
-	public static void main(String[] args) throws URISyntaxException, IOException {
-		PLSQLValidatorPreferences.INSTANCE.setValidatorClass(TrivadisGuidelines3Plus.class);
-		genPlsqlcopModelXml();
-		genRulesXml();
-	}
+    public static void main(String[] args) throws URISyntaxException, IOException {
+        PLSQLValidatorPreferences.INSTANCE.setValidatorClass(TrivadisGuidelines3Plus.class);
+        genPlsqlcopModelXml();
+        genRulesXml();
+    }
 
 }

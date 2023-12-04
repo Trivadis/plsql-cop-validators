@@ -20,19 +20,19 @@ import com.trivadis.tvdcc.validators.GLP;
 
 public class GLPValidatorConfig implements ValidatorConfig<GLP> {
 
-	@Override
-	public String getModelResourcePath() {
-		return "/GLP/genmodel/plsqlcop-model.xml";
-	}
+    @Override
+    public String getModelResourcePath() {
+        return "/GLP/genmodel/plsqlcop-model.xml";
+    }
 
-	@Override
-	public String getRulesResourcePath() {
-		return "/GLP/genmodel/rules.xml";
-	}
+    @Override
+    public String getRulesResourcePath() {
+        return "/GLP/genmodel/rules.xml";
+    }
 
-	@Override
-	public Class<GLP> getValidatorClass() {
-		return GLP.class;
-	}
+    @Override
+    public Class<GLP> getValidatorClass() {
+        return GLP.class;
+    }
 
 }

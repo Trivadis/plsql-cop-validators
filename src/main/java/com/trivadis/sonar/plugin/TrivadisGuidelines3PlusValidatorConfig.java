@@ -20,20 +20,19 @@ import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus;
 
 public class TrivadisGuidelines3PlusValidatorConfig implements ValidatorConfig<TrivadisGuidelines3Plus> {
 
-	@Override
-	public String getModelResourcePath() {
-		return "/TrivadisGuidelines3Plus/genmodel/plsqlcop-model.xml";
-	}
+    @Override
+    public String getModelResourcePath() {
+        return "/TrivadisGuidelines3Plus/genmodel/plsqlcop-model.xml";
+    }
 
-	@Override
-	public String getRulesResourcePath() {
-		return "/TrivadisGuidelines3Plus/genmodel/rules.xml";
-	}
+    @Override
+    public String getRulesResourcePath() {
+        return "/TrivadisGuidelines3Plus/genmodel/rules.xml";
+    }
 
-
-	@Override
-	public Class<TrivadisGuidelines3Plus> getValidatorClass() {
-		return TrivadisGuidelines3Plus.class;
-	}
+    @Override
+    public Class<TrivadisGuidelines3Plus> getValidatorClass() {
+        return TrivadisGuidelines3Plus.class;
+    }
 
 }
