@@ -142,7 +142,7 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
                             "Always prefix local variables with '" + PREFIX_LOCAL_VARIABLE_NAME + "'.", MAJOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_CURSOR_NAME,
-                    new PLSQLCopGuideline(ISSUE_CURSOR_NAME, "Always prefix cursors with " + PREFIX_CURSOR_NAME + "'.",
+                    new PLSQLCopGuideline(ISSUE_CURSOR_NAME, "Always prefix cursors with '" + PREFIX_CURSOR_NAME + "'.",
                             MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_RECORD_NAME,
                     new PLSQLCopGuideline(ISSUE_RECORD_NAME, "Always prefix records with '" + PREFIX_RECORD_NAME + "'.",
@@ -164,11 +164,11 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_OUT_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_OUT_PARAMETER_NAME,
-                            "Always prefix out parameters with " + PREFIX_OUT_PARAMETER_NAME + "'.", MAJOR,
+                            "Always prefix out parameters with '" + PREFIX_OUT_PARAMETER_NAME + "'.", MAJOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_IN_OUT_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_IN_OUT_PARAMETER_NAME,
-                            "Always prefix in/out parameters with " + PREFIX_IN_OUT_PARAMETER_NAME + "'.", MAJOR,
+                            "Always prefix in/out parameters with '" + PREFIX_IN_OUT_PARAMETER_NAME + "'.", MAJOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_RECORD_TYPE_NAME,
                     new PLSQLCopGuideline(ISSUE_RECORD_TYPE_NAME,
@@ -182,7 +182,7 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
                             MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_EXCEPTION_NAME,
                     new PLSQLCopGuideline(ISSUE_EXCEPTION_NAME,
-                            "Always prefix exceptions with '" + PREFIX_EXCEPTION_NAME + "'.'", MAJOR, UNDERSTANDABILITY,
+                            "Always prefix exceptions with '" + PREFIX_EXCEPTION_NAME + "'.", MAJOR, UNDERSTANDABILITY,
                             Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_CONSTANT_NAME,
                     new PLSQLCopGuideline(ISSUE_CONSTANT_NAME,
