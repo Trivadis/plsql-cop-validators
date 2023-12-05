@@ -47,103 +47,108 @@ import org.junit.Test;
 
 @SuppressWarnings("all")
 public abstract class AbstractValidatorTest {
-  private static final String PROPERTIES_FILE_NAME = TrivadisPlsqlNaming.PROPERTIES_FILE_NAME;
+    private static final String PROPERTIES_FILE_NAME = TrivadisPlsqlNaming.PROPERTIES_FILE_NAME;
 
-  public static final String FULL_PROPERTIES_FILE_NAME = ((System.getProperty("user.home") + File.separator) + AbstractValidatorTest.PROPERTIES_FILE_NAME);
+    public static final String FULL_PROPERTIES_FILE_NAME = ((System.getProperty("user.home") + File.separator)
+            + AbstractValidatorTest.PROPERTIES_FILE_NAME);
 
-  private static final String FULL_PROPERTIES_FILE_NAME_BACKUP = (AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME + ".backup");
+    private static final String FULL_PROPERTIES_FILE_NAME_BACKUP = (AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME
+            + ".backup");
 
-  private Injector injector = new PLSQLStandaloneSetup().createInjectorAndDoEMFRegistration();
+    private Injector injector = new PLSQLStandaloneSetup().createInjectorAndDoEMFRegistration();
 
-  @BeforeClass
-  public static void commonSetup() {
-    AbstractValidatorTest.stashPropertiesFile();
-  }
-
-  public static void stashPropertiesFile() {
-    try {
-      boolean _exists = Files.exists(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME));
-      if (_exists) {
-        Files.copy(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME), Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME_BACKUP));
-        Files.delete(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME));
-      }
-    } catch (Throwable _e) {
-      throw Exceptions.sneakyThrow(_e);
+    @BeforeClass
+    public static void commonSetup() {
+        AbstractValidatorTest.stashPropertiesFile();
     }
-  }
 
-  @AfterClass
-  public static void restorePropertiesFile() {
-    try {
-      boolean _exists = Files.exists(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME_BACKUP));
-      if (_exists) {
-        Files.copy(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME_BACKUP), Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME), 
-          StandardCopyOption.REPLACE_EXISTING);
-        Files.delete(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME_BACKUP));
-      } else {
-        boolean _exists_1 = Files.exists(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME));
-        if (_exists_1) {
-          Files.delete(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME));
+    public static void stashPropertiesFile() {
+        try {
+            boolean _exists = Files.exists(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME));
+            if (_exists) {
+                Files.copy(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME),
+                        Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME_BACKUP));
+                Files.delete(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME));
+            }
+        } catch (Throwable _e) {
+            throw Exceptions.sneakyThrow(_e);
         }
-      }
-    } catch (Throwable _e) {
-      throw Exceptions.sneakyThrow(_e);
     }
-  }
 
-  @Test
-  public void guidelineTitleStartsWithKeyword() {
-    final Function1<PLSQLCopGuideline, Boolean> _function = (PLSQLCopGuideline it) -> {
-      Integer _id = it.getId();
-      return Boolean.valueOf(((_id).intValue() >= 9000));
-    };
-    final Iterable<PLSQLCopGuideline> guidelines = IterableExtensions.<PLSQLCopGuideline>filter(this.getValidator().getGuidelines().values(), _function);
-    for (final PLSQLCopGuideline g : guidelines) {
-      String _msg = g.getMsg();
-      String _plus = ("\"" + _msg);
-      String _plus_1 = (_plus + "\' does not start with keyword");
-      MatcherAssert.<String>assertThat(_plus_1, 
-        g.getMsg(), 
-        AnyOf.<String>anyOf(StringStartsWith.startsWith("Always"), StringStartsWith.startsWith("Never"), StringStartsWith.startsWith("Avoid"), StringStartsWith.startsWith("Try")));
+    @AfterClass
+    public static void restorePropertiesFile() {
+        try {
+            boolean _exists = Files.exists(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME_BACKUP));
+            if (_exists) {
+                Files.copy(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME_BACKUP),
+                        Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME),
+                        StandardCopyOption.REPLACE_EXISTING);
+                Files.delete(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME_BACKUP));
+            } else {
+                boolean _exists_1 = Files.exists(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME));
+                if (_exists_1) {
+                    Files.delete(Paths.get(AbstractValidatorTest.FULL_PROPERTIES_FILE_NAME));
+                }
+            }
+        } catch (Throwable _e) {
+            throw Exceptions.sneakyThrow(_e);
+        }
     }
-  }
 
-  public XtextResource parse(final String stmt) {
-    try {
-      final XtextResourceSet resourceSet = this.injector.<XtextResourceSet>getInstance(XtextResourceSet.class);
-      resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
-      resourceSet.addLoadOption(XtextResource.OPTION_ENCODING, Charset.defaultCharset().name());
-      final Resource resource = resourceSet.createResource(URI.createURI("dummy:/test.plsql"));
-      byte[] _bytes = stmt.getBytes();
-      final ByteArrayInputStream input = new ByteArrayInputStream(_bytes);
-      resource.load(input, resourceSet.getLoadOptions());
-      return ((XtextResource) resource);
-    } catch (Throwable _e) {
-      throw Exceptions.sneakyThrow(_e);
+    @Test
+    public void guidelineTitleStartsWithKeyword() {
+        final Function1<PLSQLCopGuideline, Boolean> _function = (PLSQLCopGuideline it) -> {
+            Integer _id = it.getId();
+            return Boolean.valueOf(((_id).intValue() >= 9000));
+        };
+        final Iterable<PLSQLCopGuideline> guidelines = IterableExtensions
+                .<PLSQLCopGuideline>filter(this.getValidator().getGuidelines().values(), _function);
+        for (final PLSQLCopGuideline g : guidelines) {
+            String _msg = g.getMsg();
+            String _plus = ("\"" + _msg);
+            String _plus_1 = (_plus + "\' does not start with keyword");
+            MatcherAssert.<String>assertThat(_plus_1, g.getMsg(),
+                    AnyOf.<String>anyOf(StringStartsWith.startsWith("Always"), StringStartsWith.startsWith("Never"),
+                            StringStartsWith.startsWith("Avoid"), StringStartsWith.startsWith("Try")));
+        }
     }
-  }
 
-  public List<Issue> getIssues(final String stmt) {
-    final XtextResource resource = this.parse(stmt);
-    final EList<Resource.Diagnostic> errors = resource.getErrors();
-    int _size = errors.size();
-    boolean _greaterThan = (_size > 0);
-    if (_greaterThan) {
-      final Resource.Diagnostic firstError = errors.get(0);
-      StringConcatenation _builder = new StringConcatenation();
-      _builder.append("Syntax error: ");
-      String _message = firstError.getMessage();
-      _builder.append(_message);
-      _builder.append(" at line ");
-      int _line = firstError.getLine();
-      _builder.append(_line);
-      _builder.append(".");
-      throw new RuntimeException(_builder.toString());
+    public XtextResource parse(final String stmt) {
+        try {
+            final XtextResourceSet resourceSet = this.injector.<XtextResourceSet>getInstance(XtextResourceSet.class);
+            resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+            resourceSet.addLoadOption(XtextResource.OPTION_ENCODING, Charset.defaultCharset().name());
+            final Resource resource = resourceSet.createResource(URI.createURI("dummy:/test.plsql"));
+            byte[] _bytes = stmt.getBytes();
+            final ByteArrayInputStream input = new ByteArrayInputStream(_bytes);
+            resource.load(input, resourceSet.getLoadOptions());
+            return ((XtextResource) resource);
+        } catch (Throwable _e) {
+            throw Exceptions.sneakyThrow(_e);
+        }
     }
-    return resource.getResourceServiceProvider().getResourceValidator().validate(resource, CheckMode.ALL, null);
-  }
 
-  public PLSQLValidator getValidator() {
-    return this.injector.<PLSQLValidator>getInstance(PLSQLValidator.class);
-  }
+    public List<Issue> getIssues(final String stmt) {
+        final XtextResource resource = this.parse(stmt);
+        final EList<Resource.Diagnostic> errors = resource.getErrors();
+        int _size = errors.size();
+        boolean _greaterThan = (_size > 0);
+        if (_greaterThan) {
+            final Resource.Diagnostic firstError = errors.get(0);
+            StringConcatenation _builder = new StringConcatenation();
+            _builder.append("Syntax error: ");
+            String _message = firstError.getMessage();
+            _builder.append(_message);
+            _builder.append(" at line ");
+            int _line = firstError.getLine();
+            _builder.append(_line);
+            _builder.append(".");
+            throw new RuntimeException(_builder.toString());
+        }
+        return resource.getResourceServiceProvider().getResourceValidator().validate(resource, CheckMode.ALL, null);
+    }
+
+    public PLSQLValidator getValidator() {
+        return this.injector.<PLSQLValidator>getInstance(PLSQLValidator.class);
+    }
 }
