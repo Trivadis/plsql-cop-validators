@@ -98,16 +98,6 @@
 				<version>${xtext.version}</version>
 				<executions>
 					<execution>
-						<id>main</id>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<configuration>
-							<javaSourceVersion>${jdk.version}</javaSourceVersion>
-							<outputDirectory>${project.basedir}/src/main/xtend-gen</outputDirectory>
-						</configuration>
-					</execution>
-					<execution>
 						<id>test</id>
 						<goals>
 							<goal>testCompile</goal>
