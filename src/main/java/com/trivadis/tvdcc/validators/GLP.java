@@ -45,7 +45,7 @@ public class GLP extends PLSQLValidator implements PLSQLCopValidator {
 
     @Override
     public HashMap<Integer, PLSQLCopGuideline> getGuidelines() {
-        if ((guidelines == null)) {
+        if (guidelines == null) {
             guidelines = new HashMap<>();
             // register parent guidelines
             for (final Integer k : super.getGuidelines().keySet()) {

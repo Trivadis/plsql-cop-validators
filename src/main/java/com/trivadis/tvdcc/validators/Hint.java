@@ -715,7 +715,7 @@ public class Hint extends PLSQLValidator implements PLSQLCopValidator {
 
     private void checkTabspec(HintOrComment h, String hint, String tabspec, int tabspecOffset,
             List<Pair<String, String>> tabrefs) {
-        if ((tabspec.startsWith(">") || tabspec.contains("@"))) {
+        if (tabspec.startsWith(">") || tabspec.contains("@")) {
             // do not check validity of tabspec to avoid false positives, see issue #33
         } else {
             final String alias = getTableAliasOfReferencedTable(tabspec, tabrefs);
@@ -797,9 +797,9 @@ public class Hint extends PLSQLValidator implements PLSQLCopValidator {
         List<Pair<String, String>> tabrefs = null;
         while (matcher.find()) {
             final String tabspec = matcher.group(4);
-            if ((tabspec != null)) {
+            if (tabspec != null) {
                 final String hint = matcher.group(2);
-                if ((tabrefs == null)) {
+                if (tabrefs == null) {
                     // populate only if hints are found
                     tabrefs = getTableReferences(h);
                 }
@@ -832,7 +832,7 @@ public class Hint extends PLSQLValidator implements PLSQLCopValidator {
         final Matcher matcher = pattern.matcher(getHintText(h));
         List<Pair<String, String>> tabrefs = null;
         while (matcher.find()) {
-            if ((tabrefs == null)) {
+            if (tabrefs == null) {
                 // populate only if hints are found
                 tabrefs = getTableReferences(h);
             }
@@ -865,7 +865,7 @@ public class Hint extends PLSQLValidator implements PLSQLCopValidator {
             final String tabspec = matcher.group(5);
             if (tabspec != null) {
                 final String hint_1 = matcher.group(2);
-                if ((tabrefs == null)) {
+                if (tabrefs == null) {
                     // populate only if hints are found
                     tabrefs = getTableReferences(h);
                 }

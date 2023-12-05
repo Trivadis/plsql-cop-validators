@@ -203,7 +203,7 @@ public class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
     public String getQualifiedFunctionName(EObject obj) {
         final BinaryCompoundExpressionLevel7 expr7 = EcoreUtil2.getContainerOfType(obj,
                 BinaryCompoundExpressionLevel7.class);
-        if ((expr7 != null)) {
+        if (expr7 != null) {
             final Expression left = expr7.getLeft();
             if (left instanceof SimpleExpressionNameValue) {
                 final String functionName = ((SimpleExpressionNameValue) left).getValue();
