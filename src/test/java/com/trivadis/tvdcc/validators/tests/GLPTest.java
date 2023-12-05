@@ -33,7 +33,7 @@ public class GLPTest extends AbstractValidatorTest {
 
     @Test
     public void guidelines() {
-        var guidelines = ((GLP) getValidator()).getGuidelines();
+        var guidelines = getValidator().getGuidelines();
         Assert.assertEquals(3, guidelines.values().stream().filter(it -> it.getId() >= 9000).count());
     }
 
