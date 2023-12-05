@@ -65,4 +65,4 @@ steps:
     mavenOptions: '$(MAVEN_OPTS)'
     goals: '-Dtvdcc.basedir=$(Pipeline.Workspace) -DaltDeploymentRepository=plsqlcop::default::https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1 clean deploy -U'
     publishJUnitResults: true
-    jdkVersion: 1.8
+    jdkVersion: 17
