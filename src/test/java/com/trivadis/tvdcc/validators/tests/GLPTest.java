@@ -1,8 +1,8 @@
-/*
+/**
  * Copyright 2017 Philipp Salvisberg <philipp.salvisberg@trivadis.com>
  * 
- * Licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 
- * Unported License (the "License"); you may not use this file except 
+ * Licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0
+ * Unported License (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  * 
  *     https://creativecommons.org/licenses/by-nc-nd/3.0/
@@ -13,141 +13,250 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.trivadis.tvdcc.validators.tests
+package com.trivadis.tvdcc.validators.tests;
 
-import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences
-import com.trivadis.tvdcc.validators.GLP
-import org.junit.Assert
-import org.junit.BeforeClass
-import org.junit.Test
+import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline;
+import com.trivadis.oracle.plsql.validation.PLSQLValidator;
+import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences;
+import com.trivadis.tvdcc.validators.GLP;
+import java.util.HashMap;
+import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.validation.Issue;
+import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-class GLPTest extends AbstractValidatorTest {
+@SuppressWarnings("all")
+public class GLPTest extends AbstractValidatorTest {
+    @BeforeClass
+    public static void setupValidator() {
+        PLSQLValidatorPreferences.INSTANCE.setValidatorClass(GLP.class);
+    }
 
-	@BeforeClass
-	static def setupValidator() {
-		PLSQLValidatorPreferences.INSTANCE.validatorClass = GLP
-	}
-	
-	@Test
-	def void guidelines() {
-		val guidelines = (getValidator() as GLP).guidelines
-		Assert.assertEquals(3, guidelines.values.filter[it.id >= 9000].size)
-	}
-	
-	@Test 
-	def void procedureOk() {
-		val stmt = '''
-			CREATE OR REPLACE PROCEDURE p (p_1 IN INTEGER, p_2 IN VARCHAR2) AS
-			   l_something INTEGER;
-			BEGIN
-			   NULL;
-			END p;
-		'''
-		val issues = stmt.issues.filter[it.code.startsWith("G-9")]
-		Assert.assertEquals(0, issues.size)
-	}
+    @Test
+    public void guidelines() {
+        PLSQLValidator _validator = this.getValidator();
+        final HashMap<Integer, PLSQLCopGuideline> guidelines = ((GLP) _validator).getGuidelines();
+        final Function1<PLSQLCopGuideline, Boolean> _function = (PLSQLCopGuideline it) -> {
+            Integer _id = it.getId();
+            return Boolean.valueOf(((_id).intValue() >= 9000));
+        };
+        Assert.assertEquals(3,
+                IterableExtensions.size(IterableExtensions.<PLSQLCopGuideline>filter(guidelines.values(), _function)));
+    }
 
-	@Test 
-	def void procedureNok() {
-		val stmt = '''
-			CREATE OR REPLACE PROCEDURE p (a IN INTEGER, b IN VARCHAR2) AS
-			   c INTEGER;
-			BEGIN
-			   NULL;
-			END p;
-		'''
-		val issues = stmt.issues.filter[it.code.startsWith("G-9")]
-		Assert.assertEquals(3, issues.size)
-		// a
-		val issue1 = issues.get(0)
-		Assert.assertEquals(1, issue1.lineNumber)
-		Assert.assertEquals(32, issue1.column)
-		Assert.assertEquals(1, issue1.length)
-		Assert.assertEquals("G-9003", issue1.code)
-		Assert.assertEquals("G-9003: Always prefix parameters with 'p_'.", issue1.message)
-		Assert.assertEquals("a IN INTEGER", issue1.data.get(0))
-		// b
-		val issue2 = issues.get(1)
-		Assert.assertEquals(1, issue2.lineNumber)
-		Assert.assertEquals(46, issue2.column)
-		Assert.assertEquals(1, issue2.length)
-		Assert.assertEquals("G-9003", issue2.code)
-		Assert.assertEquals("G-9003: Always prefix parameters with 'p_'.", issue2.message)
-		Assert.assertEquals("b IN VARCHAR2", issue2.data.get(0))
-		// c
-		val issue3 = issues.get(2)
-		Assert.assertEquals(2, issue3.lineNumber)
-		Assert.assertEquals(4, issue3.column)
-		Assert.assertEquals(1, issue3.length)
-		Assert.assertEquals("G-9002", issue3.code)
-		Assert.assertEquals("G-9002: Always prefix local variables with 'l_'.", issue3.message)
-		Assert.assertEquals("c INTEGER;", issue3.data.get(0))
-	}
+    @Test
+    public void procedureOk() {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("CREATE OR REPLACE PROCEDURE p (p_1 IN INTEGER, p_2 IN VARCHAR2) AS");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("l_something INTEGER;");
+        _builder.newLine();
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("NULL;");
+        _builder.newLine();
+        _builder.append("END p;");
+        _builder.newLine();
+        final String stmt = _builder.toString();
+        final Function1<Issue, Boolean> _function = (Issue it) -> {
+            return Boolean.valueOf(it.getCode().startsWith("G-9"));
+        };
+        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
+        Assert.assertEquals(0, IterableExtensions.size(issues));
+    }
 
-	@Test 
-	def void packageBodyOk() {
-		val stmt = '''
-			CREATE OR REPLACE PACKAGE BODY pkg AS
-			   g_global_variable INTEGER;
-			
-			   PROCEDURE p (
-			   	   p_parameter1 IN INTEGER,
-			   	   p_parameter2 IN VARCHAR2
-			   ) AS
-			      l_local_variable INTEGER;
-			   BEGIN
-			      NULL;
-			   END p;
-			 
-			   FUNCTION f (
-			   	   p_parameter1 IN INTEGER,
-			   	   p_parameter2 IN INTEGER
-			   ) RETURN INTEGER AS
-			      l_local_variable INTEGER;
-			   BEGIN
-			      RETURN p_parameter1 * p_parameter2;
-			   END f;
-			END pkg;
-		'''
-		val issues = stmt.issues.filter[it.code.startsWith("G-9")]
-		Assert.assertEquals(0, issues.size)
-	}
+    @Test
+    public void procedureNok() {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("CREATE OR REPLACE PROCEDURE p (a IN INTEGER, b IN VARCHAR2) AS");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("c INTEGER;");
+        _builder.newLine();
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("NULL;");
+        _builder.newLine();
+        _builder.append("END p;");
+        _builder.newLine();
+        final String stmt = _builder.toString();
+        final Function1<Issue, Boolean> _function = (Issue it) -> {
+            return Boolean.valueOf(it.getCode().startsWith("G-9"));
+        };
+        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
+        Assert.assertEquals(3, IterableExtensions.size(issues));
+        final Issue issue1 = ((Issue[]) Conversions.unwrapArray(issues, Issue.class))[0];
+        Assert.assertEquals(1, (issue1.getLineNumber()).intValue());
+        Assert.assertEquals(32, (issue1.getColumn()).intValue());
+        Assert.assertEquals(1, (issue1.getLength()).intValue());
+        Assert.assertEquals("G-9003", issue1.getCode());
+        Assert.assertEquals("G-9003: Always prefix parameters with \'p_\'.", issue1.getMessage());
+        Assert.assertEquals("a IN INTEGER", issue1.getData()[0]);
+        final Issue issue2 = ((Issue[]) Conversions.unwrapArray(issues, Issue.class))[1];
+        Assert.assertEquals(1, (issue2.getLineNumber()).intValue());
+        Assert.assertEquals(46, (issue2.getColumn()).intValue());
+        Assert.assertEquals(1, (issue2.getLength()).intValue());
+        Assert.assertEquals("G-9003", issue2.getCode());
+        Assert.assertEquals("G-9003: Always prefix parameters with \'p_\'.", issue2.getMessage());
+        Assert.assertEquals("b IN VARCHAR2", issue2.getData()[0]);
+        final Issue issue3 = ((Issue[]) Conversions.unwrapArray(issues, Issue.class))[2];
+        Assert.assertEquals(2, (issue3.getLineNumber()).intValue());
+        Assert.assertEquals(4, (issue3.getColumn()).intValue());
+        Assert.assertEquals(1, (issue3.getLength()).intValue());
+        Assert.assertEquals("G-9002", issue3.getCode());
+        Assert.assertEquals("G-9002: Always prefix local variables with \'l_\'.", issue3.getMessage());
+        Assert.assertEquals("c INTEGER;", issue3.getData()[0]);
+    }
 
-	@Test 
-	def void packageBodyNok() {
-		val stmt = '''
-			CREATE OR REPLACE PACKAGE BODY pkg AS
-			   global_variable INTEGER;
-			
-			   PROCEDURE p (
-			   	   parameter1 IN INTEGER,
-			   	   parameter2 IN VARCHAR2
-			   ) AS
-			      local_variable INTEGER;
-			   BEGIN
-			      NULL;
-			   END p;
-			 
-			   FUNCTION f (
-			   	   parameter1 IN INTEGER,
-			   	   parameter2 IN INTEGER
-			   ) RETURN INTEGER AS
-			      local_variable INTEGER;
-			   BEGIN
-			      RETURN parameter1 * p_parameter2;
-			   END f;
-			END pkg;
-		'''
-		val issues = stmt.issues.filter[it.code.startsWith("G-9")]
-		Assert.assertEquals(7, issues.size)
-		// global_variable
-		val issue1 = issues.get(0)
-		Assert.assertEquals(2, issue1.lineNumber)
-		Assert.assertEquals(4, issue1.column)
-		Assert.assertEquals(15, issue1.length)
-		Assert.assertEquals("G-9001", issue1.code)
-		Assert.assertEquals("G-9001: Always prefix global variables with 'g_'.", issue1.message)
-		Assert.assertEquals("global_variable INTEGER;", issue1.data.get(0))
-	}
+    @Test
+    public void packageBodyOk() {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("CREATE OR REPLACE PACKAGE BODY pkg AS");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("g_global_variable INTEGER;");
+        _builder.newLine();
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("PROCEDURE p (");
+        _builder.newLine();
+        _builder.append("   \t   ");
+        _builder.append("p_parameter1 IN INTEGER,");
+        _builder.newLine();
+        _builder.append("   \t   ");
+        _builder.append("p_parameter2 IN VARCHAR2");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append(") AS");
+        _builder.newLine();
+        _builder.append("      ");
+        _builder.append("l_local_variable INTEGER;");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("      ");
+        _builder.append("NULL;");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("END p;");
+        _builder.newLine();
+        _builder.append(" ");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("FUNCTION f (");
+        _builder.newLine();
+        _builder.append("   \t   ");
+        _builder.append("p_parameter1 IN INTEGER,");
+        _builder.newLine();
+        _builder.append("   \t   ");
+        _builder.append("p_parameter2 IN INTEGER");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append(") RETURN INTEGER AS");
+        _builder.newLine();
+        _builder.append("      ");
+        _builder.append("l_local_variable INTEGER;");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("      ");
+        _builder.append("RETURN p_parameter1 * p_parameter2;");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("END f;");
+        _builder.newLine();
+        _builder.append("END pkg;");
+        _builder.newLine();
+        final String stmt = _builder.toString();
+        final Function1<Issue, Boolean> _function = (Issue it) -> {
+            return Boolean.valueOf(it.getCode().startsWith("G-9"));
+        };
+        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
+        Assert.assertEquals(0, IterableExtensions.size(issues));
+    }
 
+    @Test
+    public void packageBodyNok() {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("CREATE OR REPLACE PACKAGE BODY pkg AS");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("global_variable INTEGER;");
+        _builder.newLine();
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("PROCEDURE p (");
+        _builder.newLine();
+        _builder.append("   \t   ");
+        _builder.append("parameter1 IN INTEGER,");
+        _builder.newLine();
+        _builder.append("   \t   ");
+        _builder.append("parameter2 IN VARCHAR2");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append(") AS");
+        _builder.newLine();
+        _builder.append("      ");
+        _builder.append("local_variable INTEGER;");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("      ");
+        _builder.append("NULL;");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("END p;");
+        _builder.newLine();
+        _builder.append(" ");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("FUNCTION f (");
+        _builder.newLine();
+        _builder.append("   \t   ");
+        _builder.append("parameter1 IN INTEGER,");
+        _builder.newLine();
+        _builder.append("   \t   ");
+        _builder.append("parameter2 IN INTEGER");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append(") RETURN INTEGER AS");
+        _builder.newLine();
+        _builder.append("      ");
+        _builder.append("local_variable INTEGER;");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("      ");
+        _builder.append("RETURN parameter1 * p_parameter2;");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("END f;");
+        _builder.newLine();
+        _builder.append("END pkg;");
+        _builder.newLine();
+        final String stmt = _builder.toString();
+        final Function1<Issue, Boolean> _function = (Issue it) -> {
+            return Boolean.valueOf(it.getCode().startsWith("G-9"));
+        };
+        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
+        Assert.assertEquals(7, IterableExtensions.size(issues));
+        final Issue issue1 = ((Issue[]) Conversions.unwrapArray(issues, Issue.class))[0];
+        Assert.assertEquals(2, (issue1.getLineNumber()).intValue());
+        Assert.assertEquals(4, (issue1.getColumn()).intValue());
+        Assert.assertEquals(15, (issue1.getLength()).intValue());
+        Assert.assertEquals("G-9001", issue1.getCode());
+        Assert.assertEquals("G-9001: Always prefix global variables with \'g_\'.", issue1.getMessage());
+        Assert.assertEquals("global_variable INTEGER;", issue1.getData()[0]);
+    }
 }
