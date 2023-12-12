@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 Philipp Salvisberg <philipp.salvisberg@trivadis.com>
  * 
  * Licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0
@@ -15,23 +15,14 @@
  */
 package com.trivadis.tvdcc.validators.tests;
 
-import com.google.common.base.Objects;
-import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline;
-import com.trivadis.oracle.plsql.validation.PLSQLValidator;
 import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences;
 import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus;
-import java.util.HashMap;
-import java.util.List;
-import org.eclipse.xtend2.lib.StringConcatenation;
-import org.eclipse.xtext.validation.Issue;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-@SuppressWarnings("all")
 public class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
+
     @BeforeClass
     public static void setupValidator() {
         PLSQLValidatorPreferences.INSTANCE.setValidatorClass(TrivadisGuidelines3Plus.class);
@@ -39,221 +30,129 @@ public class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
 
     @Test
     public void guidelines() {
-        PLSQLValidator _validator = this.getValidator();
-        final HashMap<Integer, PLSQLCopGuideline> guidelines = ((TrivadisGuidelines3Plus) _validator).getGuidelines();
-        final Function1<PLSQLCopGuideline, Boolean> _function = (PLSQLCopGuideline it) -> {
-            Integer _id = it.getId();
-            return Boolean.valueOf(((_id).intValue() >= 9100));
-        };
-        Assert.assertEquals(22,
-                IterableExtensions.size(IterableExtensions.<PLSQLCopGuideline>filter(guidelines.values(), _function)));
-        final Function1<PLSQLCopGuideline, Boolean> _function_1 = (PLSQLCopGuideline it) -> {
-            Integer _id = it.getId();
-            return Boolean.valueOf(((_id).intValue() < 9100));
-        };
-        Assert.assertEquals(123, IterableExtensions
-                .size(IterableExtensions.<PLSQLCopGuideline>filter(guidelines.values(), _function_1)));
-        final Function1<PLSQLCopGuideline, Boolean> _function_2 = (PLSQLCopGuideline it) -> {
-            Integer _id = it.getId();
-            return Boolean.valueOf(((_id).intValue() < 1000));
-        };
-        Assert.assertEquals(79, IterableExtensions
-                .size(IterableExtensions.<PLSQLCopGuideline>filter(guidelines.values(), _function_2)));
+        var guidelines = getValidator().getGuidelines();
+        Assert.assertEquals(22, guidelines.values().stream().filter(it -> it.getId() >= 9100).toList().size()); // last guideline in v4.2 is G-9040
+        Assert.assertEquals(123, guidelines.values().stream().filter(it -> it.getId() < 9100).toList().size()); // added G-3182, G-3183 in v4.3
+        Assert.assertEquals(79, guidelines.values().stream().filter(it -> it.getId() < 1000).toList().size());
     }
 
     @Test
     public void getGuidelineId_mapped_via_Trivadis2() {
-        Assert.assertEquals("G-1010", this.getValidator().getGuidelineId(Integer.valueOf(1)));
+        Assert.assertEquals("G-1010", getValidator().getGuidelineId(1));
     }
 
     @Test
     public void getGuidelineId_of_Trivadis3() {
-        Assert.assertEquals("G-2130", this.getValidator().getGuidelineId(Integer.valueOf(2130)));
+        Assert.assertEquals("G-2130", getValidator().getGuidelineId(2130));
     }
 
     @Test
     public void getGuidelineMsg_mapped_via_Trivadis2() {
-        Assert.assertEquals("G-1010: Try to label your sub blocks.",
-                this.getValidator().getGuidelineMsg(Integer.valueOf(1)));
+        Assert.assertEquals("G-1010: Try to label your sub blocks.", getValidator().getGuidelineMsg(1));
     }
 
     @Test
     public void getGuidelineMsg_mapped_via_Trivadis3() {
         Assert.assertEquals("G-2130: Try to use subtypes for constructs used often in your code.",
-                this.getValidator().getGuidelineMsg(Integer.valueOf(2130)));
+                getValidator().getGuidelineMsg(2130));
     }
 
+    // issue avoided by OverrideTrivadisGuidelines (would throw an error via TrivadisGuidelines3)
     @Test
     public void literalInLoggerCallIsOkay() {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("BEGIN");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("logger.log(\'Hello World\');");
-        _builder.newLine();
-        _builder.append("END;");
-        _builder.newLine();
-        final String stmt = _builder.toString();
-        final Function1<Issue, Boolean> _function = (Issue it) -> {
-            String _code = it.getCode();
-            return Boolean.valueOf(Objects.equal(_code, "G-1050"));
-        };
-        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-        Assert.assertEquals(0, IterableExtensions.size(issues));
+        var stmt = """
+                BEGIN
+                   logger.log('Hello World');
+                END;
+                """;
+        var issues = getIssues(stmt).stream().filter(it -> it.getCode().equals("G-1050")).toList();
+        Assert.assertEquals(0, issues.size());
     }
 
+    // issue thrown by OverrideTrivadisGuidelines (check in parent)
     @Test
     public void literalInDbmsOutputCallIsNotOkay() {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("BEGIN");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("dbms_output.put_line(\'Hello World\');");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("dbms_output.put_line(\'Hello World\');");
-        _builder.newLine();
-        _builder.append("END;");
-        _builder.newLine();
-        final String stmt = _builder.toString();
-        final Function1<Issue, Boolean> _function = (Issue it) -> {
-            String _code = it.getCode();
-            return Boolean.valueOf(Objects.equal(_code, "G-1050"));
-        };
-        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-        Assert.assertEquals(2, IterableExtensions.size(issues));
+        var stmt = """
+                BEGIN
+                   dbms_output.put_line('Hello World');
+                   dbms_output.put_line('Hello World');
+                END;
+                """;
+        var issues = getIssues(stmt).stream().filter(it -> it.getCode().equals("G-1050")).toList();
+        Assert.assertEquals(2, issues.size());
     }
 
+    // issue thrown by TrivadisGuidelines3
     @Test
     public void guideline2230_na() {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("CREATE OR REPLACE PACKAGE BODY constants_up IS");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("co_big_increase CONSTANT NUMBER(5,0) := 1;");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("FUNCTION big_increase RETURN NUMBER DETERMINISTIC IS");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("BEGIN");
-        _builder.newLine();
-        _builder.append("      ");
-        _builder.append("RETURN co_big_increase;");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("END big_increase;");
-        _builder.newLine();
-        _builder.append("END constants_up;");
-        _builder.newLine();
-        _builder.append("/");
-        _builder.newLine();
-        final String stmt = _builder.toString();
-        final Function1<Issue, Boolean> _function = (Issue it) -> {
-            String _code = it.getCode();
-            return Boolean.valueOf(Objects.equal(_code, "G-2230"));
-        };
-        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-        Assert.assertEquals(1, IterableExtensions.size(issues));
+        var stmt = """
+                CREATE OR REPLACE PACKAGE BODY constants_up IS
+                   co_big_increase CONSTANT NUMBER(5,0) := 1;
+
+                   FUNCTION big_increase RETURN NUMBER DETERMINISTIC IS
+                   BEGIN
+                      RETURN co_big_increase;
+                   END big_increase;
+                END constants_up;
+                /
+                """;
+        var issues = getIssues(stmt).stream().filter(it -> it.getCode().equals("G-2230")).toList();
+        Assert.assertEquals(1, issues.size());
     }
 
+    // issue thrown by TrivadisGuidelines2
     @Test
     public void guideline1010_10() {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("BEGIN");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("BEGIN ");
-        _builder.newLine();
-        _builder.append("      ");
-        _builder.append("NULL;");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("END;");
-        _builder.newLine();
-        _builder.append("END;");
-        _builder.newLine();
-        _builder.append("/");
-        _builder.newLine();
-        final String stmt = _builder.toString();
-        final Function1<Issue, Boolean> _function = (Issue it) -> {
-            String _code = it.getCode();
-            return Boolean.valueOf(Objects.equal(_code, "G-1010"));
-        };
-        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-        Assert.assertEquals(1, IterableExtensions.size(issues));
+        var stmt = """
+                BEGIN
+                   BEGIN
+                      NULL;
+                   END;
+                END;
+                /
+                """;
+        var issues = getIssues(stmt).stream().filter(it -> it.getCode().equals("G-1010")).toList();
+        Assert.assertEquals(1, issues.size());
     }
 
+    // issue thrown by SQLInjection
     @Test
     public void executeImmediateNotAssertedVariable() {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("CREATE OR REPLACE PROCEDURE p (in_table_name IN VARCHAR2) AS");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("co_templ     CONSTANT VARCHAR2(4000 BYTE) := \'DROP TABLE #in_table_name# PURGE\';");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("l_table_name VARCHAR2(128 BYTE);");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("l_sql        VARCHAR2(4000 BYTE);");
-        _builder.newLine();
-        _builder.append("BEGIN");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("l_table_name := in_table_name;");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("l_sql := replace(l_templ, \'#in_table_name#\', l_table_name);");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("EXECUTE IMMEDIATE l_sql;");
-        _builder.newLine();
-        _builder.append("END p;");
-        _builder.newLine();
-        final String stmt = _builder.toString();
-        final Function1<Issue, Boolean> _function = (Issue it) -> {
-            String _code = it.getCode();
-            return Boolean.valueOf(Objects.equal(_code, "G-9501"));
-        };
-        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-        Assert.assertEquals(1, IterableExtensions.size(issues));
+        var stmt = """
+                CREATE OR REPLACE PROCEDURE p (in_table_name IN VARCHAR2) AS
+                   co_templ     CONSTANT VARCHAR2(4000 BYTE) := 'DROP TABLE #in_table_name# PURGE';
+                   l_table_name VARCHAR2(128 BYTE);
+                   l_sql        VARCHAR2(4000 BYTE);
+                BEGIN
+                   l_table_name := in_table_name;
+                   l_sql := replace(l_templ, '#in_table_name#', l_table_name);
+                   EXECUTE IMMEDIATE l_sql;
+                END p;
+                """;
+        var issues = getIssues(stmt).stream().filter(it -> it.getCode().equals("G-9501")).toList();
+        Assert.assertEquals(1, issues.size());
     }
 
+    // issue thrown by TrivadisPlsqlNaming
     @Test
     public void globalVariableNok() {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("CREATE OR REPLACE PACKAGE example AS");
-        _builder.newLine();
-        _builder.append("   ");
-        _builder.append("some_name INTEGER;");
-        _builder.newLine();
-        _builder.append("END example;");
-        _builder.newLine();
-        _builder.append("/");
-        _builder.newLine();
-        final String stmt = _builder.toString();
-        final List<Issue> issues = this.getIssues(stmt);
-        final Function1<Issue, Boolean> _function = (Issue it) -> {
-            String _code = it.getCode();
-            return Boolean.valueOf(Objects.equal(_code, "G-9101"));
-        };
-        Assert.assertEquals(1, IterableExtensions.size(IterableExtensions.<Issue>filter(issues, _function)));
+        var stmt = """
+                CREATE OR REPLACE PACKAGE example AS
+                   some_name INTEGER;
+                END example;
+                /
+                """;
+        var issues = getIssues(stmt);
+        Assert.assertEquals(1, issues.stream().filter(it -> it.getCode().equals("G-9101")).toList().size());
     }
 
+    // issue thrown by Hint
     @Test
     public void unknownHint() {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("INSERT /*+ NOLOGGING APPEND */ INTO sales_hist SELECT * FROM sales;");
-        _builder.newLine();
-        final String stmt = _builder.toString();
-        final List<Issue> issues = this.getIssues(stmt);
-        final Function1<Issue, Boolean> _function = (Issue it) -> {
-            String _code = it.getCode();
-            return Boolean.valueOf(Objects.equal(_code, "G-9601"));
-        };
-        Assert.assertEquals(1, IterableExtensions.size(IterableExtensions.<Issue>filter(issues, _function)));
+        var stmt = """
+                INSERT /*+ NOLOGGING APPEND */ INTO sales_hist SELECT * FROM sales;
+                """;
+        var issues = getIssues(stmt);
+        Assert.assertEquals(1, issues.stream().filter(it -> it.getCode().equals("G-9601")).toList().size());
     }
 }
