@@ -18,8 +18,6 @@ package com.trivadis.tvdcc.validators.tests;
 import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences;
 import com.trivadis.tvdcc.validators.GLP;
 
-import java.util.Arrays;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -68,7 +66,7 @@ public class GLPTest extends AbstractValidatorTest {
         Assert.assertEquals(1, issue1.getLength().intValue());
         Assert.assertEquals("G-9003", issue1.getCode());
         Assert.assertEquals("G-9003: Always prefix parameters with 'p_'.", issue1.getMessage());
-        Assert.assertEquals("a IN INTEGER", Arrays.stream(issue1.getData()).toList().get(0));
+        Assert.assertEquals("a IN INTEGER", issue1.getData()[0]);
         // b
         var issue2 = issues.get(1);
         Assert.assertEquals(1, issue2.getLineNumber().intValue());
@@ -76,7 +74,7 @@ public class GLPTest extends AbstractValidatorTest {
         Assert.assertEquals(1, issue2.getLength().intValue());
         Assert.assertEquals("G-9003", issue2.getCode());
         Assert.assertEquals("G-9003: Always prefix parameters with 'p_'.", issue2.getMessage());
-        Assert.assertEquals("b IN VARCHAR2", Arrays.stream(issue2.getData()).toList().get(0));
+        Assert.assertEquals("b IN VARCHAR2", issue2.getData()[0]);
         // c
         var issue3 = issues.get(2);
         Assert.assertEquals(2, issue3.getLineNumber().intValue());
@@ -84,7 +82,7 @@ public class GLPTest extends AbstractValidatorTest {
         Assert.assertEquals(1, issue3.getLength().intValue());
         Assert.assertEquals("G-9002", issue3.getCode());
         Assert.assertEquals("G-9002: Always prefix local variables with 'l_'.", issue3.getMessage());
-        Assert.assertEquals("c INTEGER;", Arrays.stream(issue3.getData()).toList().get(0));
+        Assert.assertEquals("c INTEGER;", issue3.getData()[0]);
     }
 
     @Test
@@ -150,6 +148,6 @@ public class GLPTest extends AbstractValidatorTest {
         Assert.assertEquals(15, issue1.getLength().intValue());
         Assert.assertEquals("G-9001", issue1.getCode());
         Assert.assertEquals("G-9001: Always prefix global variables with 'g_'.", issue1.getMessage());
-        Assert.assertEquals("global_variable INTEGER;", Arrays.stream(issue1.getData()).toList().get(0));
+        Assert.assertEquals("global_variable INTEGER;", issue1.getData()[0]);
     }
 }
