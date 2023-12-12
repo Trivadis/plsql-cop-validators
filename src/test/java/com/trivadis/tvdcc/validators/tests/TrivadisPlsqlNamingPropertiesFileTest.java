@@ -1,90 +1,143 @@
-package com.trivadis.tvdcc.validators.tests
+package com.trivadis.tvdcc.validators.tests;
 
-import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences
-import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileWriter
-import org.junit.Assert
-import org.junit.BeforeClass
-import org.junit.Test
+import com.google.common.base.Objects;
+import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences;
+import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.List;
+import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.validation.Issue;
+import org.eclipse.xtext.xbase.lib.Exceptions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
+@SuppressWarnings("all")
+public class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
+  @BeforeClass
+  public static void commonSetup() {
+    AbstractValidatorTest.stashPropertiesFile();
+    TrivadisPlsqlNamingPropertiesFileTest.createTestPropertiesFile();
+    PLSQLValidatorPreferences.INSTANCE.setValidatorClass(TrivadisPlsqlNaming.class);
+  }
 
-	@BeforeClass
-	static def void commonSetup() {
-		stashPropertiesFile
-		createTestPropertiesFile
-		PLSQLValidatorPreferences.INSTANCE.validatorClass = TrivadisPlsqlNaming
-	}
-	
-	// create a simple properties file to test with	
-	static def void createTestPropertiesFile() {
-		val file = new File(TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME)
-		val fileWriter = new FileWriter(file, true)
-		val bufferedWriter = new BufferedWriter(fileWriter)
-		bufferedWriter.write("PREFIX_LOCAL_VARIABLE_NAME = loc_")
-		bufferedWriter.newLine()
-		bufferedWriter.close()
-		fileWriter.close()
-	}
+  public static void createTestPropertiesFile() {
+    try {
+      final File file = new File(TrivadisPlsqlNamingTest.FULL_PROPERTIES_FILE_NAME);
+      final FileWriter fileWriter = new FileWriter(file, true);
+      final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+      bufferedWriter.write("PREFIX_LOCAL_VARIABLE_NAME = loc_");
+      bufferedWriter.newLine();
+      bufferedWriter.close();
+      fileWriter.close();
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
+    }
+  }
 
-	// check that old prefix is now not accepted
-	@Test
-	def void LocalVariableNok() {
-		val stmt = '''
-			CREATE OR REPLACE PACKAGE BODY example AS
-			   PROCEDURE a IS
-			      l_some_name INTEGER;
-			   BEGIN
-			      NULL;
-			   END a;
-			END example;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9102"].size)
-	}
+  @Test
+  public void LocalVariableNok() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("CREATE OR REPLACE PACKAGE BODY example AS");
+    _builder.newLine();
+    _builder.append("   ");
+    _builder.append("PROCEDURE a IS");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("l_some_name INTEGER;");
+    _builder.newLine();
+    _builder.append("   ");
+    _builder.append("BEGIN");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("NULL;");
+    _builder.newLine();
+    _builder.append("   ");
+    _builder.append("END a;");
+    _builder.newLine();
+    _builder.append("END example;");
+    _builder.newLine();
+    final String stmt = _builder.toString();
+    final List<Issue> issues = this.getIssues(stmt);
+    final Function1<Issue, Boolean> _function = (Issue it) -> {
+      String _code = it.getCode();
+      return Boolean.valueOf(Objects.equal(_code, "G-9102"));
+    };
+    Assert.assertEquals(1, IterableExtensions.size(IterableExtensions.<Issue>filter(issues, _function)));
+  }
 
-	// check that new prefix from file is accepted
-	@Test
-	def void LocalVariableOk() {
-		val stmt = '''
-			CREATE OR REPLACE PACKAGE BODY example AS
-			   PROCEDURE a IS
-			      loc_some_name INTEGER;
-			   BEGIN
-			      NULL;
-			   END a;
-			END example;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9102"].size)
-	}
+  @Test
+  public void LocalVariableOk() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("CREATE OR REPLACE PACKAGE BODY example AS");
+    _builder.newLine();
+    _builder.append("   ");
+    _builder.append("PROCEDURE a IS");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("loc_some_name INTEGER;");
+    _builder.newLine();
+    _builder.append("   ");
+    _builder.append("BEGIN");
+    _builder.newLine();
+    _builder.append("      ");
+    _builder.append("NULL;");
+    _builder.newLine();
+    _builder.append("   ");
+    _builder.append("END a;");
+    _builder.newLine();
+    _builder.append("END example;");
+    _builder.newLine();
+    final String stmt = _builder.toString();
+    final List<Issue> issues = this.getIssues(stmt);
+    final Function1<Issue, Boolean> _function = (Issue it) -> {
+      String _code = it.getCode();
+      return Boolean.valueOf(Objects.equal(_code, "G-9102"));
+    };
+    Assert.assertEquals(0, IterableExtensions.size(IterableExtensions.<Issue>filter(issues, _function)));
+  }
 
-	// check that defaults are used if not specified in the properties-file
-	@Test
-	def void GlobalVariableNok() {
-		val stmt = '''
-			CREATE OR REPLACE PACKAGE example AS
-			   some_name INTEGER;
-			END example;
-			/
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(1, issues.filter[it.code == "G-9101"].size)
-	}
+  @Test
+  public void GlobalVariableNok() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("CREATE OR REPLACE PACKAGE example AS");
+    _builder.newLine();
+    _builder.append("   ");
+    _builder.append("some_name INTEGER;");
+    _builder.newLine();
+    _builder.append("END example;");
+    _builder.newLine();
+    _builder.append("/");
+    _builder.newLine();
+    final String stmt = _builder.toString();
+    final List<Issue> issues = this.getIssues(stmt);
+    final Function1<Issue, Boolean> _function = (Issue it) -> {
+      String _code = it.getCode();
+      return Boolean.valueOf(Objects.equal(_code, "G-9101"));
+    };
+    Assert.assertEquals(1, IterableExtensions.size(IterableExtensions.<Issue>filter(issues, _function)));
+  }
 
-	// check that defaults are used if not specified in the properties-file
-	@Test
-	def void GlobalVariableOk() {
-		val stmt = '''
-			CREATE OR REPLACE PACKAGE example AS
-			   g_some_name INTEGER;
-			END example;
-		'''
-		val issues = stmt.issues
-		Assert.assertEquals(0, issues.filter[it.code == "G-9101"].size)
-
-	}
-
+  @Test
+  public void GlobalVariableOk() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("CREATE OR REPLACE PACKAGE example AS");
+    _builder.newLine();
+    _builder.append("   ");
+    _builder.append("g_some_name INTEGER;");
+    _builder.newLine();
+    _builder.append("END example;");
+    _builder.newLine();
+    final String stmt = _builder.toString();
+    final List<Issue> issues = this.getIssues(stmt);
+    final Function1<Issue, Boolean> _function = (Issue it) -> {
+      String _code = it.getCode();
+      return Boolean.valueOf(Objects.equal(_code, "G-9101"));
+    };
+    Assert.assertEquals(0, IterableExtensions.size(IterableExtensions.<Issue>filter(issues, _function)));
+  }
 }
