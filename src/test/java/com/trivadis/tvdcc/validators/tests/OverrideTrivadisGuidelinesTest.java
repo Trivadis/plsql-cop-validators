@@ -28,112 +28,112 @@ import org.junit.Test;
 
 @SuppressWarnings("all")
 public class OverrideTrivadisGuidelinesTest extends AbstractValidatorTest {
-  @BeforeClass
-  public static void setupValidator() {
-    PLSQLValidatorPreferences.INSTANCE.setValidatorClass(OverrideTrivadisGuidelines.class);
-  }
+    @BeforeClass
+    public static void setupValidator() {
+        PLSQLValidatorPreferences.INSTANCE.setValidatorClass(OverrideTrivadisGuidelines.class);
+    }
 
-  @Test
-  public void literalInConstantDeclarationsIsOkay() {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("CREATE PACKAGE pkg AS");
-    _builder.newLine();
-    _builder.append("   ");
-    _builder.append("co_templ CONSTANT VARCHAR2(4000 BYTE) := \'a text\' || \' more text\';");
-    _builder.newLine();
-    _builder.append("END pkg;");
-    _builder.newLine();
-    final String stmt = _builder.toString();
-    final Function1<Issue, Boolean> _function = (Issue it) -> {
-      String _code = it.getCode();
-      return Boolean.valueOf(Objects.equal(_code, "G-1050"));
-    };
-    final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-    Assert.assertEquals(0, IterableExtensions.size(issues));
-  }
+    @Test
+    public void literalInConstantDeclarationsIsOkay() {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("CREATE PACKAGE pkg AS");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("co_templ CONSTANT VARCHAR2(4000 BYTE) := \'a text\' || \' more text\';");
+        _builder.newLine();
+        _builder.append("END pkg;");
+        _builder.newLine();
+        final String stmt = _builder.toString();
+        final Function1<Issue, Boolean> _function = (Issue it) -> {
+            String _code = it.getCode();
+            return Boolean.valueOf(Objects.equal(_code, "G-1050"));
+        };
+        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
+        Assert.assertEquals(0, IterableExtensions.size(issues));
+    }
 
-  @Test
-  public void literalInLoggerCallIsOkay() {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("BEGIN");
-    _builder.newLine();
-    _builder.append("   ");
-    _builder.append("logger.log(\'Hello World\');");
-    _builder.newLine();
-    _builder.append("END;");
-    _builder.newLine();
-    final String stmt = _builder.toString();
-    final Function1<Issue, Boolean> _function = (Issue it) -> {
-      String _code = it.getCode();
-      return Boolean.valueOf(Objects.equal(_code, "G-1050"));
-    };
-    final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-    Assert.assertEquals(0, IterableExtensions.size(issues));
-  }
+    @Test
+    public void literalInLoggerCallIsOkay() {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("logger.log(\'Hello World\');");
+        _builder.newLine();
+        _builder.append("END;");
+        _builder.newLine();
+        final String stmt = _builder.toString();
+        final Function1<Issue, Boolean> _function = (Issue it) -> {
+            String _code = it.getCode();
+            return Boolean.valueOf(Objects.equal(_code, "G-1050"));
+        };
+        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
+        Assert.assertEquals(0, IterableExtensions.size(issues));
+    }
 
-  @Test
-  public void literalInFunctionOfLoggerCallIsOkay() {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("BEGIN");
-    _builder.newLine();
-    _builder.append("   ");
-    _builder.append("logger.log(upper(\'Hello World\'));");
-    _builder.newLine();
-    _builder.append("   ");
-    _builder.append("logger.log(upper(\'Hello World\'));");
-    _builder.newLine();
-    _builder.append("END;");
-    _builder.newLine();
-    final String stmt = _builder.toString();
-    final Function1<Issue, Boolean> _function = (Issue it) -> {
-      String _code = it.getCode();
-      return Boolean.valueOf(Objects.equal(_code, "G-1050"));
-    };
-    final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-    Assert.assertEquals(0, IterableExtensions.size(issues));
-  }
+    @Test
+    public void literalInFunctionOfLoggerCallIsOkay() {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("logger.log(upper(\'Hello World\'));");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("logger.log(upper(\'Hello World\'));");
+        _builder.newLine();
+        _builder.append("END;");
+        _builder.newLine();
+        final String stmt = _builder.toString();
+        final Function1<Issue, Boolean> _function = (Issue it) -> {
+            String _code = it.getCode();
+            return Boolean.valueOf(Objects.equal(_code, "G-1050"));
+        };
+        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
+        Assert.assertEquals(0, IterableExtensions.size(issues));
+    }
 
-  @Test
-  public void literalInPackageFunctionOfLoggerCallIsOkay() {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("BEGIN");
-    _builder.newLine();
-    _builder.append("   ");
-    _builder.append("logger.log(x.y(\'Hello World\'));");
-    _builder.newLine();
-    _builder.append("   ");
-    _builder.append("logger.log(x.y(\'Hello World\'));");
-    _builder.newLine();
-    _builder.append("END;");
-    _builder.newLine();
-    final String stmt = _builder.toString();
-    final Function1<Issue, Boolean> _function = (Issue it) -> {
-      String _code = it.getCode();
-      return Boolean.valueOf(Objects.equal(_code, "G-1050"));
-    };
-    final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-    Assert.assertEquals(0, IterableExtensions.size(issues));
-  }
+    @Test
+    public void literalInPackageFunctionOfLoggerCallIsOkay() {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("logger.log(x.y(\'Hello World\'));");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("logger.log(x.y(\'Hello World\'));");
+        _builder.newLine();
+        _builder.append("END;");
+        _builder.newLine();
+        final String stmt = _builder.toString();
+        final Function1<Issue, Boolean> _function = (Issue it) -> {
+            String _code = it.getCode();
+            return Boolean.valueOf(Objects.equal(_code, "G-1050"));
+        };
+        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
+        Assert.assertEquals(0, IterableExtensions.size(issues));
+    }
 
-  @Test
-  public void literalInDbmsOutputCallIsNotOkay() {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("BEGIN");
-    _builder.newLine();
-    _builder.append("   ");
-    _builder.append("dbms_output.put_line(\'Hello World\');");
-    _builder.newLine();
-    _builder.append("   ");
-    _builder.append("dbms_output.put_line(\'Hello World\');");
-    _builder.newLine();
-    _builder.append("END;");
-    _builder.newLine();
-    final String stmt = _builder.toString();
-    final Function1<Issue, Boolean> _function = (Issue it) -> {
-      String _code = it.getCode();
-      return Boolean.valueOf(Objects.equal(_code, "G-1050"));
-    };
-    final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
-    Assert.assertEquals(2, IterableExtensions.size(issues));
-  }
+    @Test
+    public void literalInDbmsOutputCallIsNotOkay() {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("BEGIN");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("dbms_output.put_line(\'Hello World\');");
+        _builder.newLine();
+        _builder.append("   ");
+        _builder.append("dbms_output.put_line(\'Hello World\');");
+        _builder.newLine();
+        _builder.append("END;");
+        _builder.newLine();
+        final String stmt = _builder.toString();
+        final Function1<Issue, Boolean> _function = (Issue it) -> {
+            String _code = it.getCode();
+            return Boolean.valueOf(Objects.equal(_code, "G-1050"));
+        };
+        final Iterable<Issue> issues = IterableExtensions.<Issue>filter(this.getIssues(stmt), _function);
+        Assert.assertEquals(2, IterableExtensions.size(issues));
+    }
 }
