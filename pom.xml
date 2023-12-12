@@ -155,23 +155,6 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<groupId>org.eclipse.xtend</groupId>
-				<artifactId>xtend-maven-plugin</artifactId>
-				<version>${xtext.version}</version>
-				<executions>
-					<execution>
-						<id>test</id>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-						<configuration>
-							<javaSourceVersion>${jdk.version}</javaSourceVersion>
-							<testOutputDirectory>${project.basedir}/src/test/xtend-gen</testOutputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
 				<version>1.18.0.372</version>
