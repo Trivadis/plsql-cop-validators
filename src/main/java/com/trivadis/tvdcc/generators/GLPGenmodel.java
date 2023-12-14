@@ -22,22 +22,22 @@ import com.trivadis.tvdcc.genmodel.GenSqaleXml;
 import com.trivadis.tvdcc.validators.GLP;
 
 public class GLPGenmodel {
-	
-	public static void genPlsqlcopModelXml() {
-		GenSqaleXml gen = new GenSqaleXml();
-		gen.generate("./src/main/resources/GLP");
-	}
-	
-	public static void genRulesXml() {
-		GenRulesXml gen = new GenRulesXml();
-		String targetDir = "./src/main/resources/GLP";
-		gen.generate(targetDir, "./src/main/resources/GLP/sample");
-	}
 
-	public static void main(String[] args) {
-		PLSQLValidatorPreferences.INSTANCE.setValidatorClass(GLP.class);
-		genPlsqlcopModelXml();
-		genRulesXml();
-	}
+    public static void genPlsqlcopModelXml() {
+        GenSqaleXml gen = new GenSqaleXml();
+        gen.generate("./src/main/resources/GLP");
+    }
+
+    public static void genRulesXml() {
+        GenRulesXml gen = new GenRulesXml();
+        String targetDir = "./src/main/resources/GLP";
+        gen.generate(targetDir, "./src/main/resources/GLP/sample");
+    }
+
+    public static void main(String[] args) {
+        PLSQLValidatorPreferences.INSTANCE.setValidatorClass(GLP.class);
+        genPlsqlcopModelXml();
+        genRulesXml();
+    }
 
 }

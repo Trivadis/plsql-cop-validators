@@ -19,9 +19,11 @@ package com.trivadis.sonar.plugin;
 import org.sonar.api.Plugin;
 
 public class PlsqlCustomPlugin implements Plugin {
-	public PlsqlCustomPlugin() {}
-	
-	@Override
-	public void define(Context context) {}
+    public PlsqlCustomPlugin() {
+    }
+
+    @Override
+    public void define(Context context) {
+    }
 
 }
