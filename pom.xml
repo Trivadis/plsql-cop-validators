@@ -61,6 +61,46 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<id>CI</id>
+			<repositories>
+				<repository>
+					<id>plsqlcop</id>
+					<url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>plsqlcop</id>
+					<url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+			<distributionManagement>
+				<repository>
+					<id>plsqlcop</id>
+					<url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+				</repository>
+				<snapshotRepository>
+					<id>plsqlcop</id>
+					<url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
 	</profiles>
 	<dependencies>
 		<dependency>

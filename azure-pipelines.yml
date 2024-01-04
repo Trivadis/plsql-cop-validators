@@ -40,6 +40,6 @@ steps:
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '$(MAVEN_OPTS)'
-    goals: '-Dtvdcc.basedir=$(Pipeline.Workspace) -DaltDeploymentRepository=plsqlcop::default::https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1 clean deploy -U'
+    goals: 'clean deploy -U -Pdefault,CI'
     publishJUnitResults: true
     jdkVersion: 17
