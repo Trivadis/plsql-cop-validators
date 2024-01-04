@@ -653,7 +653,7 @@ public class Hint extends PLSQLValidator implements PLSQLCopValidator {
         SimpleExpressionNameValue sourceTable = null;
         SimpleExpressionNameValue sourceAlias = null;
         if (usingClause != null) {
-            sourceTable = usingClause.getTable();
+            sourceTable = usingClause.getQte().getQteName();
             sourceAlias = usingClause.getAlias();
         }
         String sourceTableValue = null;
