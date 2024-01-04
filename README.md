@@ -143,7 +143,7 @@ This way you can deal with an unbound number of validators without comproming th
 
 2. Install db* CODECOP Command Line
 
-   - Uncompress the distributed db* CODECOP archive file (e.g. tvdcc-4.x.x.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `/usr/local/bin/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
+   - Uncompress the distributed db* CODECOP archive file (e.g. tvdcc-4.x.x.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `$HOME/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
 
    - For Windows platforms only: Amend the settings for JAVA_HOME in the tvdcc.cmd file to meet your environment settings. Use at least a Java 8 runtime environment (JRE) or development kit (JDK).
 
@@ -259,9 +259,20 @@ This way you can deal with an unbound number of validators without comproming th
 
    Clone or download this repository. 
 
+3. Install the required db* CODECOP libraries
+
+   These libraries are not available in public Maven repositories into your local Maven repository. 
+   Open a terminal window in the cop-validators root folder and run Run the following shell script:
+
+      ./install_tvdcc_libs.sh
+
+   The shell script expects to find the library `tvdcc.jar` in `$HOME/tvdcc`. If it is not there, pass the path to the directory as parameter to this script. For example
+
+      ./install_tvdcc_libs.sh $HOME/tvdcc
+
 4. Build validator jar file
 
-   Open a terminal window in the cop-validators root folder and maven build by the following command
+   Open a terminal window in the cop-validators root folder and run the Maven build by the following command
 
 		mvn -Dtvdcc.basedir=/usr/local/bin/tvdcc clean package
 
