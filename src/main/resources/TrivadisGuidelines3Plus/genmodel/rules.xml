@@ -6551,7 +6551,7 @@ end employee_api;
 		<name><![CDATA[G-9101: Always name global variables to match '^g_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9101</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6576,7 +6576,7 @@ end example;
 		<name><![CDATA[G-9102: Always name local variables to match '^l_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9102</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6605,7 +6605,7 @@ end;
 		<name><![CDATA[G-9103: Always name cursors to match '^c_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9103</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6634,7 +6634,7 @@ end;
 		<name><![CDATA[G-9104: Always name records to match '^r_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9104</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6675,7 +6675,7 @@ end;
 		<name><![CDATA[G-9105: Always name collection types (arrays/tables) to match '^t_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9105</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6714,7 +6714,7 @@ end;
 		<name><![CDATA[G-9106: Always name objects to match '^o_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9106</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6757,7 +6757,7 @@ end;
 		<name><![CDATA[G-9107: Always name cursor parameters to match '^p_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9107</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6792,7 +6792,7 @@ end;
 		<name><![CDATA[G-9108: Always name in parameters to match '^in_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9108</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6817,7 +6817,7 @@ end p;
 		<name><![CDATA[G-9109: Always name out parameters to match '^out_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9109</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6842,7 +6842,7 @@ end p;
 		<name><![CDATA[G-9110: Always name in/out parameters to match '^io_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9110</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6867,7 +6867,7 @@ end p;
 		<name><![CDATA[G-9111: Always name record type definitions to match '^r_.+_type$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9111</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6906,7 +6906,7 @@ end;
 		<name><![CDATA[G-9112: Always name collection type definitions (arrays/tables) to match '^t_.+_type$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9112</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6939,7 +6939,7 @@ end;
 		<name><![CDATA[G-9113: Always name exceptions to match '^e_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9113</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6968,7 +6968,7 @@ end;
 		<name><![CDATA[G-9114: Always name constants to match '^co_.+$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9114</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -6997,7 +6997,7 @@ end;
 		<name><![CDATA[G-9115: Always name subtypes to match '^.+_type$'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9115</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
