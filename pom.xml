@@ -246,6 +246,7 @@
 							<excludes>
 								<exclude>**/TrivadisPlsqlNamingTest.java</exclude>
 								<exclude>**/TrivadisPlsqlNamingPropertiesFileTest.java</exclude>
+                                <exclude>**/TrivadisPlsqlNamingSystemPropertiesTest.java</exclude>
 								<exclude>**/GLPTest.java</exclude>
 								<exclude>**/SQLInjectionTest.java</exclude>
 								<exclude>**/OverrideTrivadisGuidelinesTest.java</exclude>
@@ -282,6 +283,20 @@
 							</includes>
 						</configuration>
 					</execution>
+                    <execution>
+                        <id>trivadis-plsql-naming-system-properties-test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <forkCount>1</forkCount>
+                            <reuseForks>true</reuseForks>
+                            <includes>
+                                <include>**/TrivadisPlsqlNamingSystemPropertiesTest.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
 					<execution>
 						<id>glp-test</id>
 						<goals>
