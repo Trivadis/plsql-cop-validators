@@ -17,16 +17,26 @@ package com.trivadis.tvdcc.validators;
 
 import com.trivadis.oracle.plsql.plsql.CollectionTypeDefinition;
 import com.trivadis.oracle.plsql.plsql.ConstantDeclaration;
+import com.trivadis.oracle.plsql.plsql.ConstructorDeclaration;
+import com.trivadis.oracle.plsql.plsql.CreateFunction;
 import com.trivadis.oracle.plsql.plsql.CreatePackage;
 import com.trivadis.oracle.plsql.plsql.CreatePackageBody;
 import com.trivadis.oracle.plsql.plsql.CreateType;
 import com.trivadis.oracle.plsql.plsql.CursorDeclarationOrDefinition;
 import com.trivadis.oracle.plsql.plsql.ExceptionDeclaration;
+import com.trivadis.oracle.plsql.plsql.ExitStatement;
+import com.trivadis.oracle.plsql.plsql.FuncDeclInType;
+import com.trivadis.oracle.plsql.plsql.FunctionDefinition;
 import com.trivadis.oracle.plsql.plsql.ParameterDeclaration;
+import com.trivadis.oracle.plsql.plsql.PlsqlBlock;
+import com.trivadis.oracle.plsql.plsql.ProcDeclInType;
+import com.trivadis.oracle.plsql.plsql.ProcedureDefinition;
 import com.trivadis.oracle.plsql.plsql.RecordTypeDefinition;
+import com.trivadis.oracle.plsql.plsql.SimpleExpressionNameValue;
 import com.trivadis.oracle.plsql.plsql.SubTypeDefinition;
 import com.trivadis.oracle.plsql.plsql.UserDefinedType;
 import com.trivadis.oracle.plsql.plsql.VariableDeclaration;
+import com.trivadis.oracle.plsql.plsql.WhileLoopStatement;
 import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline;
 import com.trivadis.oracle.plsql.validation.PLSQLCopValidator;
 import com.trivadis.oracle.plsql.validation.PLSQLValidator;
@@ -84,7 +94,6 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
     private static String PREFIX_EXCEPTION_NAME = "e_";
     private static String PREFIX_CONSTANT_NAME = "co_";
     private static String SUFFIX_SUBTYPE_NAME = "_type";
-    private static String VALID_LOCAL_VARIABLE_NAMES = "^([ij])$";
 
     public TrivadisPlsqlNaming() {
         super();
@@ -278,6 +287,57 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
         }
         return ret;
     }
+    
+    private boolean containsSimpleExpressionName(EObject container, String name) {
+        boolean found = false;
+        List<SimpleExpressionNameValue> values = EcoreUtil2.getAllContentsOfType(container,
+                SimpleExpressionNameValue.class);
+        for (SimpleExpressionNameValue value : values) {
+            if (value.getValue().equalsIgnoreCase(name)) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+    
+    protected EObject getParentOfBody(EObject obj) {
+        EObject ret = obj;
+        while (!(ret instanceof PlsqlBlock || ret instanceof ConstructorDeclaration || ret instanceof CreateFunction
+                || ret instanceof CreatePackageBody || ret instanceof FuncDeclInType
+                || ret instanceof FunctionDefinition || ret instanceof ProcDeclInType
+                || ret instanceof ProcedureDefinition) && ret != null) {
+            ret = ret.eContainer();
+        }
+        return ret;
+    }
+    
+    private boolean isLoopIndexVariable(EObject obj) {
+        if (obj instanceof SimpleExpressionNameValue) {
+            String varName = ((SimpleExpressionNameValue) obj).getValue();
+            EObject container = getParentOfBody(obj);
+            List<WhileLoopStatement> whileLoops = EcoreUtil2.getAllContentsOfType(container,
+                    WhileLoopStatement.class);
+            boolean found = false;
+            for (WhileLoopStatement whileLoop : whileLoops) {
+                if (containsSimpleExpressionName(whileLoop.getCondition(), varName)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                List<ExitStatement> exits = EcoreUtil2.getAllContentsOfType(container, ExitStatement.class);
+                for (ExitStatement exit : exits) {
+                    if (containsSimpleExpressionName(exit.getCondition(), varName)) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            return found;
+        }
+        return false;
+    }
 
     @Check
     public void checkVariableName(VariableDeclaration v) {
@@ -310,7 +370,7 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
                     // reduce false positives, allow cursor/object/array names and common indices i, j
                     if (!name.startsWith(PREFIX_LOCAL_VARIABLE_NAME) && !name.startsWith(PREFIX_CURSOR_NAME)
                             && !name.startsWith(PREFIX_OBJECT_NAME) && !name.startsWith(PREFIX_ARRAY_NAME)
-                            && !name.matches(VALID_LOCAL_VARIABLE_NAMES)) {
+                            && !isLoopIndexVariable(v.getVariable())) {
                         warning(ISSUE_LOCAL_VARIABLE_NAME, v.getVariable(), v);
                     }
                 }
