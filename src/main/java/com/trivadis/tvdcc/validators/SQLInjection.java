@@ -78,7 +78,7 @@ public class SQLInjection extends PLSQLValidator implements PLSQLCopValidator {
             guidelines = new HashMap<>();
             guidelines.put(9501, new PLSQLCopGuideline(9501,
                     "Never use parameter in string expression of dynamic SQL. Use asserted local variable instead.",
-                    CRITICAL, SECURITY_FEATURES, Remediation.createConstantPerIssue(1)));
+                    BLOCKER, SECURITY_FEATURES, Remediation.createConstantPerIssue(5)));
         }
         return guidelines;
     }
