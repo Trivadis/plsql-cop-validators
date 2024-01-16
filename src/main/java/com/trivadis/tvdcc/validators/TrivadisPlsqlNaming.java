@@ -149,60 +149,60 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
             // register custom guidelines
             guidelines.put(ISSUE_GLOBAL_VARIABLE_NAME,
                     new PLSQLCopGuideline(ISSUE_GLOBAL_VARIABLE_NAME,
-                            "Always name global variables to match '" + REGEX_GLOBAL_VARIABLE_NAME + "'.", MAJOR,
+                            "Always name global variables to match '" + REGEX_GLOBAL_VARIABLE_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_LOCAL_VARIABLE_NAME,
                     new PLSQLCopGuideline(ISSUE_LOCAL_VARIABLE_NAME,
-                            "Always name local variables to match '" + REGEX_LOCAL_VARIABLE_NAME + "'.", MAJOR,
+                            "Always name local variables to match '" + REGEX_LOCAL_VARIABLE_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_CURSOR_NAME,
                     new PLSQLCopGuideline(ISSUE_CURSOR_NAME, "Always name cursors to match '" + REGEX_CURSOR_NAME + "'.",
-                            MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
+                            MINOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_RECORD_NAME,
                     new PLSQLCopGuideline(ISSUE_RECORD_NAME, "Always name records to match '" + REGEX_RECORD_NAME + "'.",
-                            MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
+                            MINOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_ARRAY_NAME,
                     new PLSQLCopGuideline(ISSUE_ARRAY_NAME,
-                            "Always name collection types (arrays/tables) to match '" + REGEX_ARRAY_NAME + "'.", MAJOR,
+                            "Always name collection types (arrays/tables) to match '" + REGEX_ARRAY_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_OBJECT_NAME,
                     new PLSQLCopGuideline(ISSUE_OBJECT_NAME, "Always name objects to match '" + REGEX_OBJECT_NAME + "'.",
-                            MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
+                            MINOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_CURSOR_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_CURSOR_PARAMETER_NAME,
-                            "Always name cursor parameters to match '" + REGEX_CURSOR_PARAMETER_NAME + "'.", MAJOR,
+                            "Always name cursor parameters to match '" + REGEX_CURSOR_PARAMETER_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_IN_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_IN_PARAMETER_NAME,
-                            "Always name in parameters to match '" + REGEX_IN_PARAMETER_NAME + "'.", MAJOR,
+                            "Always name in parameters to match '" + REGEX_IN_PARAMETER_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_OUT_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_OUT_PARAMETER_NAME,
-                            "Always name out parameters to match '" + REGEX_OUT_PARAMETER_NAME + "'.", MAJOR,
+                            "Always name out parameters to match '" + REGEX_OUT_PARAMETER_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_IN_OUT_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_IN_OUT_PARAMETER_NAME,
-                            "Always name in/out parameters to match '" + REGEX_IN_OUT_PARAMETER_NAME + "'.", MAJOR,
+                            "Always name in/out parameters to match '" + REGEX_IN_OUT_PARAMETER_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_RECORD_TYPE_NAME,
                     new PLSQLCopGuideline(ISSUE_RECORD_TYPE_NAME,
-                            "Always name record type definitions to match '" + REGEX_RECORD_TYPE_NAME + "'.", MAJOR,
+                            "Always name record type definitions to match '" + REGEX_RECORD_TYPE_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_ARRAY_TYPE_NAME,
                     new PLSQLCopGuideline(ISSUE_ARRAY_TYPE_NAME,
                             "Always name collection type definitions (arrays/tables) to match '" + REGEX_ARRAY_TYPE_NAME
-                            + "'.", MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
+                            + "'.", MINOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_EXCEPTION_NAME,
                     new PLSQLCopGuideline(ISSUE_EXCEPTION_NAME,
-                            "Always name exceptions to match '" + REGEX_EXCEPTION_NAME + "'.", MAJOR, UNDERSTANDABILITY,
+                            "Always name exceptions to match '" + REGEX_EXCEPTION_NAME + "'.", MINOR, UNDERSTANDABILITY,
                             Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_CONSTANT_NAME,
                     new PLSQLCopGuideline(ISSUE_CONSTANT_NAME,
-                            "Always name constants to match '" + REGEX_CONSTANT_NAME + "'.", MAJOR, UNDERSTANDABILITY,
+                            "Always name constants to match '" + REGEX_CONSTANT_NAME + "'.", MINOR, UNDERSTANDABILITY,
                             Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_SUBTYPE_NAME,
                     new PLSQLCopGuideline(ISSUE_SUBTYPE_NAME,
-                            "Always name subtypes to match '" + REGEX_SUBTYPE_NAME + "'.", MAJOR, UNDERSTANDABILITY,
+                            "Always name subtypes to match '" + REGEX_SUBTYPE_NAME + "'.", MINOR, UNDERSTANDABILITY,
                             Remediation.createConstantPerIssue(1)));
         }
         return guidelines;
