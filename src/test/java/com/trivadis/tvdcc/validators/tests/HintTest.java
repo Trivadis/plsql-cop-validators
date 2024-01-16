@@ -600,4 +600,32 @@ public class HintTest extends AbstractValidatorTest {
         var issues = getIssues(stmt).stream().filter(it -> it.getCode().equals("G-9602")).toList();
         Assert.assertEquals(0, issues.size());
     }
+    
+    // -- issue 65 https://github.com/Trivadis/plsql-cop-validators/issues/65
+    
+    @Test
+    public void parallelHintWithDegreeWithoutParenthesis() {
+        // was reporting G-9601: Never use unknown hints. "2" is unknown.
+        var stmt = """
+                select /*+ parallel 2 */ count(*) 
+                  from sales s
+                  join customers c 
+                    on c.cust_id = s.cust_id;
+                """;
+        var issues = getIssues(stmt);
+        Assert.assertEquals(0, issues.size());
+    }
+
+    @Test
+    public void parallelHintWithDegreeInParenthesisWithoutAlias() {
+        // was working before fixing issue 65
+        var stmt = """
+                select /*+ parallel(2) */ count(*) 
+                  from sales s
+                  join customers c 
+                    on c.cust_id = s.cust_id;
+                """;
+        var issues = getIssues(stmt);
+        Assert.assertEquals(0, issues.size());
+    }
 }
