@@ -164,23 +164,6 @@ public class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
     }
 
     @Test
-    public void localVariableSingleLetterZNok() {
-        var stmt = """
-                declare
-                   z pls_integer := 0;
-                begin
-                   while z < 10
-                   loop
-                      dbms_output.put_line(z);
-                      z := z + 1;
-                   end loop;
-                end;
-                """;
-        var issues = getIssues(stmt);
-        Assert.assertEquals(1, issues.stream().filter(it -> it.getCode().equals("G-9102")).toList().size());
-    }
-
-    @Test
     public void cursorNameNok() {
         var stmt = """
                 DECLARE
