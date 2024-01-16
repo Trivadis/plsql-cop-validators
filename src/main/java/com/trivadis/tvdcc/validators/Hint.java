@@ -521,13 +521,25 @@ public class Hint extends PLSQLValidator implements PLSQLCopValidator {
         }
         return h.getText().substring(3, h.getText().length() - endCommentLength);
     }
+    
+    private static boolean isNumeric(String value) {
+        if (value == null) {
+            return false;
+        }
+        try {
+            Double.parseDouble(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;            
+        }
+    }
 
     private void checkUnknownHint(HintOrComment h) {
         final Pattern pattern = Pattern.compile("(?i)([^\\s\\(]+)(\\s*\\([^\\(\\)]+\\)*)*");
         final Matcher matcher = pattern.matcher(getHintText(h));
         while (matcher.find()) {
             final String hint = matcher.group(1);
-            if (!ALL_HINTS.contains(hint.toUpperCase())) {
+            if (!ALL_HINTS.contains(hint.toUpperCase()) && !isNumeric(hint)) {
                 warning(9601, "\"" + hint + "\" is unknown.", h, matcher.start(1), hint.length());
             }
         }
