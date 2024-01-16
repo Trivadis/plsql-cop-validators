@@ -40,7 +40,7 @@ public class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest
             final File file = new File(FULL_PROPERTIES_FILE_NAME);
             final FileWriter fileWriter = new FileWriter(file, true);
             final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write("PREFIX_LOCAL_VARIABLE_NAME = loc_");
+            bufferedWriter.write("REGEX_LOCAL_VARIABLE_NAME = ^loc_.+$");
             bufferedWriter.newLine();
             bufferedWriter.close();
             fileWriter.close();
