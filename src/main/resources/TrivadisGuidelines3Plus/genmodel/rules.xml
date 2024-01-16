@@ -7026,7 +7026,7 @@ end;
 		<name><![CDATA[G-9501: Never use parameter in string expression of dynamic SQL. Use asserted local variable instead.]]></name>
 		<type>VULNERABILITY</type>
 		<internalKey>G-9501</internalKey>
-		<severity>CRITICAL</severity>
+		<severity>BLOCKER</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
