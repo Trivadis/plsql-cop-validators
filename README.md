@@ -46,6 +46,7 @@ These regular expressions can be customized by using a `TrivadisPlsqlNaming.prop
 Here's an example of the `TrivadisPlsqlNaming.properties` file content using default values for all properties:
 
 ```
+# Override default for TrivadisPlsqlNaming validator
 REGEX_GLOBAL_VARIABLE_NAME = ^g_.+$
 REGEX_LOCAL_VARIABLE_NAME = ^l_.+$
 REGEX_CURSOR_NAME = ^c_.+$
@@ -61,7 +62,16 @@ REGEX_ARRAY_TYPE_NAME = ^t_.+_type$
 REGEX_EXCEPTION_NAME = ^e_.+$
 REGEX_CONSTANT_NAME = ^co_.+$
 REGEX_SUBTYPE_NAME = ^.+_type$
+# Override defaults for TrivadisGuidelines3 validator
+cop.1050.threshold = 2
+cop.2185.threshold = 4
+cop.2410.boolean.strings = true,false,t,f,0,1,2,yes,no,y,n,ja,nein,j,si,s,oui,non,o,l_true,l_false,co_true,co_false,co_numeric_true,co_numeric_false
+cop.5050.threshold.from = 20000
+cop.5050.threshold.to = 20999
+cop.7210.threshold = 2000
 ```
+
+If you are using the `TrivadisGuidelines3Plus` validator, the properties for the `TrivadisGuidelines3` validator can also be configured in this properties file.
 
 ### GLP
 
