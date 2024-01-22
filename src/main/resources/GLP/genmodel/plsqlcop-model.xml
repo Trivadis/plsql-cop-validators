@@ -174,7 +174,7 @@
 				</prop>
 				<prop>
 					<key>offset</key>
-					<val>2.0</val>
+					<val>1.0</val>
 					<txt>mn</txt>
 				</prop>
 			</chc>
@@ -184,16 +184,16 @@
 				<rule-key>E-0002</rule-key>
 				<prop>
 					<key>remediationFunction</key>
-					<txt>LINEAR_OFFSET</txt>
+					<txt>CONSTANT_ISSUE</txt>
 				</prop>
 				<prop>
 					<key>remediationFactor</key>
-					<val>3.0</val>
+					<val>0.0</val>
 					<txt>mn</txt>
 				</prop>
 				<prop>
 					<key>offset</key>
-					<val>10.0</val>
+					<val>1.0</val>
 					<txt>mn</txt>
 				</prop>
 			</chc>
@@ -212,7 +212,7 @@
 				</prop>
 				<prop>
 					<key>offset</key>
-					<val>2.0</val>
+					<val>1.0</val>
 					<txt>mn</txt>
 				</prop>
 			</chc>
