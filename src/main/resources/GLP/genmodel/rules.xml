@@ -18,7 +18,7 @@
 		<name><![CDATA[G-9001: Always prefix global variables with 'g_'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9001</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -43,7 +43,7 @@ end pkg;
 		<name><![CDATA[G-9002: Always prefix local variables with 'l_'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9002</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[
@@ -72,7 +72,7 @@ end p;
 		<name><![CDATA[G-9003: Always prefix parameters with 'p_'.]]></name>
 		<type>CODE_SMELL</type>
 		<internalKey>G-9003</internalKey>
-		<severity>MAJOR</severity>
+		<severity>MINOR</severity>
 		<cardinality>SINGLE</cardinality>
 		<status>READY</status>
 		<description><![CDATA[

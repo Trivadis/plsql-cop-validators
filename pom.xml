@@ -5,45 +5,17 @@
 	<!-- The Basics -->
 	<groupId>trivadis.tvdcc</groupId>
 	<artifactId>sonar-plsql-cop-custom-validators-plugin</artifactId>
-	<version>4.4.1-SNAPSHOT</version>
+	<version>4.5.0-SNAPSHOT</version>
 	<packaging>sonar-plugin</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>8</jdk.version>
 		<jdk.test.version>17</jdk.test.version>
-		<tvdcc.basedir>/usr/local/bin/tvdcc</tvdcc.basedir>
 		<xtext.version>2.27.0</xtext.version>
 		<skip.genmodel>false</skip.genmodel>
 		<skipTests>false</skipTests>
 	</properties>
 	<profiles>
-		<profile>
-			<id>fallback</id>
-			<properties>
-				<tvdcc.basedir>${basedir}/../..</tvdcc.basedir>
-				<skip.genmodel>true</skip.genmodel>
-			</properties>
-			<activation>
-				<file>
-					<missing>${tvdcc.basedir}/tvdcc.jar</missing>
-				</file>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<version>3.10.1</version>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<!-- different Java version for main and test -->
-							<!-- works with Maven builder from IDE or command line -->
-							<release>${jdk.version}</release>
-							<testRelease>${jdk.test.version}</testRelease>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 		<profile>
 			<id>default</id>
 			<activation>
@@ -89,23 +61,61 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<id>CI</id>
+			<repositories>
+				<repository>
+					<id>plsqlcop</id>
+					<url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>plsqlcop</id>
+					<url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+			<distributionManagement>
+				<repository>
+					<id>plsqlcop</id>
+					<url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+				</repository>
+				<snapshotRepository>
+					<id>plsqlcop</id>
+					<url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
 	</profiles>
 	<dependencies>
 		<dependency>
 			<!-- contains TrivadisGuidelines3 -->
 			<groupId>trivadis.tvdcc</groupId>
 			<artifactId>tvdcc</artifactId>
-			<version>4.4.0</version>
-			<scope>system</scope>
-			<systemPath>${tvdcc.basedir}/tvdcc.jar</systemPath>
+			<version>4.5.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<!-- contains PLSQLValidator -->
 			<groupId>trivadis.oracle</groupId>
 			<artifactId>plsql</artifactId>
-			<version>4.2.1</version>
-			<scope>system</scope>
-			<systemPath>${tvdcc.basedir}/lib/plsql-4.2.1.jar</systemPath>
+			<version>4.2.2-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<!-- required to build SonarQube plugin for minimal target version -->
@@ -185,8 +195,9 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.1</version>
 				<executions>
+                    <!-- only the test classpath contains the provided dependencies -->
 					<execution>
 						<id>glp</id>
 						<phase>compile</phase> 
@@ -195,7 +206,7 @@
 				    	</goals>
 				    	<configuration>
 							<mainClass>com.trivadis.tvdcc.generators.GLPGenmodel</mainClass>
-							<classpathScope>compile</classpathScope>
+							<classpathScope>test</classpathScope>
 							<cleanupDaemonThreads>false</cleanupDaemonThreads>
 							<skip>${skip.genmodel}</skip>
 						</configuration>
@@ -208,7 +219,7 @@
 				    	</goals>
 				    	<configuration>
 							<mainClass>com.trivadis.tvdcc.generators.TrivadisGuidelines3PlusGenmodel</mainClass>
-							<classpathScope>compile</classpathScope>
+							<classpathScope>test</classpathScope>
 							<cleanupDaemonThreads>false</cleanupDaemonThreads>
 							<skip>${skip.genmodel}</skip>
 						</configuration>
@@ -235,6 +246,7 @@
 							<excludes>
 								<exclude>**/TrivadisPlsqlNamingTest.java</exclude>
 								<exclude>**/TrivadisPlsqlNamingPropertiesFileTest.java</exclude>
+                                <exclude>**/TrivadisPlsqlNamingSystemPropertiesTest.java</exclude>
 								<exclude>**/GLPTest.java</exclude>
 								<exclude>**/SQLInjectionTest.java</exclude>
 								<exclude>**/OverrideTrivadisGuidelinesTest.java</exclude>
@@ -271,6 +283,20 @@
 							</includes>
 						</configuration>
 					</execution>
+                    <execution>
+                        <id>trivadis-plsql-naming-system-properties-test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <forkCount>1</forkCount>
+                            <reuseForks>true</reuseForks>
+                            <includes>
+                                <include>**/TrivadisPlsqlNamingSystemPropertiesTest.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
 					<execution>
 						<id>glp-test</id>
 						<goals>
@@ -346,7 +372,7 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>

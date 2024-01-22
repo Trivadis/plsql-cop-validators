@@ -52,11 +52,11 @@ public class GLP extends PLSQLValidator implements PLSQLCopValidator {
                 guidelines.put(k, super.getGuidelines().get(k));
             }
             // register guidelines
-            guidelines.put(9001, new PLSQLCopGuideline(9001, "Always prefix global variables with 'g_'.", MAJOR,
+            guidelines.put(9001, new PLSQLCopGuideline(9001, "Always prefix global variables with 'g_'.", MINOR,
                     UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
-            guidelines.put(9002, new PLSQLCopGuideline(9002, "Always prefix local variables with 'l_'.", MAJOR,
+            guidelines.put(9002, new PLSQLCopGuideline(9002, "Always prefix local variables with 'l_'.", MINOR,
                     UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
-            guidelines.put(9003, new PLSQLCopGuideline(9003, "Always prefix parameters with 'p_'.", MAJOR,
+            guidelines.put(9003, new PLSQLCopGuideline(9003, "Always prefix parameters with 'p_'.", MINOR,
                     UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
         }
         return guidelines;

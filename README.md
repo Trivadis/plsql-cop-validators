@@ -25,45 +25,53 @@ This validator implements 15 guidelines to cover the chapter [2.2 Naming Convent
 
 Guideline | Message
 --------- | -----------
-G-9101    | Always prefix global variables with 'g_'.
-G-9102    | Always prefix local variables with 'l_'.
-G-9103    | Always prefix cursors with 'c_'
-G-9104    | Always prefix records with 'r_'.
-G-9105    | Always prefix collection types (arrays/tables) with 't_'.
-G-9106    | Always prefix objects with 'o_'.
-G-9107    | Always prefix cursor parameters with 'p_'.
-G-9108    | Always prefix in parameters with 'in_'.
-G-9109    | Always prefix out parameters with 'out_'.
-G-9110    | Always prefix in/out parameters with 'io_'.
-G-9111    | Always prefix record type definitions with 'r_' and add the suffix '_type'.
-G-9112    | Always prefix collection type definitions (arrays/tables) with 't_' and add the suffix '_type'.
-G-9113    | Always prefix exceptions with 'e_'.
-G-9114    | Always prefix constants with 'co_'.
-G-9115    | Always prefix subtypes with 'type'.
+G-9101    | Always name global variables to match '^g_.+$'.
+G-9102    | Always name local variables to match '^l_.+$'.
+G-9103    | Always name cursors to match '^c_.+$'.
+G-9104    | Always name records to match '^r_.+$'.
+G-9105    | Always name collection types (arrays/tables) to match '^t_.+$'.
+G-9106    | Always name objects to match '^o_.+$'.
+G-9107    | Always name cursor parameters to match '^p_.+$'.
+G-9108    | Always name in parameters to match '^in_.+$'.
+G-9109    | Always name out parameters to match '^out_.+$'.
+G-9110    | Always name in/out parameters to match '^io_.+$'.
+G-9111    | Always name record type definitions to match '^r_.+_type$'.
+G-9112    | Always name collection type definitions (arrays/tables) to match '^t_.+_type$'.
+G-9113    | Always name exceptions to match '^e_.+$'.
+G-9114    | Always name constants to match '^co_.+$'.
+G-9115    | Always name subtypes to match '^.+_type$'.
 
-These prefixes and suffixes can be customized by using a `TrivadisPlsqlNaming.properties` file. This file must be placed in the user's home directory (`$HOME` for Linux or macOS and `%HOMEDRIVE%%HOMEPATH%` for Windows). If a property is omitted it will fall back to the default value (see table above).
+These regular expressions can be customized by using a `TrivadisPlsqlNaming.properties` file. This file must be placed in the user's home directory (`$HOME` for Linux or macOS and `%HOMEDRIVE%%HOMEPATH%` for Windows). If a property is omitted it will fall back to the default value (see table above). Furthermore, you can use Java system properties to configure the naming conventions, e.g. `-DREGEX_CONSTANT_NAME=^k_.+$`. However, the `TrivadisPlsqlNaming.properties` file overrides system properties that where set when starting the JVM.
 
 Here's an example of the `TrivadisPlsqlNaming.properties` file content using default values for all properties:
 
 ```
-PREFIX_GLOBAL_VARIABLE_NAME = g_
-PREFIX_LOCAL_VARIABLE_NAME = l_
-PREFIX_CURSOR_NAME = c_
-PREFIX_RECORD_NAME = r_
-PREFIX_ARRAY_NAME = t_
-PREFIX_OBJECT_NAME = o_
-PREFIX_CURSOR_PARAMETER_NAME = p_
-PREFIX_IN_PARAMETER_NAME = in_
-PREFIX_OUT_PARAMETER_NAME = out_
-PREFIX_IN_OUT_PARAMETER_NAME = io_
-PREFIX_RECORD_TYPE_NAME = r_
-SUFFIX_RECORD_TYPE_NAME = _type
-PREFIX_ARRAY_TYPE_NAME = t_
-SUFFIX_ARRAY_TYPE_NAME = _type
-PREFIX_EXCEPTION_NAME = e_
-PREFIX_CONSTANT_NAME = co_
-SUFFIX_SUBTYPE_NAME = _type
+# Override default for TrivadisPlsqlNaming validator
+REGEX_GLOBAL_VARIABLE_NAME = ^g_.+$
+REGEX_LOCAL_VARIABLE_NAME = ^l_.+$
+REGEX_CURSOR_NAME = ^c_.+$
+REGEX_RECORD_NAME = ^r_.+$
+REGEX_ARRAY_NAME = ^t_.+$
+REGEX_OBJECT_NAME = ^o_.+$
+REGEX_CURSOR_PARAMETER_NAME = ^p_.+$
+REGEX_IN_PARAMETER_NAME = ^in_.+$
+REGEX_OUT_PARAMETER_NAME = ^out_.+$
+REGEX_IN_OUT_PARAMETER_NAME = ^io_.+$
+REGEX_RECORD_TYPE_NAME = ^r_.+_type$
+REGEX_ARRAY_TYPE_NAME = ^t_.+_type$
+REGEX_EXCEPTION_NAME = ^e_.+$
+REGEX_CONSTANT_NAME = ^co_.+$
+REGEX_SUBTYPE_NAME = ^.+_type$
+# Override defaults for TrivadisGuidelines3 validator
+cop.1050.threshold = 2
+cop.2185.threshold = 4
+cop.2410.boolean.strings = true,false,t,f,0,1,2,yes,no,y,n,ja,nein,j,si,s,oui,non,o,l_true,l_false,co_true,co_false,co_numeric_true,co_numeric_false
+cop.5050.threshold.from = 20000
+cop.5050.threshold.to = 20999
+cop.7210.threshold = 2000
 ```
+
+If you are using the `TrivadisGuidelines3Plus` validator, the properties for the `TrivadisGuidelines3` validator can also be configured in this properties file.
 
 ### GLP
 
@@ -143,7 +151,7 @@ This way you can deal with an unbound number of validators without comproming th
 
 2. Install db* CODECOP Command Line
 
-   - Uncompress the distributed db* CODECOP archive file (e.g. tvdcc-4.x.x.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `/usr/local/bin/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
+   - Uncompress the distributed db* CODECOP archive file (e.g. tvdcc-4.x.x.zip) into a folder of your choice (hereinafter referred to as `TVDCC_HOME`). I use `$HOME/tvdcc` for `TVDCC_HOME` on my MacBook Pro.
 
    - For Windows platforms only: Amend the settings for JAVA_HOME in the tvdcc.cmd file to meet your environment settings. Use at least a Java 8 runtime environment (JRE) or development kit (JDK).
 
@@ -259,9 +267,20 @@ This way you can deal with an unbound number of validators without comproming th
 
    Clone or download this repository. 
 
+3. Install the required db* CODECOP libraries
+
+   These libraries are not available in public Maven repositories into your local Maven repository. 
+   Open a terminal window in the cop-validators root folder and run Run the following shell script:
+
+      ./install_tvdcc_libs.sh
+
+   The shell script expects to find the library `tvdcc.jar` in `$HOME/tvdcc`. If it is not there, pass the path to the directory as parameter to this script. For example
+
+      ./install_tvdcc_libs.sh $HOME/tvdcc
+
 4. Build validator jar file
 
-   Open a terminal window in the cop-validators root folder and maven build by the following command
+   Open a terminal window in the cop-validators root folder and run the Maven build by the following command
 
 		mvn -Dtvdcc.basedir=/usr/local/bin/tvdcc clean package
 

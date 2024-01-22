@@ -1658,7 +1658,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix global variables with 'g_'. -->
+			<!-- Always name global variables to match '^g_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9101</rule-key>
@@ -1677,7 +1677,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix local variables with 'l_'. -->
+			<!-- Always name local variables to match '^l_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9102</rule-key>
@@ -1696,7 +1696,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix cursors with 'c_'. -->
+			<!-- Always name cursors to match '^c_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9103</rule-key>
@@ -1715,7 +1715,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix records with 'r_'. -->
+			<!-- Always name records to match '^r_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9104</rule-key>
@@ -1734,7 +1734,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix collection types (arrays/tables) with 't_'. -->
+			<!-- Always name collection types (arrays/tables) to match '^t_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9105</rule-key>
@@ -1753,7 +1753,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix objects with 'o_'. -->
+			<!-- Always name objects to match '^o_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9106</rule-key>
@@ -1772,7 +1772,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix cursor parameters with 'p_'. -->
+			<!-- Always name cursor parameters to match '^p_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9107</rule-key>
@@ -1791,7 +1791,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix in parameters with 'in_'. -->
+			<!-- Always name in parameters to match '^in_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9108</rule-key>
@@ -1810,7 +1810,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix out parameters with 'out_'. -->
+			<!-- Always name out parameters to match '^out_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9109</rule-key>
@@ -1829,7 +1829,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix in/out parameters with 'io_'. -->
+			<!-- Always name in/out parameters to match '^io_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9110</rule-key>
@@ -1848,7 +1848,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix record type definitions with 'r_' and add the suffix '_type'. -->
+			<!-- Always name record type definitions to match '^r_.+_type$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9111</rule-key>
@@ -1867,7 +1867,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix collection type definitions (arrays/tables) with 't_' and add the suffix '_type'. -->
+			<!-- Always name collection type definitions (arrays/tables) to match '^t_.+_type$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9112</rule-key>
@@ -1886,7 +1886,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix exceptions with 'e_'. -->
+			<!-- Always name exceptions to match '^e_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9113</rule-key>
@@ -1905,7 +1905,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix constants with 'co_'. -->
+			<!-- Always name constants to match '^co_.+$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9114</rule-key>
@@ -1924,7 +1924,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always prefix subtypes with '_type'. -->
+			<!-- Always name subtypes to match '^.+_type$'. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-9115</rule-key>
@@ -2879,7 +2879,7 @@
 				</prop>
 				<prop>
 					<key>offset</key>
-					<val>1.0</val>
+					<val>5.0</val>
 					<txt>mn</txt>
 				</prop>
 			</chc>

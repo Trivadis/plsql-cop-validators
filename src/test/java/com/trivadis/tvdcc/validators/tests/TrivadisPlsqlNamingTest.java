@@ -164,23 +164,6 @@ public class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
     }
 
     @Test
-    public void localVariableSingleLetterZNok() {
-        var stmt = """
-                declare
-                   z pls_integer := 0;
-                begin
-                   while z < 10
-                   loop
-                      dbms_output.put_line(z);
-                      z := z + 1;
-                   end loop;
-                end;
-                """;
-        var issues = getIssues(stmt);
-        Assert.assertEquals(1, issues.stream().filter(it -> it.getCode().equals("G-9102")).toList().size());
-    }
-
-    @Test
     public void cursorNameNok() {
         var stmt = """
                 DECLARE
@@ -647,4 +630,48 @@ public class TrivadisPlsqlNamingTest extends AbstractValidatorTest {
         var issues = getIssues(stmt);
         Assert.assertEquals(0, issues.stream().filter(it -> it.getCode().equals("G-9115")).toList().size());
     }
+    
+    // issue 62 https://github.com/Trivadis/plsql-cop-validators/issues/62
+    
+    @Test
+    public void ignorelocalVariableInBasicLoopExitCondition() {
+        var stmt = """
+                declare
+                   a integer := 0;  -- violates G-2185, not used in while loop condition nor exit condition, violates G-9102
+                   b integer;       -- does not violate G-2185, used in exit condition, violates G-9102
+                begin
+                   <<demo>>
+                   loop
+                      b := a;
+                      exit demo when b = 10;
+                      a := a + 1;
+                   end loop demo;
+                end;
+                /
+                """;
+        var issues = getIssues(stmt).stream().filter(it -> it.getCode().equals("G-9102")).toList();
+        Assert.assertEquals(1, issues.size());
+        Assert.assertEquals(2, issues.get(0).getLineNumber().intValue());
+    }
+    
+    @Test
+    public void ignorelocalVariableInWhileLoopCondition() {
+        var stmt = """
+                declare
+                   a pls_integer := 0;
+                   b integer;
+                begin
+                   while a < 10
+                   loop
+                      b := a;
+                      dbms_output.put_line(b);
+                      a := a + 1;
+                   end loop;
+                end;
+                """;
+        var issues = getIssues(stmt).stream().filter(it -> it.getCode().equals("G-9102")).toList();
+        Assert.assertEquals(1, issues.size());
+        Assert.assertEquals(3, issues.get(0).getLineNumber().intValue());
+    }
+    
 }

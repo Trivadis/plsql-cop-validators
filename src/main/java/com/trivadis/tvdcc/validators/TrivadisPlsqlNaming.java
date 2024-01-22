@@ -17,16 +17,26 @@ package com.trivadis.tvdcc.validators;
 
 import com.trivadis.oracle.plsql.plsql.CollectionTypeDefinition;
 import com.trivadis.oracle.plsql.plsql.ConstantDeclaration;
+import com.trivadis.oracle.plsql.plsql.ConstructorDeclaration;
+import com.trivadis.oracle.plsql.plsql.CreateFunction;
 import com.trivadis.oracle.plsql.plsql.CreatePackage;
 import com.trivadis.oracle.plsql.plsql.CreatePackageBody;
 import com.trivadis.oracle.plsql.plsql.CreateType;
 import com.trivadis.oracle.plsql.plsql.CursorDeclarationOrDefinition;
 import com.trivadis.oracle.plsql.plsql.ExceptionDeclaration;
+import com.trivadis.oracle.plsql.plsql.ExitStatement;
+import com.trivadis.oracle.plsql.plsql.FuncDeclInType;
+import com.trivadis.oracle.plsql.plsql.FunctionDefinition;
 import com.trivadis.oracle.plsql.plsql.ParameterDeclaration;
+import com.trivadis.oracle.plsql.plsql.PlsqlBlock;
+import com.trivadis.oracle.plsql.plsql.ProcDeclInType;
+import com.trivadis.oracle.plsql.plsql.ProcedureDefinition;
 import com.trivadis.oracle.plsql.plsql.RecordTypeDefinition;
+import com.trivadis.oracle.plsql.plsql.SimpleExpressionNameValue;
 import com.trivadis.oracle.plsql.plsql.SubTypeDefinition;
 import com.trivadis.oracle.plsql.plsql.UserDefinedType;
 import com.trivadis.oracle.plsql.plsql.VariableDeclaration;
+import com.trivadis.oracle.plsql.plsql.WhileLoopStatement;
 import com.trivadis.oracle.plsql.validation.PLSQLCopGuideline;
 import com.trivadis.oracle.plsql.validation.PLSQLCopValidator;
 import com.trivadis.oracle.plsql.validation.PLSQLValidator;
@@ -67,28 +77,26 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
     public static final int ISSUE_SUBTYPE_NAME = 9115;
 
     // default naming conventions, can be overridden via TrivadisPlsqlNaming.properties
-    private static String PREFIX_GLOBAL_VARIABLE_NAME = "g_";
-    private static String PREFIX_LOCAL_VARIABLE_NAME = "l_";
-    private static String PREFIX_CURSOR_NAME = "c_";
-    private static String PREFIX_RECORD_NAME = "r_";
-    private static String PREFIX_ARRAY_NAME = "t_";
-    private static String PREFIX_OBJECT_NAME = "o_";
-    private static String PREFIX_CURSOR_PARAMETER_NAME = "p_";
-    private static String PREFIX_IN_PARAMETER_NAME = "in_";
-    private static String PREFIX_OUT_PARAMETER_NAME = "out_";
-    private static String PREFIX_IN_OUT_PARAMETER_NAME = "io_";
-    private static String PREFIX_RECORD_TYPE_NAME = "r_";
-    private static String SUFFIX_RECORD_TYPE_NAME = "_type";
-    private static String PREFIX_ARRAY_TYPE_NAME = "t_";
-    private static String SUFFIX_ARRAY_TYPE_NAME = "_type";
-    private static String PREFIX_EXCEPTION_NAME = "e_";
-    private static String PREFIX_CONSTANT_NAME = "co_";
-    private static String SUFFIX_SUBTYPE_NAME = "_type";
-    private static String VALID_LOCAL_VARIABLE_NAMES = "^([ij])$";
+    private static String REGEX_GLOBAL_VARIABLE_NAME = "^g_.+$";
+    private static String REGEX_LOCAL_VARIABLE_NAME = "^l_.+$";
+    private static String REGEX_CURSOR_NAME = "^c_.+$";
+    private static String REGEX_RECORD_NAME = "^r_.+$";
+    private static String REGEX_ARRAY_NAME = "^t_.+$";
+    private static String REGEX_OBJECT_NAME = "^o_.+$";
+    private static String REGEX_CURSOR_PARAMETER_NAME = "^p_.+$";
+    private static String REGEX_IN_PARAMETER_NAME = "^in_.+$";
+    private static String REGEX_OUT_PARAMETER_NAME = "^out_.+$";
+    private static String REGEX_IN_OUT_PARAMETER_NAME = "^io_.+$";
+    private static String REGEX_RECORD_TYPE_NAME = "^r_.+_type$";
+    private static String REGEX_ARRAY_TYPE_NAME = "^t_.+_type$";
+    private static String REGEX_EXCEPTION_NAME = "^e_.+$";
+    private static String REGEX_CONSTANT_NAME = "^co_.+$";
+    private static String REGEX_SUBTYPE_NAME = "^.+_type$";
 
     public TrivadisPlsqlNaming() {
         super();
         readProperties();
+        applySystemProperties(); // this way properties can be passed to the JVM in other ways, e.g. via command-line
     }
 
     // must be overridden to avoid duplicate issues when used via ComposedChecks
@@ -105,22 +113,28 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
         try {
             final FileInputStream fis = new FileInputStream(
                     System.getProperty("user.home") + File.separator + PROPERTIES_FILE_NAME);
-            final Properties prop = new Properties();
+            final Properties prop = System.getProperties();
             prop.load(fis);
-            final List<Field> fields = Arrays.stream(getClass().getDeclaredFields())
-                    .filter(it -> it.getName().startsWith("PREFIX_") || it.getName().startsWith("SUFFIX_"))
-                    .collect(Collectors.toList());
-            for (final Field field : fields) {
-                {
-                    final Object value = prop.get(field.getName());
-                    if (value != null) {
-                        field.set(this, prop.get(field.getName()));
-                    }
+            fis.close();
+        } catch (IOException e) {
+            // ignore, see https://github.com/Trivadis/plsql-cop-validators/issues/13
+        }
+    }
+    
+    private void applySystemProperties() {
+        final Properties prop = System.getProperties();
+        final List<Field> fields = Arrays.stream(getClass().getDeclaredFields())
+                .filter(it -> it.getName().startsWith("REGEX_"))
+                .collect(Collectors.toList());
+        for (final Field field : fields) {
+            final Object value = prop.get(field.getName());
+            if (value != null) {
+                try {
+                    field.set(this, prop.get(field.getName()));
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    // ignore
                 }
             }
-            fis.close();
-        } catch (IOException | IllegalArgumentException | IllegalAccessException e) {
-            // ignore, see https://github.com/Trivadis/plsql-cop-validators/issues/13
         }
     }
 
@@ -135,62 +149,60 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
             // register custom guidelines
             guidelines.put(ISSUE_GLOBAL_VARIABLE_NAME,
                     new PLSQLCopGuideline(ISSUE_GLOBAL_VARIABLE_NAME,
-                            "Always prefix global variables with '" + PREFIX_GLOBAL_VARIABLE_NAME + "'.", MAJOR,
+                            "Always name global variables to match '" + REGEX_GLOBAL_VARIABLE_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_LOCAL_VARIABLE_NAME,
                     new PLSQLCopGuideline(ISSUE_LOCAL_VARIABLE_NAME,
-                            "Always prefix local variables with '" + PREFIX_LOCAL_VARIABLE_NAME + "'.", MAJOR,
+                            "Always name local variables to match '" + REGEX_LOCAL_VARIABLE_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_CURSOR_NAME,
-                    new PLSQLCopGuideline(ISSUE_CURSOR_NAME, "Always prefix cursors with '" + PREFIX_CURSOR_NAME + "'.",
-                            MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
+                    new PLSQLCopGuideline(ISSUE_CURSOR_NAME, "Always name cursors to match '" + REGEX_CURSOR_NAME + "'.",
+                            MINOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_RECORD_NAME,
-                    new PLSQLCopGuideline(ISSUE_RECORD_NAME, "Always prefix records with '" + PREFIX_RECORD_NAME + "'.",
-                            MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
+                    new PLSQLCopGuideline(ISSUE_RECORD_NAME, "Always name records to match '" + REGEX_RECORD_NAME + "'.",
+                            MINOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_ARRAY_NAME,
                     new PLSQLCopGuideline(ISSUE_ARRAY_NAME,
-                            "Always prefix collection types (arrays/tables) with '" + PREFIX_ARRAY_NAME + "'.", MAJOR,
+                            "Always name collection types (arrays/tables) to match '" + REGEX_ARRAY_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_OBJECT_NAME,
-                    new PLSQLCopGuideline(ISSUE_OBJECT_NAME, "Always prefix objects with '" + PREFIX_OBJECT_NAME + "'.",
-                            MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
+                    new PLSQLCopGuideline(ISSUE_OBJECT_NAME, "Always name objects to match '" + REGEX_OBJECT_NAME + "'.",
+                            MINOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_CURSOR_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_CURSOR_PARAMETER_NAME,
-                            "Always prefix cursor parameters with '" + PREFIX_CURSOR_PARAMETER_NAME + "'.", MAJOR,
+                            "Always name cursor parameters to match '" + REGEX_CURSOR_PARAMETER_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_IN_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_IN_PARAMETER_NAME,
-                            "Always prefix in parameters with '" + PREFIX_IN_PARAMETER_NAME + "'.", MAJOR,
+                            "Always name in parameters to match '" + REGEX_IN_PARAMETER_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_OUT_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_OUT_PARAMETER_NAME,
-                            "Always prefix out parameters with '" + PREFIX_OUT_PARAMETER_NAME + "'.", MAJOR,
+                            "Always name out parameters to match '" + REGEX_OUT_PARAMETER_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_IN_OUT_PARAMETER_NAME,
                     new PLSQLCopGuideline(ISSUE_IN_OUT_PARAMETER_NAME,
-                            "Always prefix in/out parameters with '" + PREFIX_IN_OUT_PARAMETER_NAME + "'.", MAJOR,
+                            "Always name in/out parameters to match '" + REGEX_IN_OUT_PARAMETER_NAME + "'.", MINOR,
                             UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_RECORD_TYPE_NAME,
                     new PLSQLCopGuideline(ISSUE_RECORD_TYPE_NAME,
-                            "Always prefix record type definitions with '" + PREFIX_RECORD_TYPE_NAME
-                                    + "' and add the suffix '" + SUFFIX_RECORD_TYPE_NAME + "'.",
-                            MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
+                            "Always name record type definitions to match '" + REGEX_RECORD_TYPE_NAME + "'.", MINOR,
+                            UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_ARRAY_TYPE_NAME,
                     new PLSQLCopGuideline(ISSUE_ARRAY_TYPE_NAME,
-                            "Always prefix collection type definitions (arrays/tables) with '" + PREFIX_ARRAY_TYPE_NAME
-                                    + "' and add the suffix '" + SUFFIX_ARRAY_TYPE_NAME + "'.",
-                            MAJOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
+                            "Always name collection type definitions (arrays/tables) to match '" + REGEX_ARRAY_TYPE_NAME
+                            + "'.", MINOR, UNDERSTANDABILITY, Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_EXCEPTION_NAME,
                     new PLSQLCopGuideline(ISSUE_EXCEPTION_NAME,
-                            "Always prefix exceptions with '" + PREFIX_EXCEPTION_NAME + "'.", MAJOR, UNDERSTANDABILITY,
+                            "Always name exceptions to match '" + REGEX_EXCEPTION_NAME + "'.", MINOR, UNDERSTANDABILITY,
                             Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_CONSTANT_NAME,
                     new PLSQLCopGuideline(ISSUE_CONSTANT_NAME,
-                            "Always prefix constants with '" + PREFIX_CONSTANT_NAME + "'.", MAJOR, UNDERSTANDABILITY,
+                            "Always name constants to match '" + REGEX_CONSTANT_NAME + "'.", MINOR, UNDERSTANDABILITY,
                             Remediation.createConstantPerIssue(1)));
             guidelines.put(ISSUE_SUBTYPE_NAME,
                     new PLSQLCopGuideline(ISSUE_SUBTYPE_NAME,
-                            "Always prefix subtypes with '" + SUFFIX_SUBTYPE_NAME + "'.", MAJOR, UNDERSTANDABILITY,
+                            "Always name subtypes to match '" + REGEX_SUBTYPE_NAME + "'.", MINOR, UNDERSTANDABILITY,
                             Remediation.createConstantPerIssue(1)));
         }
         return guidelines;
@@ -278,39 +290,90 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
         }
         return ret;
     }
+    
+    private boolean containsSimpleExpressionName(EObject container, String name) {
+        boolean found = false;
+        List<SimpleExpressionNameValue> values = EcoreUtil2.getAllContentsOfType(container,
+                SimpleExpressionNameValue.class);
+        for (SimpleExpressionNameValue value : values) {
+            if (value.getValue().equalsIgnoreCase(name)) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+    
+    protected EObject getParentOfBody(EObject obj) {
+        EObject ret = obj;
+        while (!(ret instanceof PlsqlBlock || ret instanceof ConstructorDeclaration || ret instanceof CreateFunction
+                || ret instanceof CreatePackageBody || ret instanceof FuncDeclInType
+                || ret instanceof FunctionDefinition || ret instanceof ProcDeclInType
+                || ret instanceof ProcedureDefinition) && ret != null) {
+            ret = ret.eContainer();
+        }
+        return ret;
+    }
+    
+    private boolean isLoopIndexVariable(EObject obj) {
+        if (obj instanceof SimpleExpressionNameValue) {
+            String varName = ((SimpleExpressionNameValue) obj).getValue();
+            EObject container = getParentOfBody(obj);
+            List<WhileLoopStatement> whileLoops = EcoreUtil2.getAllContentsOfType(container,
+                    WhileLoopStatement.class);
+            boolean found = false;
+            for (WhileLoopStatement whileLoop : whileLoops) {
+                if (containsSimpleExpressionName(whileLoop.getCondition(), varName)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                List<ExitStatement> exits = EcoreUtil2.getAllContentsOfType(container, ExitStatement.class);
+                for (ExitStatement exit : exits) {
+                    if (containsSimpleExpressionName(exit.getCondition(), varName)) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            return found;
+        }
+        return false;
+    }
 
     @Check
     public void checkVariableName(VariableDeclaration v) {
         final EObject parent = v.eContainer().eContainer();
         final String name = v.getVariable().getValue().toLowerCase();
         if (isSysRefcursor(v)) {
-            if (!name.startsWith(PREFIX_CURSOR_NAME)) {
+            if (!name.matches(REGEX_CURSOR_NAME)) {
                 warning(ISSUE_CURSOR_NAME, v.getVariable(), v);
             }
         } else if (isObjectType(v)) {
-            if (!name.startsWith(PREFIX_OBJECT_NAME)) {
+            if (!name.matches(REGEX_OBJECT_NAME)) {
                 warning(ISSUE_OBJECT_NAME, v.getVariable(), v);
             }
         } else if (isCollectionType(v)) {
-            if (!name.startsWith(PREFIX_ARRAY_NAME)) {
+            if (!name.matches(REGEX_ARRAY_NAME)) {
                 warning(ISSUE_ARRAY_NAME, v.getVariable(), v);
             }
         } else if (isRowtype(v) || isRecordType(v)) {
-            if (!name.startsWith(PREFIX_RECORD_NAME)) {
+            if (!name.matches(REGEX_RECORD_NAME)) {
                 warning(ISSUE_RECORD_NAME, v.getVariable(), v);
             }
         } else {
             // reduce false positives, skip checking variables base on qualified UDTs
             if (!isQualifiedUdt(v)) {
                 if (parent instanceof CreatePackage || parent instanceof CreatePackageBody) {
-                    if (!name.startsWith(PREFIX_GLOBAL_VARIABLE_NAME)) {
+                    if (!name.matches(REGEX_GLOBAL_VARIABLE_NAME)) {
                         warning(ISSUE_GLOBAL_VARIABLE_NAME, v.getVariable(), v);
                     }
                 } else {
-                    // reduce false positives, allow cursor/object/array names and common indices i, j
-                    if (!name.startsWith(PREFIX_LOCAL_VARIABLE_NAME) && !name.startsWith(PREFIX_CURSOR_NAME)
-                            && !name.startsWith(PREFIX_OBJECT_NAME) && !name.startsWith(PREFIX_ARRAY_NAME)
-                            && !name.matches(VALID_LOCAL_VARIABLE_NAMES)) {
+                    // reduce false positives, allow cursor/object/array names and loop indices (e.g. i and j)
+                    if (!name.matches(REGEX_LOCAL_VARIABLE_NAME) && !name.matches(REGEX_CURSOR_NAME)
+                            && !name.matches(REGEX_OBJECT_NAME) && !name.matches(REGEX_ARRAY_NAME)
+                            && !isLoopIndexVariable(v.getVariable())) {
                         warning(ISSUE_LOCAL_VARIABLE_NAME, v.getVariable(), v);
                     }
                 }
@@ -320,11 +383,11 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
 
     @Check
     public void checkCursorName(CursorDeclarationOrDefinition c) {
-        if (!c.getCursor().getValue().toLowerCase().startsWith(PREFIX_CURSOR_NAME)) {
+        if (!c.getCursor().getValue().toLowerCase().matches(REGEX_CURSOR_NAME)) {
             warning(ISSUE_CURSOR_NAME, c.getCursor());
         }
         for (final ParameterDeclaration p : c.getParams()) {
-            if (!p.getParameter().getValue().toLowerCase().startsWith(PREFIX_CURSOR_PARAMETER_NAME)) {
+            if (!p.getParameter().getValue().toLowerCase().matches(REGEX_CURSOR_PARAMETER_NAME)) {
                 warning(ISSUE_CURSOR_PARAMETER_NAME, p.getParameter(), p);
             }
         }
@@ -337,15 +400,15 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
             final String name = p.getParameter().getValue();
             if (!("self".equalsIgnoreCase(name))) {
                 if (p.isIn() && p.isOut()) {
-                    if (!name.startsWith(PREFIX_IN_OUT_PARAMETER_NAME)) {
+                    if (!name.matches(REGEX_IN_OUT_PARAMETER_NAME)) {
                         warning(ISSUE_IN_OUT_PARAMETER_NAME, p.getParameter(), p);
                     }
                 } else if (p.isOut()) {
-                    if (!name.startsWith(PREFIX_OUT_PARAMETER_NAME)) {
+                    if (!name.matches(REGEX_OUT_PARAMETER_NAME)) {
                         warning(ISSUE_OUT_PARAMETER_NAME, p.getParameter(), p);
                     }
                 } else {
-                    if (!name.startsWith(PREFIX_IN_PARAMETER_NAME)) {
+                    if (!name.matches(REGEX_IN_PARAMETER_NAME)) {
                         warning(ISSUE_IN_PARAMETER_NAME, p.getParameter(), p);
                     }
                 }
@@ -356,7 +419,7 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
     @Check
     public void checkRecordTypeName(RecordTypeDefinition rt) {
         final String name = rt.getType().getValue().toLowerCase();
-        if (!(name.startsWith(PREFIX_RECORD_TYPE_NAME) && name.endsWith(SUFFIX_RECORD_TYPE_NAME))) {
+        if (!(name.matches(REGEX_RECORD_TYPE_NAME))) {
             warning(ISSUE_RECORD_TYPE_NAME, rt.getType(), rt);
         }
     }
@@ -364,28 +427,28 @@ public class TrivadisPlsqlNaming extends PLSQLValidator implements PLSQLCopValid
     @Check
     public void checkArrayTypeName(CollectionTypeDefinition ct) {
         final String name = ct.getType().getValue().toLowerCase();
-        if (!(name.startsWith(PREFIX_ARRAY_TYPE_NAME) && name.endsWith(SUFFIX_ARRAY_TYPE_NAME))) {
+        if (!(name.matches(REGEX_ARRAY_TYPE_NAME))) {
             warning(ISSUE_ARRAY_TYPE_NAME, ct.getType(), ct);
         }
     }
 
     @Check
     public void checkExceptionName(ExceptionDeclaration e) {
-        if (!e.getException().getValue().toLowerCase().startsWith(PREFIX_EXCEPTION_NAME)) {
+        if (!e.getException().getValue().toLowerCase().matches(REGEX_EXCEPTION_NAME)) {
             warning(ISSUE_EXCEPTION_NAME, e.getException(), e);
         }
     }
 
     @Check
     public void checkConstantName(ConstantDeclaration co) {
-        if (!co.getConstant().getValue().toLowerCase().startsWith(PREFIX_CONSTANT_NAME)) {
+        if (!co.getConstant().getValue().toLowerCase().matches(REGEX_CONSTANT_NAME)) {
             warning(ISSUE_CONSTANT_NAME, co.getConstant(), co);
         }
     }
 
     @Check
     public void checkSubtypeName(SubTypeDefinition st) {
-        if (!st.getType().getValue().toLowerCase().endsWith(SUFFIX_SUBTYPE_NAME)) {
+        if (!st.getType().getValue().toLowerCase().matches(REGEX_SUBTYPE_NAME)) {
             warning(ISSUE_SUBTYPE_NAME, st.getType(), st);
         }
     }

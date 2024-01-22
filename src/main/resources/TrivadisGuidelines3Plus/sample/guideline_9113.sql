@@ -1,7 +1,8 @@
--- G-9113: Always prefix exceptions with 'e_'.
+-- G-9113: Always name exceptions to match '^e_.+$'.
 
 -- Reason
-/*<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.2/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>*/
+/*<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+<p>You can override the default via system property REGEX_EXCEPTION_NAME.</p>*/
 
 -- Bad
 declare

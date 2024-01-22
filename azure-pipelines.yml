@@ -35,34 +35,11 @@ steps:
     path: $(MAVEN_CACHE_FOLDER)
   displayName: Cache Maven local repo
 
-- task: DownloadPackage@1
-  inputs:
-    packageType: 'maven'
-    feed: '18837db9-b003-4158-aea6-2cbe5db0f9f0/2243676f-5a13-4f9a-842a-0d4b65c80104'
-    definition: 'trivadis.tvdcc:tvdcc'
-    version: '4.4.0' # lowercase is necessary
-    files: '*.jar'
-    downloadPath: '$(Pipeline.Workspace)'
-
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: for f in $(Pipeline.Workspace)/tvdcc-4.4.0*.jar; do echo $f; mv $f $(Pipeline.Workspace)/tvdcc.jar; done
-
-- task: DownloadPackage@1
-  inputs:
-    packageType: 'maven'
-    feed: '18837db9-b003-4158-aea6-2cbe5db0f9f0/2243676f-5a13-4f9a-842a-0d4b65c80104'
-    definition: 'trivadis.oracle:plsql'
-    version: '4.2.1' # lowercase is necessary
-    files: '*.jar'
-    downloadPath: '$(Pipeline.Workspace)/lib'
-
 - task: Maven@3
   displayName: 'Maven com.trivadis.tvdcc'
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '$(MAVEN_OPTS)'
-    goals: '-Dtvdcc.basedir=$(Pipeline.Workspace) -DaltDeploymentRepository=plsqlcop::default::https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1 clean deploy -U'
+    goals: 'clean deploy -U -Pdefault,CI'
     publishJUnitResults: true
     jdkVersion: 17

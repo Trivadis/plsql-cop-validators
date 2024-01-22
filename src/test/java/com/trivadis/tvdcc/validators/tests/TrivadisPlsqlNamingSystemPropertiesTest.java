@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Philipp Salvisberg <philipp.salvisberg@trivadis.com>
+ * Copyright 2024 Philipp Salvisberg <philipp.salvisberg@accenture.com>
  * 
  * Licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0
  * Unported License (the "License"); you may not use this file except
@@ -17,36 +17,25 @@ package com.trivadis.tvdcc.validators.tests;
 
 import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences;
 import com.trivadis.tvdcc.validators.TrivadisPlsqlNaming;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest {
+public class TrivadisPlsqlNamingSystemPropertiesTest extends AbstractValidatorTest {
 
     @BeforeClass
     public static void commonSetup() {
         stashPropertiesFile();
-        createTestPropertiesFile();
+        removePropertiesFile();
+        System.getProperties().setProperty("REGEX_LOCAL_VARIABLE_NAME", "^local_.+$");
         PLSQLValidatorPreferences.INSTANCE.setValidatorClass(TrivadisPlsqlNaming.class);
     }
 
-    // create a simple properties file to test with 
-    public static void createTestPropertiesFile() {
-        try {
-            final File file = new File(FULL_PROPERTIES_FILE_NAME);
-            final FileWriter fileWriter = new FileWriter(file, true);
-            final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write("REGEX_LOCAL_VARIABLE_NAME = ^loc_.+$");
-            bufferedWriter.newLine();
-            bufferedWriter.close();
-            fileWriter.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    // remove property file to ensure it cannot be read from the validator 
+    public static void removePropertiesFile() {
+        final File file = new File(FULL_PROPERTIES_FILE_NAME);
+        file.delete();
     }
 
     // check that old prefix is now not accepted
@@ -71,7 +60,7 @@ public class TrivadisPlsqlNamingPropertiesFileTest extends AbstractValidatorTest
         var stmt = """
                 CREATE OR REPLACE PACKAGE BODY example AS
                    PROCEDURE a IS
-                      loc_some_name INTEGER;
+                      local_some_name INTEGER;
                    BEGIN
                       NULL;
                    END a;
