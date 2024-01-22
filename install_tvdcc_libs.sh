@@ -15,8 +15,8 @@ if ! test -f "${TVDCC_DIR}/tvdcc.jar"; then
 fi
 
 # define versions according usage in pom.xml
-TVDCC_VERSION="4.4.3-SNAPSHOT"
-PLSQL_VERSION="4.2.2-SNAPSHOT"
+TVDCC_VERSION="4.5.1-SNAPSHOT"
+PLSQL_VERSION="4.2.3-SNAPSHOT"
 
 # install JAR files into local Maven repository, these libs are not available in public Maven repositories
 mvn install:install-file -Dfile=$TVDCC_DIR/tvdcc.jar -DgeneratePom=true \
