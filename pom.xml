@@ -5,13 +5,13 @@
 	<!-- The Basics -->
 	<groupId>trivadis.tvdcc</groupId>
 	<artifactId>sonar-plsql-cop-custom-validators-plugin</artifactId>
-	<version>4.5.1-SNAPSHOT</version>
+	<version>5.0.0-SNAPSHOT</version>
 	<packaging>sonar-plugin</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>8</jdk.version>
 		<jdk.test.version>17</jdk.test.version>
-		<xtext.version>2.27.0</xtext.version>
+		<xtext.version>2.28.0</xtext.version> <!-- latest version that runs with JDK8 -->
 		<skip.genmodel>false</skip.genmodel>
 		<skipTests>false</skipTests>
 	</properties>
@@ -25,8 +25,8 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<version>3.10.1</version>
 						<artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.12.1</version>
 						<configuration>
 							<!-- different Java version for main and test -->
 							<!-- works with Maven builder from IDE or command line -->
@@ -49,8 +49,8 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<version>3.10.1</version>
 						<artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.12.1</version>
 						<configuration>
 							<!-- IDEA requires same Java version for main and test -->
 							<!-- see https://youtrack.jetbrains.com/issue/IDEA-85478 -->
@@ -107,14 +107,14 @@
 			<!-- contains TrivadisGuidelines3 -->
 			<groupId>trivadis.tvdcc</groupId>
 			<artifactId>tvdcc</artifactId>
-			<version>4.5.1-SNAPSHOT</version>
+			<version>5.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
         <dependency>
             <!-- contains PLSQLValidator -->
             <groupId>trivadis.oracle</groupId>
             <artifactId>plsql</artifactId>
-            <version>4.2.3-SNAPSHOT</version>
+            <version>5.0.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 		<dependency>
@@ -147,7 +147,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -167,7 +167,7 @@
 			<plugin>
 				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
-				<version>1.18.0.372</version>
+				<version>1.21.0.505</version> <!-- last version before breaking changes -->
 				<extensions>true</extensions>
 				<configuration>
 				<pluginKey>plsql-cop-custom-validators</pluginKey>
@@ -177,7 +177,7 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<version>3.10.1</version>
+				<version>3.12.1</version>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>${jdk.version}</source>
@@ -229,7 +229,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>3.2.5</version>
 				<executions>
 					<execution>
 						<id>default-test</id>
