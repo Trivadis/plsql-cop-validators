@@ -16,6 +16,8 @@
 
 package com.trivadis.tvdcc.generators;
 
+import java.io.IOException;
+
 import com.trivadis.oracle.plsql.validation.PLSQLValidatorPreferences;
 import com.trivadis.tvdcc.genmodel.GenRulesXml;
 import com.trivadis.tvdcc.genmodel.GenSqaleXml;
@@ -23,18 +25,18 @@ import com.trivadis.tvdcc.validators.GLP;
 
 public class GLPGenmodel {
 
-    public static void genPlsqlcopModelXml() {
+    public static void genPlsqlcopModelXml() throws IOException {
         GenSqaleXml gen = new GenSqaleXml();
-        gen.generate("./src/main/resources/GLP");
+        gen.generate(GenUtil.getPath("src/main/resources/GLP"));
     }
 
-    public static void genRulesXml() {
+    public static void genRulesXml() throws IOException {
         GenRulesXml gen = new GenRulesXml();
-        String targetDir = "./src/main/resources/GLP";
-        gen.generate(targetDir, "./src/main/resources/GLP/sample");
+        String targetDir = GenUtil.getPath("src/main/resources/GLP");
+        gen.generate(targetDir, GenUtil.getPath("src/main/resources/GLP/sample"));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         PLSQLValidatorPreferences.INSTANCE.setValidatorClass(GLP.class);
         genPlsqlcopModelXml();
         genRulesXml();
