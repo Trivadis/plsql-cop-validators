@@ -57,17 +57,19 @@ public class TrivadisGuidelines3PlusGenmodel {
     public static void copyGuidelinesFromJar(String targetDir) throws IOException, URISyntaxException {
         File tvdccJarFile = new File(
                 TrivadisGuidelines3.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        JarFile jarFile = new JarFile(tvdccJarFile);
-        Enumeration<JarEntry> entries = jarFile.entries();
-        while (entries.hasMoreElements()) {
-            JarEntry entry = entries.nextElement();
-            if (!entry.isDirectory() && entry.getName().startsWith("guidelines/")) {
-                InputStream entryInputStream = jarFile.getInputStream(entry);
-                Path targetFile = Paths.get(targetDir, entry.getName().substring(10));
-                Files.copy(entryInputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+        if (tvdccJarFile.getName().endsWith(".jar")) {
+            JarFile jarFile = new JarFile(tvdccJarFile);
+            Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                if (!entry.isDirectory() && entry.getName().startsWith("guidelines/")) {
+                    InputStream entryInputStream = jarFile.getInputStream(entry);
+                    Path targetFile = Paths.get(targetDir, entry.getName().substring(10));
+                    Files.copy(entryInputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+                }
             }
+            jarFile.close();
         }
-        jarFile.close();
     }
 
     public static void genRulesXml() throws URISyntaxException, IOException {
