@@ -2592,7 +2592,7 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
-			<!-- Always specify column names instead of positional references in GROUP BY clauses. -->
+			<!-- Always specify column names/aliases instead of positional references in GROUP BY clauses. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-3182</rule-key>
@@ -2668,6 +2668,25 @@
 					<txt>mn</txt>
 				</prop>
 			</chc>
+			<!-- Avoid autonomous transactions. -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-3330</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>CONSTANT_ISSUE</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>0.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>60.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
 			<!-- Avoid using %NOTFOUND directly after the FETCH when working with BULK OPERATIONS and LIMIT clause. -->
 			<chc>
 				<rule-repo>trivadis</rule-repo>
@@ -2691,6 +2710,25 @@
 			<chc>
 				<rule-repo>trivadis</rule-repo>
 				<rule-key>G-4140</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>CONSTANT_ISSUE</txt>
+				</prop>
+				<prop>
+					<key>remediationFactor</key>
+					<val>0.0</val>
+					<txt>mn</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>5.0</val>
+					<txt>mn</txt>
+				</prop>
+			</chc>
+			<!-- Never use a FOR LOOP for a query that should return not more than one row. (not implemented) -->
+			<chc>
+				<rule-repo>trivadis</rule-repo>
+				<rule-key>G-4387</rule-key>
 				<prop>
 					<key>remediationFunction</key>
 					<txt>CONSTANT_ISSUE</txt>
