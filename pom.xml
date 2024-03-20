@@ -36,6 +36,18 @@
 					</plugin>
 				</plugins>
 			</build>
+           <repositories>
+                <repository>
+                    <id>plsqlcop</id>
+                    <url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
 		</profile>
 		<profile>
 			<id>idea</id>
@@ -60,6 +72,18 @@
 					</plugin>
 				</plugins>
 			</build>
+           <repositories>
+                <repository>
+                    <id>plsqlcop</id>
+                    <url>https://pkgs.dev.azure.com/tvdvsts/2001.5038513/_packaging/plsqlcop/maven/v1</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
 		</profile>
 		<profile>
 			<activation>
