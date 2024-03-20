@@ -131,14 +131,14 @@
 			<!-- contains TrivadisGuidelines3 -->
 			<groupId>trivadis.tvdcc</groupId>
 			<artifactId>tvdcc</artifactId>
-			<version>5.0.0-SNAPSHOT</version>
+			<version>5.0.0</version>
 			<scope>provided</scope>
 		</dependency>
         <dependency>
             <!-- contains PLSQLValidator -->
             <groupId>trivadis.oracle</groupId>
             <artifactId>plsql</artifactId>
-            <version>5.0.0-SNAPSHOT</version>
+            <version>5.0.0</version>
             <scope>provided</scope>
         </dependency>
 		<dependency>
