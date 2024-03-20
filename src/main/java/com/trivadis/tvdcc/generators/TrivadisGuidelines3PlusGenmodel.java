@@ -36,9 +36,9 @@ import com.trivadis.tvdcc.validators.TrivadisGuidelines3Plus;
 
 public class TrivadisGuidelines3PlusGenmodel {
 
-    public static void genPlsqlcopModelXml() {
+    public static void genPlsqlcopModelXml() throws IOException {
         GenSqaleXml gen = new GenSqaleXml();
-        gen.generate("./src/main/resources/TrivadisGuidelines3Plus");
+        gen.generate(GenUtil.getPath("src/main/resources/TrivadisGuidelines3Plus"));
     }
 
     public static void copy(String sourceDir, String targetDir) throws IOException {
@@ -57,25 +57,27 @@ public class TrivadisGuidelines3PlusGenmodel {
     public static void copyGuidelinesFromJar(String targetDir) throws IOException, URISyntaxException {
         File tvdccJarFile = new File(
                 TrivadisGuidelines3.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        JarFile jarFile = new JarFile(tvdccJarFile);
-        Enumeration<JarEntry> entries = jarFile.entries();
-        while (entries.hasMoreElements()) {
-            JarEntry entry = entries.nextElement();
-            if (!entry.isDirectory() && entry.getName().startsWith("guidelines/")) {
-                InputStream entryInputStream = jarFile.getInputStream(entry);
-                Path targetFile = Paths.get(targetDir, entry.getName().substring(10));
-                Files.copy(entryInputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+        if (tvdccJarFile.getName().endsWith(".jar")) {
+            JarFile jarFile = new JarFile(tvdccJarFile);
+            Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                if (!entry.isDirectory() && entry.getName().startsWith("guidelines/")) {
+                    InputStream entryInputStream = jarFile.getInputStream(entry);
+                    Path targetFile = Paths.get(targetDir, entry.getName().substring(10));
+                    Files.copy(entryInputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+                }
             }
+            jarFile.close();
         }
-        jarFile.close();
     }
 
     public static void genRulesXml() throws URISyntaxException, IOException {
         GenRulesXml gen = new GenRulesXml();
         String tempDir = Files.createTempDirectory("genmodel_").toString();
         copyGuidelinesFromJar(tempDir);
-        copy("./src/main/resources/TrivadisGuidelines3Plus/sample", tempDir);
-        gen.generate("./src/main/resources/TrivadisGuidelines3Plus", tempDir.toString());
+        copy(GenUtil.getPath("src/main/resources/TrivadisGuidelines3Plus/sample"), tempDir);
+        gen.generate(GenUtil.getPath("src/main/resources/TrivadisGuidelines3Plus"), tempDir.toString());
     }
 
     public static void main(String[] args) throws URISyntaxException, IOException {

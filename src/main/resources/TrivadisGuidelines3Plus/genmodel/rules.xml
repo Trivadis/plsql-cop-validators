@@ -1541,9 +1541,9 @@ select emp.last_name
       ,emp.first_name
   from employees emp
  where emp.employee_id in (
-          select j.employee_id
-            from jobs j
-           where j.job_title like '%Manager%' -- NOSONAR: G-1050 literal is ok for a standalone query
+          select job.employee_id
+            from jobs job
+           where job.job_title like '%Manager%' -- NOSONAR: G-1050 literal is ok for a standalone query
        );</pre>
 			<p></p>]]></description>
 		<tag>always</tag>
@@ -1891,7 +1891,7 @@ select test_case,column_defaulted from null_test;
 	</rule>
 	<rule>
 		<key>G-3182</key>
-		<name><![CDATA[G-3182: Always specify column names instead of positional references in GROUP BY clauses.]]></name>
+		<name><![CDATA[G-3182: Always specify column names/aliases instead of positional references in GROUP BY clauses.]]></name>
 		<type>BUG</type>
 		<internalKey>G-3182</internalKey>
 		<severity>BLOCKER</severity>
@@ -1905,10 +1905,10 @@ select test_case,column_defaulted from null_test;
 			version 23c, then this literal is not required. It is simply a constant.</p>
 			
 			<p>Starting with Oracle Database 23c, it is possible to use a literal in the <code>group by</code>
-			clause to refer to a column name in the <code>select</code> list. However, this only works if the
-			<code>group_by_position_enabled</code> parameter is set to <code>true</code>. In any case, it is not
-			convenient for the readers of the code to have to count the columns in the <code>select</code> list
-			to know how the result is grouped.</p>
+			clause to refer to a column name or column alias in the <code>select</code> list. However, this only
+			works if the <code>group_by_position_enabled</code> parameter is set to <code>true</code>. In any
+			case, it is not convenient for the readers of the code to have to count the columns in the
+			<code>select</code> list to know how the result is grouped.</p>
 			
 			<p>Since the meaning of a <code>literal</code> depends on the configuration and database version, the
 			intention is unclear and might lead to an incorrect result.</p>
@@ -2405,6 +2405,58 @@ end;
 		<tag>try</tag>
 	</rule>
 	<rule>
+		<key>G-3330</key>
+		<name><![CDATA[G-3330: Avoid autonomous transactions.]]></name>
+		<type>BUG</type>
+		<internalKey>G-3330</internalKey>
+		<severity>BLOCKER</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<blockquote><p>Before we take a look at how autonomous transactions work, 
+			I’d like to emphasize that this type of transaction is a powerful and therefore
+			dangerous tool when used improperly. The true need for an autonomous transaction is very
+			rare indeed. I would be very suspicious of any code that makes use of
+			them — that code would get extra examination.
+			It is far too easy to accidentally introduce logical
+			data integrity issues into a system using them. (page 300)</p>
+			
+			<p>In my experience, that is the only truly valid use of an autonomous transaction - 
+			to log errors or informational messages in a manner that can be committed independently
+			of the parent transaction. (page 305)</p>
+			
+			<footer>- Kyte, Thomas (2013), <cite>_Expert Oracle Database Architecture. Third Edition_. Apress.</cite></footer>
+			
+			<p>It is most likely not possible to distinguish legitimate uses of autonomous transactions from
+			illegitimate ones via static code analysis. However, since we expect exactly one autonomous
+			transaction per application, the number of false positives is manageable.</p>
+			<h2>Bad</h2>
+<pre>create or replace package body dept_api is
+   procedure ins_dept(in_dept_row in dept%rowtype) is
+      pragma autonomous_transaction;
+   begin
+      insert into dept
+      values in_dept_row;
+      commit; -- required by autonomous transaction
+   end ins_dept;
+end dept_api;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package body dept_api is
+   procedure ins_dept(in_dept_row in dept%rowtype) is
+   begin
+      insert into dept
+      values in_dept_row;
+      -- transaction is commited in calling module
+      -- after the completion of the unit of work
+   end ins_dept;
+end dept_api;
+/</pre>
+			<p></p>]]></description>
+		<tag>avoid</tag>
+	</rule>
+	<rule>
 		<key>G-4110</key>
 		<name><![CDATA[G-4110: Always use %NOTFOUND instead of NOT %FOUND to check whether a cursor returned data.]]></name>
 		<type>CODE_SMELL</type>
@@ -2751,8 +2803,6 @@ begin
          my_package.do_blue();
       when constants_up.co_black then
          my_package.do_black();
-      else
-         null;
    end case;
 end;
 /</pre>
@@ -3167,10 +3217,7 @@ begin
    end loop for_loop;
 
    &lt;&lt;process_employees&gt;&gt;
-   for r_employee in (
-      select last_name
-        from employees
-   )
+   for r_employee in (select last_name from employees)
    loop
       sys.dbms_output.put_line(r_employee.last_name);
    end loop process_employees;
@@ -3766,6 +3813,62 @@ begin
       null; -- some processing;
    end if;
 end;
+/</pre>
+			<p></p>]]></description>
+		<tag>never</tag>
+	</rule>
+	<rule>
+		<key>G-4387</key>
+		<name><![CDATA[G-4387: Never use a FOR LOOP for a query that should return not more than one row. (not implemented)]]></name>
+		<type>BUG</type>
+		<internalKey>G-4387</internalKey>
+		<severity>BLOCKER</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<description><![CDATA[
+			<h2>Reason</h2>
+			<p>A <code>for loop</code> can hide a <code>too_many_rows</code> exception. The more complex a query
+			is, the higher is the risk that more than one row will be processed.
+			This affects performance and
+			can lead to a wrong result. </p>
+			
+			<p>A <code>for loop</code> can also hide a <code>no_data_found</code> exception and the reader cannot
+			determine whether this is intentional or not.</p>
+			<h2>Bad</h2>
+<pre>create or replace package body employee_api is
+   function emp_name(in_empno in integer) return varchar2 is -- NOSONAR: non-deterministic
+      l_ename emp.ename%type;
+   begin
+      &lt;&lt;fetch_name&gt;&gt;
+      for r in (
+         select ename
+           from emp
+          where empno = in_empno
+      )
+      loop
+         l_ename := r.ename;
+      end loop fetch_name;
+      return l_ename;
+   end emp_name;
+end employee_api;
+/</pre>
+			<h2>Good</h2>
+<pre>create or replace package body employee_api is
+   function emp_name(in_empno in integer) return varchar2 is -- NOSONAR: non-deterministic
+      l_ename emp.ename%type;
+   begin
+      select ename
+        into l_ename
+        from emp
+       where empno = in_empno;
+      return l_ename;
+   exception
+      when no_data_found then
+         return null;
+      when too_many_rows then
+         raise;
+   end emp_name;
+end employee_api;
 /</pre>
 			<p></p>]]></description>
 		<tag>never</tag>
@@ -4434,8 +4537,7 @@ end;
 			lengthy or nested.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body employee_api is
-   function -- NOSONAR: non-deterministic
-   employee_by_id(in_employee_id in integer)
+   function employee_by_id(in_employee_id in integer) -- NOSONAR: non-deterministic
       return employees%rowtype is
       co_employee_id constant employees.employee_id%type := in_employee_id;
       r_employee     employees%rowtype;
@@ -6556,7 +6658,7 @@ end employee_api;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_GLOBAL_VARIABLE_NAME.</p>
 			<h2>Bad</h2>
 <pre>create or replace package body example as
@@ -6581,7 +6683,7 @@ end example;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_LOCAL_VARIABLE_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -6610,7 +6712,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_CURSOR_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -6639,7 +6741,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_RECORD_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -6680,7 +6782,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_ARRAY_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -6719,7 +6821,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_OBJECT_NAME.</p>
 			<h2>Bad</h2>
 <pre>create or replace type dept_type as object (
@@ -6762,7 +6864,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_CURSOR_PARAMETER_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -6797,7 +6899,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_IN_PARAMETER_NAME.</p>
 			<h2>Bad</h2>
 <pre>create or replace package p is
@@ -6822,7 +6924,7 @@ end p;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_OUT_PARAMETER_NAME.</p>
 			<h2>Bad</h2>
 <pre>create or replace package p is
@@ -6847,7 +6949,7 @@ end p;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_IN_OUT_PARAMETER_NAME.</p>
 			<h2>Bad</h2>
 <pre>create or replace package p is
@@ -6872,7 +6974,7 @@ end p;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_RECORD_TYPE_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -6911,7 +7013,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_ARRAY_TYPE_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -6944,7 +7046,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_EXCEPTION_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -6973,7 +7075,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_CONSTANT_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare
@@ -7002,7 +7104,7 @@ end;
 		<status>READY</status>
 		<description><![CDATA[
 			<h2>Reason</h2>
-			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
+			<p>See <a href="https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.4/2-naming-conventions/naming-conventions/#naming-conventions-for-plsql" target="_blank">Naming Conventions for PL/SQL</a>.</p>
 			<p>You can override the default via system property REGEX_SUBTYPE_NAME.</p>
 			<h2>Bad</h2>
 <pre>declare

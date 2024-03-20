@@ -32,7 +32,7 @@ public class TrivadisGuidelines3PlusTest extends AbstractValidatorTest {
     public void guidelines() {
         var guidelines = getValidator().getGuidelines();
         Assert.assertEquals(22, guidelines.values().stream().filter(it -> it.getId() >= 9100).toList().size()); // last guideline in v4.2 is G-9040
-        Assert.assertEquals(123, guidelines.values().stream().filter(it -> it.getId() < 9100).toList().size()); // added G-3182, G-3183 in v4.3
+        Assert.assertEquals(125, guidelines.values().stream().filter(it -> it.getId() < 9100).toList().size()); // added G-3182, G-3183 in v4.3, added G-3330, G-4387 in v4.4
         Assert.assertEquals(79, guidelines.values().stream().filter(it -> it.getId() < 1000).toList().size());
     }
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# set the directory where SQLcl libraries are stored
+# set the directory where libraries of db* CODECOP CLI are stored
 if [[ "$1" = "" ]]; then
     TVDCC_DIR="$HOME/tvdcc"
 else
@@ -15,8 +15,8 @@ if ! test -f "${TVDCC_DIR}/tvdcc.jar"; then
 fi
 
 # define versions according usage in pom.xml
-TVDCC_VERSION="4.5.1-SNAPSHOT"
-PLSQL_VERSION="4.2.3-SNAPSHOT"
+TVDCC_VERSION="5.0.0-SNAPSHOT"
+PLSQL_VERSION="5.0.0-SNAPSHOT"
 
 # install JAR files into local Maven repository, these libs are not available in public Maven repositories
 mvn install:install-file -Dfile=$TVDCC_DIR/tvdcc.jar -DgeneratePom=true \
