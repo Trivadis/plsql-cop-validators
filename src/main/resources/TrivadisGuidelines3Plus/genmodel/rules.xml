@@ -2426,7 +2426,7 @@ end;
 			to log errors or informational messages in a manner that can be committed independently
 			of the parent transaction. (page 305)</p>
 			
-			<footer>- Kyte, Thomas (2013), <cite>_Expert Oracle Database Architecture. Third Edition_. Apress.</cite></footer>
+			<footer>- Kyte, Thomas (2013), <cite>Expert Oracle Database Architecture. Third Edition. Apress.</cite></footer></blockquote>
 			
 			<p>It is most likely not possible to distinguish legitimate uses of autonomous transactions from
 			illegitimate ones via static code analysis. However, since we expect exactly one autonomous
