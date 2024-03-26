@@ -5,7 +5,7 @@
 	<!-- The Basics -->
 	<groupId>trivadis.tvdcc</groupId>
 	<artifactId>sonar-plsql-cop-custom-validators-plugin</artifactId>
-	<version>5.0.1-SNAPSHOT</version>
+	<version>5.0.1</version>
 	<packaging>sonar-plugin</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -131,7 +131,7 @@
 			<!-- contains TrivadisGuidelines3 -->
 			<groupId>trivadis.tvdcc</groupId>
 			<artifactId>tvdcc</artifactId>
-			<version>5.0.1-SNAPSHOT</version>
+			<version>5.0.1</version>
 			<scope>provided</scope>
 		</dependency>
         <dependency>
