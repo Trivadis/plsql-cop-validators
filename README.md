@@ -269,7 +269,10 @@ This way you can deal with an unbound number of validators without comproming th
 
 3. Install the required db* CODECOP libraries
 
-   These libraries are not available in public Maven repositories into your local Maven repository. 
+   These libraries are not available in public Maven repositories. However, they are part
+   of the db* CODECOP Command Line installed in step 1. You need to install these libraries
+   into your local Maven repository.
+
    Open a terminal window in the cop-validators root folder and run Run the following shell script:
 
       ./install_tvdcc_libs.sh
@@ -282,9 +285,7 @@ This way you can deal with an unbound number of validators without comproming th
 
    Open a terminal window in the cop-validators root folder and run the Maven build by the following command
 
-		mvn -Dtvdcc.basedir=/usr/local/bin/tvdcc clean package
-
-	Amend the parameter `tvdcc.basedir` to match your `TVDCC_HOME` directory. This folder is used to reference db* CODECOP jar files which are not available in public Maven repositories
+		mvn clean package
 
 ## License
 
