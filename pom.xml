@@ -114,7 +114,7 @@
             <!-- contains PLSQLValidator -->
             <groupId>trivadis.oracle</groupId>
             <artifactId>plsql</artifactId>
-            <version>5.0.0</version>
+            <version>5.0.1</version>
             <scope>provided</scope>
         </dependency>
 		<dependency>
